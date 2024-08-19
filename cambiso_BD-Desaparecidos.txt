@@ -1,0 +1,35 @@
+
+
+
+
+ALTER TABLE `colaboraciones` ADD COLUMN  `id_cat_gen` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  `edad` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  `id_cat_nacionalidad` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN `id_cat_escolaridad` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  `id_cat_ocup` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  `leer_escribir` VARCHAR(50) NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  `id_cat_disc` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  `id_cat_grupo_vuln` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  `id_cat_comun` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  `id_cat_ent_fed_origen` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  `id_cat_mun_origen` INTEGER NOT NULL;
+ALTER TABLE `colaboraciones` ADD COLUMN  motivo_colaboracion VARCHAR(150) NOT NULL;
+
+update `colaboraciones` set id_cat_gen=4;
+ALTER TABLE `colaboraciones` ADD CONSTRAINT `colaboraciones_fk3` FOREIGN KEY (`id_cat_gen`) REFERENCES `cat_genero` (`id_cat_gen`); 
+update `colaboraciones` set id_cat_nacionalidad=1;
+ALTER TABLE `colaboraciones` ADD CONSTRAINT `colaboraciones_fk4` FOREIGN KEY (`id_cat_nacionalidad`) REFERENCES `cat_nacionalidades` (`id_cat_nacionalidad`);
+update `colaboraciones` set id_cat_escolaridad=11;
+ALTER TABLE `colaboraciones` ADD CONSTRAINT `colaboraciones_fk8` FOREIGN KEY (`id_cat_escolaridad`) REFERENCES `cat_escolaridad` (`id_cat_escolaridad`);
+update `colaboraciones` set id_cat_ocup=18;
+ALTER TABLE `colaboraciones` ADD CONSTRAINT `colaboraciones_fk5` FOREIGN KEY (`id_cat_ocup`) REFERENCES `cat_ocupaciones` (`id_cat_ocup`);
+update `colaboraciones` set id_cat_disc=8;
+ALTER TABLE `colaboraciones` ADD CONSTRAINT `colaboraciones_fk6` FOREIGN KEY (`id_cat_disc`) REFERENCES `cat_discapacidades` (`id_cat_disc`);
+update `colaboraciones` set id_cat_grupo_vuln=24;
+ALTER TABLE `colaboraciones` ADD CONSTRAINT `colaboraciones_fk7` FOREIGN KEY (`id_cat_grupo_vuln`) REFERENCES `cat_grupos_vuln` (`id_cat_grupo_vuln`);
+update `colaboraciones` set id_cat_comun=27;
+ALTER TABLE `colaboraciones` ADD CONSTRAINT `colaboraciones_fk9` FOREIGN KEY (`id_cat_comun`) REFERENCES `cat_comunidades` (`id_cat_comun`);
+ALTER TABLE `colaboraciones` ADD CONSTRAINT `colaboraciones_fk11` FOREIGN KEY (`id_cat_ent_fed_origen`) REFERENCES `cat_entidad_fed` (`id_cat_ent_fed`);
+ALTER TABLE `colaboraciones` ADD CONSTRAINT `colaboraciones_fk12` FOREIGN KEY (`id_cat_mun_origen`) REFERENCES `cat_municipios` (`id_cat_mun`);
+
+

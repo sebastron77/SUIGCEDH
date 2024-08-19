@@ -1,0 +1,17 @@
+{
+    "editor.cursorStyle": "line",
+    "editor.cursorBlinking": "blink",
+    "editor.minimap.autohide": true,
+    "editor.minimap.enabled": true,
+    "editor.minimap.maxColumn": 120,
+    "editor.minimap.scale": 1,
+    "editor.minimap.size": "fill",
+    "workbench.layoutControl.type": "both",
+    "workbench.list.defaultFindMode": "highlight",
+    "workbench.list.fastScrollSensitivity": 5,
+    "workbench.activityBar.iconClickBehavior": "toggle",
+    "workbench.colorCustomizations": {
+    },
+    "workbench.editor.decorations.colors": true,
+    "workbench.statusBar.visible": true
+}

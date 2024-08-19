@@ -1,0 +1,113 @@
+
+/***********************************************/
+/********** Version publica Queja  *************/
+/***********************************************/
+.headerp { 
+	color: black; font-family: Verdana; 
+    background: rgb(140,60,194);
+	background: linear-gradient(90deg, rgba(140,60,194,1) 1%, rgba(122,87,122,1) 29%, rgba(252,176,69,1) 100%);
+	clip-path: ellipse(80% 95% at 50% 2%);
+	height: 150px;
+  }
+  
+.title-main {
+    position: fixed !important;
+    min-height: 120px;
+    width: 100%;
+	margin: auto;
+    text-align: center;
+    word-wrap: break-word; 
+	background-color: white;
+	
+    align-items: center;
+  justify-content: center;
+}
+
+.title-main div{
+	font-size: 14px;
+  outline: none;
+  text-decoration: none !important;
+  text-transform: none;
+  font-family: arial;
+  transition: all .3s ease;
+}
+
+.contpub{
+	margin: 0 auto;	
+	display: block;	
+	height: auto;
+	line-height: 5em;
+}
+
+
+.title-tex{
+	text-align: center;
+    margin: 10px;
+    width: auto;
+	left: 500px;
+	top: 0;	
+	font-weight: bold;
+	font-size:50px;	
+	color: white; 
+	text-shadow: black 0.1em 0.1em 0.2em;	
+	display:inline-block;
+	padding:10px; 
+	font-weight:bold;
+}
+
+.title-logo{
+	text-align: left;
+    margin: 10px 0 0 220px;
+    width: 300px;
+	position: absolute;
+}
+
+.form-select{
+	
+	 all: unset;
+}
+
+.divider {
+  display: flex;
+  
+  &:before,
+  &:after {
+    content: "";
+    flex: 1;
+  }
+}
+
+// Base line
+.line {
+  align-items: center;
+  margin: 1em -1em;
+  
+  &:before,
+  &:after {
+    height: 0.5px;
+    margin: 0 1em;
+  }
+}
+
+.glow {
+    &:before,
+    &:after {
+      height: 6px;
+      -webkit-filter: blur(5px);
+      border-radius: 2px;
+    }
+    
+    &:before {
+      background: linear-gradient(90deg, rgba(252,176,69,1) 1%, rgba(122,87,122,1) 29%,  rgba(140,60,194,1) 100%);
+    }
+    
+    &:after {
+      background: linear-gradient(90deg, rgba(140,60,194,1) 1%, rgba(122,87,122,1) 29%, rgba(252,176,69,1) 100%);
+    }
+  }
+  
+  .form-footer{
+	  background-color: white; height: 50px; margin-top:2%; padding: 20px; font-size: 13px; color: #646C9A;text-align: center;
+  }
+
+

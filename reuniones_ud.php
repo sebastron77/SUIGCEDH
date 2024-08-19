@@ -1,0 +1,176 @@
+<?php
+error_reporting(E_ALL ^ E_NOTICE);
+$page_title = 'Reuniones de Trabajo de Desaparecidos';
+require_once('includes/load.php');
+
+$ejercicio = isset($_GET['anio']) ? $_GET['anio'] : date("Y");
+$all_datos = find_all_year('reuniones_trabajo_ud', 'fecha_reunion',$ejercicio);
+$user = current_user();
+$id_usuario = $user['id_user'];
+$busca_area = area_usuario($id_usuario);
+$otro = $busca_area['nivel_grupo'];
+$nivel_user = $user['user_level'];
+
+if ($nivel_user <= 2) {
+    page_require_level(2);
+}
+if ($nivel_user == 7) {
+    page_require_level(7);
+}
+if ($nivel_user == 12) {
+    page_require_level(12);
+}
+
+
+if ($nivel_user == 7 || $nivel_user == 53) {
+	insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo '.$page_title.' del Ejercicio '.$ejercicio, 5);
+}
+
+
+$conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
+mysqli_set_charset($conexion, "utf8");
+mysqli_select_db($conexion, "suigcedh7");
+$sql = "SELECT
+	folio,fecha_reunion,hora_reunion,lugar_reunion,quien_atendio,no_asistentes,replace(acciones_realizar,'\r\n','  ') as acciones_realizar,observaciones,
+    a.fecha_creacion,
+    CONCAT(du.nombre,' ',du.apellidos) as user_creador
+    
+FROM  reuniones_trabajo_ud a
+LEFT JOIN users u ON(u.id_user= a.user_creador)
+LEFT JOIN detalles_usuario du ON(du.id_det_usuario= u.id_detalle_user) 
+ WHERE YEAR(fecha_reunion)= '{$ejercicio}'";
+$resultado = mysqli_query($conexion, $sql) or die;
+$dates = array();
+while ($rows = mysqli_fetch_assoc($resultado)) {
+    $dates[] = $rows;
+}
+
+mysqli_close($conexion);
+
+if (isset($_POST["export_data"])) {
+    if (!empty($dates)) {
+        header('Content-type: application/vnd.ms-excel; charset=iso-8859-1');
+        header("Content-Disposition: attachment; filename=reuniones_desaparecidos.xls");
+        $filename = "reuniones_desaparecidos.xls";
+        $mostrar_columnas = false;
+
+         foreach ($dates as $datos) {
+            if (!$mostrar_columnas) {
+                echo utf8_decode(implode("\t", array_keys($datos)) . "\n");
+                $mostrar_columnas = true;
+            }
+            echo utf8_decode(implode("\t", array_values($datos)) . "\n");
+        }
+		if ($nivel_user == 7 || $nivel_user == 53) {
+	insertAccion($user['id_user'], '"' . $user['username'] . '" descargó la lista de  '.$page_title.' del Ejercicio '.$ejercicio, 6);
+}
+    } else {
+        echo 'No hay datos a exportar';
+    }
+    exit;
+}
+?>
+<script type="text/javascript">	
+ function changueAnio(anio){
+	 window.open("reuniones_ud.php?anio="+anio,"_self");
+	 
+ }
+</script>
+
+<?php include_once('layouts/header.php'); ?>
+<div class="row">
+    <div class="col-md-12">
+        <?php echo display_msg($msg); ?>
+    </div>
+</div>
+<a href="solicitudes_desaparecidos.php" class="btn btn-success">Regresar</a><br><br>
+<div class="row">
+
+<div class="row">
+	    <div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
+					<div class="col-md-8">
+							<strong>
+								<span class="glyphicon glyphicon-th"></span>
+								<span>Reuniones de Trabajo de Desaparecidos <?php echo $ejercicio ?></span>
+							</strong>
+					</div>
+					<div class="col-md-1" style="margin: 20px 40px 10px 0px;">
+						 
+					</div>
+					<div class="col-md-1">
+						<?php if (($nivel_user <= 2) || ($nivel_user == 12) ) : ?>
+                    <a href="add_reunion_ud.php" class="btn btn-info pull-right btn-md"> Agregar Reunión</a>
+                <?php endif ?>
+					</div>										
+					<div class="col-md-1">
+						<div class="form-group" >
+							<select class="form-control" name="ejercicio" onchange="changueAnio(this.value)">
+								<option value="">Selecciona Ejercicio</option>																								
+								<?php for ($i = 2022; $i <= (int) date("Y"); $i++) {
+								echo "<option value='".$i."'>".$i."</option>";
+								}?>																									
+							</select>
+						</div>	
+					</div>
+					<form action=" <?php echo $_SERVER["PHP_SELF"]; ?>?anio=<?php echo $ejercicio ?>" method="post">
+								<button style="float: right; margin-top: 0px" type="submit" id="export_data" name='export_data' value="Export to excel" class="btn btn-excel">Exportar a Excel</button>
+							</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div class="col-md-12">
+       
+		
+        <div class="panel-body">
+            <table class="datatable table table-bordered table-striped">
+                <thead class="thead-purple">
+                    <tr style="height: 10px;">
+                            <th class="text-center" style="width: 5%;">#</th>
+                            <th style="width: 10%;">Folio</th>
+                            <th class="text-center" >Fecha Reunión</th>
+                            <th class="text-center" >Lugar</th>
+                            <th class="text-center" >¿Quién Atendió?</th>
+                            <th class="text-center" >No. Asistentes</th>
+                            <?php if (($nivel_user <= 2) || ($nivel_user == 7) || ($nivel_user == 12) ) : ?>
+                                <th class="text-center" style="width: 20%;">Acciones</th>
+                            <?php endif ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($all_datos as $adetalle) : ?>
+                            <tr>
+                                <td class="text-center"><?php echo count_id(); ?></td>
+                                <td><?php echo remove_junk(($adetalle['folio'])) ?></td>
+                                <td class="text-center"><?php echo date("d-m-Y", strtotime(remove_junk(($adetalle['fecha_reunion'])))) ?></td>
+                                <td class="text-center"><?php echo remove_junk($adetalle['lugar_reunion'])?></td>
+                                <td class="text-center"><?php echo remove_junk($adetalle['quien_atendio'])?></td>
+                                <td class="text-center"><?php echo remove_junk($adetalle['no_asistentes']) ?></td>
+                                
+                                <?php if (($nivel_user <= 2) || ($nivel_user == 7) || ($nivel_user == 12) ) : ?>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+											<a href="ver_info_reunion_ud.php?id=<?php echo (int)$adetalle['id_reuniones_trabajo_ud']; ?>" class="btn btn-md btn-info" data-toggle="tooltip" title="Ver información completa">
+                                            <i class="glyphicon glyphicon-eye-open"></i>
+                                        </a>&nbsp;
+                                            <?php if (($nivel_user <= 2) || ($nivel_user == 12) ) : ?>
+                                                <a href="edit_reunion_ud.php?id=<?php echo (int)$adetalle['id_reuniones_trabajo_ud']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Editar">
+                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                </a>
+                                            <?php endif ?>
+                                            
+                                        </div>
+                                    </td>
+                                <?php endif ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<?php include_once('layouts/footer.php'); ?>

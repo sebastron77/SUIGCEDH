@@ -1,0 +1,66 @@
+CREATE TABLE `cat_medio_pres_ut` (
+  `id_cat_med_pres_ut` INTEGER NOT NULL AUTO_INCREMENT,
+  `descripcion` VARCHAR(250)  NOT NULL,
+  `estatus` TINYINT NOT NULL,
+  `color_estadistica` VARCHAR(10)  DEFAULT NULL,
+  PRIMARY KEY USING BTREE (`id_cat_med_pres_ut`),
+  UNIQUE KEY `id_cat_med_pres_ut` USING BTREE (`id_cat_med_pres_ut`)
+) ENGINE=InnoDB
+AUTO_INCREMENT=1 ROW_FORMAT=DYNAMIC  ;
+
+
+CREATE TABLE `cat_tipo_solicitud` (
+  `id_cat_tipo_solicitud` INTEGER NOT NULL AUTO_INCREMENT,
+  `descripcion` VARCHAR(250)  NOT NULL,
+  `estatus` TINYINT NOT NULL,
+  `color_estadistica` VARCHAR(10)  DEFAULT NULL,
+  PRIMARY KEY USING BTREE (`id_cat_tipo_solicitud`),
+  UNIQUE KEY `id_cat_tipo_solicitud` USING BTREE (`id_cat_tipo_solicitud`)
+) ENGINE=InnoDB
+AUTO_INCREMENT=1 ROW_FORMAT=DYNAMIC ;
+
+
+CREATE TABLE `recursos_decuncias` (
+  `id_recursos_decuncias` INTEGER NOT NULL AUTO_INCREMENT,
+  `tipo_accion` VARCHAR(20)  NOT NULL,
+  `folio_accion` VARCHAR(20)  NOT NULL,
+  `articulo_causal` TEXT  NOT NULL,
+  `fecha_notificacion` DATE NOT NULL,
+  `tramite` BIT(1) NOT NULL DEFAULT b'1',
+  `fecha_resolucion` DATE DEFAULT NULL,
+  `sentido_resolucion` TEXT  DEFAULT NULL,
+  `user_creador` INTEGER DEFAULT NULL,
+  `fecha_creacion` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY USING BTREE (`id_recursos_decuncias`),
+  UNIQUE KEY `id_recursos_decuncias` USING BTREE (`id_recursos_decuncias`),
+  KEY `recursos_decuncias_fk1` USING BTREE (`user_creador`),
+  CONSTRAINT `recursos_decuncias_fk1` FOREIGN KEY (`user_creador`) REFERENCES `users` (`id_user`)
+) ENGINE=InnoDB
+AUTO_INCREMENT=1 ROW_FORMAT=DYNAMIC ;
+
+CREATE TABLE `solicitudes_informacion` (
+  `id_solicitudes_informacion` INTEGER NOT NULL AUTO_INCREMENT,
+  `folio_solicitud` VARCHAR(30)  NOT NULL,
+  `fecha_presentacion` DATE NOT NULL,
+  `nombre_solicitante` VARCHAR(250)  NOT NULL,
+  `id_cat_gen` INTEGER NOT NULL,
+  `id_cat_med_pres_ut` INTEGER NOT NULL,
+  `informacion_solicitada` TEXT  NOT NULL,
+  `id_cat_tipo_solicitud` INTEGER NOT NULL,
+  `fecha_respuesta` DATE DEFAULT NULL,
+  `archivo_respuesta` VARCHAR(250)  DEFAULT NULL,
+  `user_creador` INTEGER NOT NULL,
+  `fecha_creacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY USING BTREE (`id_solicitudes_informacion`),
+  UNIQUE KEY `id_solicitudes_informacion` USING BTREE (`id_solicitudes_informacion`),
+  UNIQUE KEY `folio_solicitud` USING BTREE (`folio_solicitud`) 
+) ENGINE=InnoDB
+AUTO_INCREMENT=1 ROW_FORMAT=DYNAMIC;
+
+
+
+ ALTER TABLE `solicitudes_informacion` ADD CONSTRAINT `solicitudes_informacion_fk1` FOREIGN KEY (`id_cat_gen`) REFERENCES `cat_genero` (`id_cat_gen`);
+ ALTER TABLE `solicitudes_informacion` ADD CONSTRAINT `solicitudes_informacion_fk2` FOREIGN KEY (`id_cat_med_pres_ut`) REFERENCES `cat_medio_pres_ut` (`id_cat_med_pres_ut`);
+ ALTER TABLE `solicitudes_informacion` ADD CONSTRAINT `solicitudes_informacion_fk3` FOREIGN KEY (`id_cat_tipo_solicitud`) REFERENCES `cat_tipo_solicitud` (`id_cat_tipo_solicitud`);
+ ALTER TABLE `solicitudes_informacion` ADD CONSTRAINT `solicitudes_informacion_fk4` FOREIGN KEY (`user_creador`) REFERENCES `users` (`id_user`);
+ 

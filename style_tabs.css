@@ -1,0 +1,343 @@
+/* 
+    Created on : 15 jul 2022, 13:57:33
+    Author     : Perla
+*/
+
+body {   
+    font-family: "Poppins", sans-serif;
+    margin: 0px;
+    height: 100%;
+    padding: 0px;  
+	background-coloR: white;	
+}
+
+a{
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 14px;
+	cursor: pointer;
+}
+
+a:visited {
+  color: #FFFFFF;
+}
+
+.title1{
+	background: #f7f7f7; 
+	background-size: cover; 
+	font-size: 18px; 
+	color: #777; 
+	margin: 0 auto; 
+	height: 70px; 
+	display: flex; 
+	justify-content: center; 
+	align-items: center;
+}
+
+.footer{
+	background-color: rgb(44,46,54);
+    color: rgb(255,255,255);
+	margin: 0 auto; 
+	height: 70px; 
+	display: flex; 
+	align-items: center;
+	font-size: 12px;
+}
+
+.control_dates{
+letter-spacing: 1px;
+    color: #777;
+    border: 2px solid #f0f0f0;
+    padding: 9px 20px;
+    background-color: transparent;
+    font-size: 14px;
+    line-height: inherit;
+    width: 100%;
+    margin-bottom: 14px;
+    height: auto;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: border ease .238s;
+    -moz-transition: border ease .238s;
+    transition: border ease .238s;
+}
+option {
+     background: #fff; 
+    border-color: #0d0d0f;
+    color: #777;;
+}
+
+.text_elem{
+	color: #555;
+	margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    vertical-align: baseline;
+    font-family: inherit;
+    font-size: 15px;
+    font-style: inherit;
+}
+
+.btn_muestra{
+	font-family: "Poppins";
+    font-size: 12px;
+    border-radius: 3px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background-color: #1f333e;
+    color: #fff;
+    padding: 5px 15px;
+    display: inline-block;
+    -webkit-appearance: none;
+    -webkit-transition: all ease 0.3s;
+    -moz-transition: all ease 0.3s;
+    transition: all ease 0.3s;
+}
+
+.alert_warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+	padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+	font-size: 16px;
+}
+
+.container{
+	background-color:#114987;
+	background-size: cover; 
+	font-size: 14px; 
+	color: #fff; 
+	margin: 0 auto; 
+	height: 50px; 
+	display: flex; 
+	justify-content: center; 
+	align-items: center;
+}
+
+.datos_exp{
+	list-style-image: url('73304.png');
+	background-color: #567895;
+	width: 50%;
+	margin: 0;
+	padding: 5 20;
+	color: white;  
+    border-radius: 5px;
+	text-align: left;
+	
+}
+li {
+    margin: 10px auto;
+}
+
+.etiqueta{
+    padding: 20px;
+    color: sandybrown;
+    font-size: large;
+}
+
+
+
+ul.tabs {
+	margin: 0;
+	padding: 0;
+	float: left;
+	list-style: none;
+	height: 32px; /*--Set height of tabs--*/
+	border-bottom: 0px solid #999;
+	border-left: 0px solid #999;
+	width: 100%;
+	
+	
+}
+
+ul.tabs li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 31px; /*--Subtract 1px from the height of the unordered list--*/
+	line-height: 31px; /*--Vertically aligns the text within the tab--*/
+	border: 1px solid #999;
+	border-left: none;
+	margin-bottom: -1px; /*--Pull the list item down 1px--*/
+	overflow: hidden;
+	position: relative;
+	/*background: #e0e0e0;*/
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        padding: 10px;
+}
+ul.tabs li a {
+	text-decoration: none;
+	color: #000;
+	display: block;
+	font-size: 1.0em;
+	padding: 0 20px;
+	/*border: 1px solid #fff; --Gives the bevel look with a 1px white border inside the list item--*/
+	outline: none;
+}
+ul.tabs li a:hover {
+	/*background: #ccc;*/
+        font-weight: bold;
+        color: sandybrown;
+}
+html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not
+        listen to the hover properties--*/
+	background: #fff;
+	border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with
+        its content--*/
+}
+
+.tab_container {
+	border: 0px solid #999;
+	border-top: none;
+	overflow: hidden;
+	clear: both;
+	float: left; width: 100%;
+	background: #fff;
+}
+.tab_content {
+	padding: 40px;
+	font-size: 1.0em;
+}
+
+.tablaInf{
+    margin-right: auto;
+    table-layout: fixed;
+    width: 90%;
+    height: 4em;
+    border-collapse: collapse;
+   /*border: 3px solid purple;*/
+}
+
+.tablaInf td{
+   
+   /*border: 3px solid purple;*/
+}
+
+.just{
+    width: calc(100% - 10px);
+}
+.campo{
+    text-align: right;
+    font-weight: bold;
+}
+
+
+
+#menu li{ line-height:200%;}
+#menu li a{color:#222; text-decoration:none;}
+#menu li a:before{  color:#ddd; margin-right:4px;}
+#menu input[name="list"] {
+	position: absolute;
+	left: -1000em;
+	}
+#menu label:before{  margin-right:2px;}
+#menu input:checked ~ label:before{ }
+#menu .interior{display: none;}
+#menu input:checked ~ ul{display:block;}
+
+.uimagen{
+    list-style-image: url('../../medios/iconos/calendar.png');
+}
+.lidoc{
+    list-style-image: url('../../medios/iconos/respuesta_small.png');
+}
+.dato{
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    padding: 20px;
+    margin: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+p{
+    text-align: center;
+    color: sandybrown;
+}
+
+.separador{
+    border: 0; 
+    height: 12px; 
+    box-shadow: inset 0 12px 12px -12px orange;
+    width: 50%;
+}
+
+.info, .correcto, .ojo, .error, .validation {
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:13px;
+    text-align:left;
+    width:300px;
+}
+
+.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('error.jpg');
+}
+
+.ojo {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('ojo.JPG');
+}
+
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 50%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  transition: 0.4s;
+  font-weight: bold;
+  letter-spacing: 2pt;
+  border-radius: 3px;
+}
+
+.active, .accordion:hover {
+  background-color: #ccc; 
+}
+
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: white;
+  overflow: hidden;
+}
+
+hr{
+	width: 55%;
+    margin: 5px;
+}
+
+.sintext {
+	margin: 20px;
+    text-align: justify;
+}
+
+.sin_valor{
+	background-image: url("sin_valor.fw.png");
+	width: 100%;
+    height: 100%;
+}

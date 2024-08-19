@@ -1,0 +1,40 @@
+ALTER TABLE `recomendaciones_generales` CHANGE COLUMN `folio_recomendacion_general` `numero_recomendacion` VARCHAR(30) NOT NULL;
+ALTER TABLE `recomendaciones_generales` DROP COLUMN `folio_queja`;
+ALTER TABLE `recomendaciones_generales` DROP COLUMN `servidor_publico`;
+ALTER TABLE `recomendaciones_generales` ADD COLUMN `sintesis_rec` VARCHAR(250) DEFAULT NULL;
+
+ALTER TABLE `recomendaciones_generales` ADD COLUMN `traduccion` VARCHAR(250) DEFAULT NULL;
+ALTER TABLE `recomendaciones_generales` ADD COLUMN `lectura_facil` VARCHAR(250) DEFAULT NULL;
+ALTER TABLE `recomendaciones_generales` ADD COLUMN `infografia` VARCHAR(250) DEFAULT NULL;
+ALTER TABLE `recomendaciones_generales` ADD COLUMN `hecho_completo` TEXT DEFAULT NULL;
+ALTER TABLE `recomendaciones_generales` ADD COLUMN `user_creador` INTEGER NOT NULL ;
+ALTER TABLE `recomendaciones_generales` ADD COLUMN `fecha_creacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `infografia`;
+
+CREATE TABLE `rel_recomendacion_gral_der_vuln` (
+  `id_rel_recomendacion_gral_der_vuln` INTEGER NOT NULL,
+  `id_recom_general` INTEGER NOT NULL,
+  `id_cat_der_vuln` INTEGER NOT NULL
+) ENGINE=InnoDB
+AUTO_INCREMENT=1 ;
+ALTER TABLE `rel_recomendacion_gral_der_vuln` ADD PRIMARY KEY USING BTREE (`id_rel_recomendacion_gral_der_vuln`);
+
+ALTER TABLE `rel_recomendacion_gral_der_vuln` ADD UNIQUE INDEX `id_rel_recomendacion_gral_der_vuln` USING BTREE (`id_rel_recomendacion_gral_der_vuln`);
+
+ALTER TABLE `rel_recomendacion_gral_der_vuln` ADD INDEX `rel_recomendacion_gral_der_vuln_fk1` USING BTREE (`id_recom_general`);
+
+ALTER TABLE `rel_recomendacion_gral_der_vuln` ADD INDEX `rel_recomendacion_gral_der_vuln_fk2` USING BTREE (`id_cat_der_vuln`);
+
+ALTER TABLE `rel_recomendacion_gral_der_vuln` ADD CONSTRAINT `rel_recomendacion_gral_der_vuln_fk1` FOREIGN KEY (`id_recom_general`) REFERENCES `recomendaciones_generales` (`id_recom_general`);
+
+ALTER TABLE `rel_recomendacion_gral_der_vuln` ADD CONSTRAINT `rel_recomendacion_gral_der_vuln_fk2` FOREIGN KEY (`id_cat_der_vuln`) REFERENCES `cat_der_vuln` (`id_cat_der_vuln`);
+
+ALTER TABLE `rel_recomendacion_gral_der_vuln` MODIFY COLUMN `id_rel_recomendacion_gral_der_vuln` INTEGER NOT NULL AUTO_INCREMENT ;
+
+
+ALTER TABLE `acuerdos_recomendaciones` MODIFY COLUMN `id_recomendacion` VARCHAR(30) DEFAULT NULL;
+ALTER TABLE `acuerdos_recomendaciones` MODIFY COLUMN `id_recomendacion` INTEGER DEFAULT NULL;
+ALTER TABLE `acuerdos_recomendaciones` ADD COLUMN `id_recom_general` INTEGER DEFAULT NULL AFTER `id_recomendacion`;
+
+
+ALTER TABLE `acuerdos_recomendaciones` ADD CONSTRAINT `acuerdos_recomendaciones_fk1` FOREIGN KEY (`id_recomendacion`) REFERENCES `recomendaciones` (`id_recomendacion`);
+ALTER TABLE `acuerdos_recomendaciones` ADD CONSTRAINT `acuerdos_recomendaciones_fk2` FOREIGN KEY (`id_recom_general`) REFERENCES `recomendaciones_generales` (`id_recom_general`);

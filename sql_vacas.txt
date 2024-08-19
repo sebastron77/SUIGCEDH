@@ -1,0 +1,15 @@
+
+function find_all_vac($id)
+{
+  $sql = "SELECT rv.id_rel_vacaciones, rv.id_cat_periodo_vac, rv.derecho_vacas, rv.observaciones, rv.ejercicio, pv.semana1_1, pv.semana1_2, 
+          pv.id_rel_periodo_vac, cpv.descripcion as cat_periodo
+          FROM rel_vacaciones rv 
+          LEFT JOIN rel_periodos_vac pv 
+          ON rv.id_rel_vacaciones = pv.id_rel_vacaciones
+          LEFT JOIN cat_periodos_vac cpv
+          ON rv.id_cat_periodo_vac = cpv.id_cat_periodo_vac
+          WHERE rv.id_detalle_usuario = '{$id}' 
+          ORDER BY rv.ejercicio DESC";
+  $result = find_by_sql($sql);
+  return $result;
+}

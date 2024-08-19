@@ -1,0 +1,20 @@
+ALTER TABLE `fichas` CHANGE COLUMN `visitaduria` `id_visitaduria` INTEGER NOT NULL;
+ALTER TABLE `fichas` CHANGE COLUMN `area_solicitante` `id_area_solicitante` INTEGER NOT NULL;
+ALTER TABLE `fichas` CHANGE COLUMN `ocupacion` `id_cat_ocup` INTEGER NOT NULL;
+ALTER TABLE `fichas` CHANGE COLUMN `escolaridad` `id_cat_escolaridad` INTEGER NOT NULL;
+ALTER TABLE `fichas` CHANGE COLUMN `hechos` `id_cat_der_vuln` INTEGER NOT NULL;
+ALTER TABLE `fichas` CHANGE COLUMN `autoridad` `id_cat_aut` INTEGER NOT NULL;
+ALTER TABLE `fichas` CHANGE COLUMN `sexo` `id_cat_gen` INTEGER NOT NULL;
+ALTER TABLE `fichas` CHANGE COLUMN `grupo_vulnerable` `id_cat_grupo_vuln` INTEGER NOT NULL;
+ ALTER TABLE `fichas` CHANGE COLUMN `funcion` `id_cat_funcion` INTEGER NOT NULL;
+
+
+ALTER TABLE `fichas` ADD CONSTRAINT `fichas_fk1` FOREIGN KEY (`id_visitaduria`) REFERENCES `area` (`id_area`);
+ALTER TABLE `fichas` ADD CONSTRAINT `fichas_fk2` FOREIGN KEY (`id_area_solicitante`) REFERENCES `area` (`id_area`);
+ALTER TABLE `fichas` ADD CONSTRAINT `fichas_fk3` FOREIGN KEY (`id_cat_ocup`) REFERENCES `cat_ocupaciones` (`id_cat_ocup`);
+ALTER TABLE `fichas` ADD CONSTRAINT `fichas_fk4` FOREIGN KEY (`id_cat_escolaridad`) REFERENCES `cat_escolaridad` (`id_cat_escolaridad`);
+ALTER TABLE `fichas` ADD CONSTRAINT `fichas_fk5` FOREIGN KEY (`id_cat_der_vuln`) REFERENCES `cat_der_vuln` (`id_cat_der_vuln`);
+ALTER TABLE `fichas` ADD CONSTRAINT `fichas_fk6` FOREIGN KEY (`id_cat_aut`) REFERENCES `cat_autoridades` (`id_cat_aut`);
+ALTER TABLE `fichas` ADD CONSTRAINT `fichas_fk7` FOREIGN KEY (`id_cat_gen`) REFERENCES `cat_genero` (`id_cat_gen`);
+ALTER TABLE `fichas` ADD CONSTRAINT `fichas_fk8` FOREIGN KEY (`id_cat_grupo_vuln`) REFERENCES `cat_grupos_vuln` (`id_cat_grupo_vuln`);
+ALTER TABLE `fichas` ADD CONSTRAINT `fichas_fk9` FOREIGN KEY (`id_cat_funcion`) REFERENCES `cat_funcion` (`id_cat_funcion`);
