@@ -70,17 +70,10 @@ if (isset($_POST['add_vehiculo'])) {
 
         $query = "INSERT INTO vehiculos (";
         $query .= "marca, modelo, anio, no_serie, placas, color, no_puertas, no_cilindros, tipo_combustible, compania_seguros, no_poliza, documento_poliza, 
-<<<<<<< HEAD
                         tarjeta_circulacion, factura, estatus, usuario_creador, fecha_creacion";
         $query .= ") VALUES (";
         $query .= " '{$marca}', '{$modelo}', '{$anio}', '{$no_serie}', '{$placas}', '{$color}', '{$no_puertas}', '{$no_cilindros}', '{$tipo_combustible}', 
                     '{$compania_seguros}', '{$no_poliza}', '{$name}', '{$name2}', '{$name3}', 1, '{$id_user}', '{$creacion}'";
-=======
-                        tarjeta_circulacion, factura, usuario_creador, fecha_creacion";
-        $query .= ") VALUES (";
-        $query .= " '{$marca}', '{$modelo}', '{$anio}', '{$no_serie}', '{$placas}', '{$color}', '{$no_puertas}', '{$no_cilindros}', '{$tipo_combustible}', 
-                    '{$compania_seguros}', '{$no_poliza}', '{$name}', '{$name2}', '{$name3}', '{$id_user}', '{$creacion}'";
->>>>>>> 828bd22a60765362069454cc6a00493ec4941003
         $query .= ")";
 
         $dbh->exec($query);

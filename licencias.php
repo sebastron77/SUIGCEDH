@@ -96,11 +96,12 @@ if (isset($_POST['licencias'])) {
     $move =  move_uploaded_file($temp, $carpeta . "/" . $name);
 
     $dias = abs((strtotime($fecha_termino) - strtotime($fecha_inicio)) / 86400);
+    $dias2 = $dias + 1 ;
 
     $query2 = "INSERT INTO rel_licencias_personal (";
     $query2 .= "id_detalle_usuario, no_consec, tipo_licencia, fecha_inicio, fecha_termino, no_dias, observaciones, documento, fecha_creacion";
     $query2 .= ") VALUES (";
-    $query2 .= " '{$idP}', '{$no_consec}', '{$tipo_licencia}', '{$fecha_inicio}', '{$fecha_termino}', '{$dias}', '{$observaciones}', '{$name}', 
+    $query2 .= " '{$idP}', '{$no_consec}', '{$tipo_licencia}', '{$fecha_inicio}', '{$fecha_termino}', '{$dias2}', '{$observaciones}', '{$name}', 
                 '{$fecha_creacion}'";
     $query2 .= ")";
     $texto2 = $texto2 . $query2;

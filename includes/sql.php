@@ -7826,3 +7826,45 @@ function find_by_id_prestamo($id)
   else
     return null;
 }
+
+/*---------------------------------------------------------*/
+/* Funcion que encuentra todas los trabajadores de un área */
+/*---------------------------------------------------------*/
+function find_all_trabajadores_areaGral($area)
+{
+  $sql = "SELECT d.id_det_usuario,d.nombre, d.apellidos, a.nombre_area 
+  FROM detalles_usuario as d 
+  LEFT JOIN cargos as c ON c.id_cargos = d.id_cargo 
+  LEFT JOIN area as a ON a.id_area = c.id_area 
+  WHERE a.id_area = '{$area}'  
+  AND estatus_detalle=1   
+  ORDER BY d.nombre ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_id_consec_serv_v($id)
+{
+  global $db;
+  $id = (int)$id;
+  $sql = $db->query("SELECT no_servicio
+                      FROM rel_servicios_vehiculos
+                      WHERE id_vehiculo = '{$db->escape($id)}' ORDER BY no_servicio DESC LIMIT 1");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+function find_by_id_consec_rep($id)
+{
+  global $db;
+  $id = (int)$id;
+  $sql = $db->query("SELECT no_reparacion
+                      FROM rel_reparaciones_vehiculos
+                      WHERE id_vehiculo = '{$db->escape($id)}' ORDER BY no_reparacion DESC LIMIT 1");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}

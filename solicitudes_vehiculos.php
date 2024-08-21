@@ -53,11 +53,7 @@ $c_user = count_by_id('users', 'id_user');
                 </span>
             </div>
         </a>
-<<<<<<< HEAD
         <a href="prestamo_vehiculos.php" class="tile">
-=======
-        <a href="correspondencia_recibida.php" class="tile">
->>>>>>> 828bd22a60765362069454cc6a00493ec4941003
             <div class="tile-tittle">Préstamo de Vehículos</div>
             <div class="tile-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">

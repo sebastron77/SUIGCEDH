@@ -6,10 +6,6 @@ require_once('includes/load.php');
 $user = current_user();
 $nivel_user = $user['user_level'];
 $vehiculo = find_by_id_vehiculo((int) $_GET['id']);
-<<<<<<< HEAD
-=======
-$id_vehiculo = (int) $_GET['id'];
->>>>>>> 828bd22a60765362069454cc6a00493ec4941003
 
 if ($nivel_user == 1) {
     page_require_level_exacto(1);
@@ -93,15 +89,9 @@ if (!$nivel_user) {
                             <td class="text-center"><?php echo $vehiculo['combustible'] ?></td>
                             <td class="text-center"><?php echo $vehiculo['compania_seguros'] ?></td>
                             <td class="text-center"><?php echo $vehiculo['no_poliza'] ?></td>
-<<<<<<< HEAD
                             <td><a target="_blank" style="color: #3D94FF;"href="uploads/parquevehicular/vehiculos/<?php echo $vehiculo['id_vehiculo'] . '/' . $vehiculo['documento_poliza']; ?>"><?php echo $vehiculo['documento_poliza']; ?></a></td>
                             <td><a target="_blank" style="color: #3D94FF;"href="uploads/parquevehicular/vehiculos/<?php echo $vehiculo['id_vehiculo'] . '/' . $vehiculo['tarjeta_circulacion']; ?>"><?php echo $vehiculo['tarjeta_circulacion']; ?></a></td>
                             <td><a target="_blank" style="color: #3D94FF;"href="uploads/parquevehicular/vehiculos/<?php echo $vehiculo['id_vehiculo'] . '/' . $vehiculo['factura']; ?>"><?php echo $vehiculo['factura']; ?></a></td>
-=======
-                            <td><a target="_blank" style="color: #3D94FF;"href="uploads/parquevehicular/vehiculos/<?php echo $id_vehiculo . '/' . $vehiculo['documento_poliza']; ?>"><?php echo $vehiculo['documento_poliza']; ?></a></td>
-                            <td><a target="_blank" style="color: #3D94FF;"href="uploads/parquevehicular/vehiculos/<?php echo $id_vehiculo . '/' . $vehiculo['tarjeta_circulacion']; ?>"><?php echo $vehiculo['tarjeta_circulacion']; ?></a></td>
-                            <td><a target="_blank" style="color: #3D94FF;"href="uploads/parquevehicular/vehiculos/<?php echo $id_vehiculo . '/' . $vehiculo['factura']; ?>"><?php echo $vehiculo['factura']; ?></a></td>
->>>>>>> 828bd22a60765362069454cc6a00493ec4941003
                         </tr>
                     </tbody>
                 </table>

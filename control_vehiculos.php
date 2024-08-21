@@ -54,7 +54,7 @@ $all_vehiculos = find_all('vehiculos');
                 <table class="datatable table table-bordered table-striped">
                     <thead class="thead-purple">
                         <tr style="height: 10px;">
-                            <th class="text-center" style="width: 7%;">#</th>
+                            <th class="text-center" style="width: 1%;">#</th>
                             <th class="text-center" style="width: 7%;">Marca</th>
                             <th class="text-center" style="width: 7%;">Modelo</th>
                             <th class="text-center" style="width: 7%;">Año</th>
@@ -68,7 +68,7 @@ $all_vehiculos = find_all('vehiculos');
                     <tbody>
                         <?php foreach ($all_vehiculos as $a_vehiculo) : ?>
                             <tr>
-							<td class="text-center"><?php echo count_id(); ?></td>
+                                <td class="text-center"><?php echo count_id(); ?></td>
                                 <td class="text-center">
                                     <?php echo remove_junk(ucwords($a_vehiculo['marca'])) ?>
                                 </td>
@@ -85,16 +85,30 @@ $all_vehiculos = find_all('vehiculos');
                                     <?php echo remove_junk(ucwords($a_vehiculo['placas'])) ?>
                                 </td>
                                 <!-- <td class="text-center">
-                                    <?php echo remove_junk(ucwords($a_vehiculo['estatus']))?>
+                                    <?php echo remove_junk(ucwords($a_vehiculo['estatus'])) ?>
                                 </td> -->
                                 <td class="text-center">
                                     <?php if ($nivel_user == 1 || $nivel_user == 14) : ?>
                                         <div class="btn-group">
                                             <a href="ver_info_vehiculo.php?id=<?php echo (int) $a_vehiculo['id_vehiculo']; ?>" class="btn btn-md btn-info" data-toggle="tooltip" title="Ver información">
-                                                <i class="glyphicon glyphicon-eye-open"></i>
+                                                <span class="material-symbols-outlined" style="font-size: 22px; color: white; margin-top: 8px;">
+                                                    visibility
+                                                </span>
                                             </a>
                                             <a href="edit_vehiculo.php?id=<?php echo (int) $a_vehiculo['id_vehiculo']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Editar">
-                                                <i class="glyphicon glyphicon-pencil"></i>
+                                                <span class="material-symbols-outlined" style="font-size: 22px; color: black; margin-top: 8px;">
+                                                    edit
+                                                </span>
+                                            </a>
+                                            <a href="reparacion_vehiculo.php?id=<?php echo (int) $a_vehiculo['id_vehiculo']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Reparaciones" style="background-color:#FF3D51; border-color: #FF3D51">
+                                                <span class="material-symbols-outlined" style="font-size: 22px; color: white; margin-top: 8px;">
+                                                    build
+                                                </span>
+                                            </a>
+                                            <a href="servicio_vehiculo.php?id=<?php echo (int) $a_vehiculo['id_vehiculo']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Servicio" style="background-color:#0094DE; border-color: #0094DE;">
+                                                <span class="material-symbols-outlined" style="font-size: 22px; color: white; margin-top: 8px;">
+                                                    no_crash
+                                                </span>
                                             </a>
                                         </div>
                                     <?php endif; ?>
