@@ -37,7 +37,7 @@ endif;
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT dif.id_difusion, dif.folio, dif.fecha, dif.tipo_difusion, td.descripcion as tipo_dif, dif.tema, dif.link, dif.entrevistado, dif.medio
         FROM difusion dif
         LEFT JOIN cat_tipo_difusion td ON td.id_cat_tipo_dif = dif.tipo_difusion";

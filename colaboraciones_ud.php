@@ -30,7 +30,7 @@ $all_acompaniamientos= find_all_Colaboraciones($ejercicio);
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT
 	id_colaboraciones,folio,ejercicio,
   IFNULL(CONCAT(d.nombre,' ',d.paterno,' ',d.materno),'') as persona_desaparecida, 

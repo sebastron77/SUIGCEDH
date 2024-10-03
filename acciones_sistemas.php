@@ -39,7 +39,7 @@ $all_acciones = find_all_accionesCSI($ejercicio);
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 
 $sql = "SELECT id_acciones_sistemas, b.descripcion as tipo_accion, nombre_area, fecha_accion,REPLACE(descripcion_accion,'\r\n',' ') as descripcion_accion, quien_atendio,definicion_indicador
           FROM acciones_sistemas a

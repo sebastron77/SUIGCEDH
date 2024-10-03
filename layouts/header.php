@@ -15,7 +15,7 @@
     ?>
   </title>
 
-  
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
   <link rel="stylesheet" href="libs/css/main.css" />
@@ -27,11 +27,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
 
-  
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
   <script src="html2pdf.bundle.min.js"></script>
   <script src="script.js"></script>
@@ -50,18 +50,22 @@
       var popup = document.getElementById("myPopup");
       popup.classList.toggle("show");
     }
+
     function myFunction2() {
       var popup2 = document.getElementById("myPopup2");
       popup2.classList.toggle("show");
     }
+
     function myFunction3() {
       var popup3 = document.getElementById("myPopup3");
       popup3.classList.toggle("show");
     }
+
     function myFunction4() {
       var popup4 = document.getElementById("myPopup4");
       popup4.classList.toggle("show");
     }
+
     function myFunction5() {
       var popup5 = document.getElementById("myPopup5");
       popup5.classList.toggle("show");
@@ -115,17 +119,31 @@
         })
 
       })
-    });   
-	
-	$(document).ready(function() {
-      $("#id_area_asignadaV").change(function() {        
+    });
+
+    $(document).ready(function() {
+      $("#id_area_asignadaV").change(function() {
 
         $("#id_area_asignadaV option:selected").each(function() {
-          id_area = $(this).val();		
+          id_area = $(this).val();
           $.post("muestra_trabajadores.php", {
             id_area: id_area
           }, function(data) {
             $("#id_user_asignadoV").html(data);
+          })
+        })
+
+      })
+    });
+
+    $(document).ready(function() {
+      $("#id_cat_categoria_inv").change(function() {
+        $("#id_cat_categoria_inv option:selected").each(function() {
+          id_cat_inv = $(this).val();
+          $.post("muestra_articulos.php", {
+            id_cat_inv: id_cat_inv
+          }, function(data) {
+            $("#id_cat_subcategorias_inv").html(data);
           })
         })
 
@@ -322,44 +340,44 @@
       <?php elseif ($user['user_level'] === '18') : ?>
         <!-- Presidencia y Secretaría Técnica -->
         <?php include_once('oficialia_menu.php'); ?>
-		
-		<?php elseif ($user['user_level'] === '19') : ?>
+
+      <?php elseif ($user['user_level'] === '19') : ?>
         <!-- Presidencia y Secretaría Técnica -->
         <?php include_once('mediacion_menu.php'); ?>
 
       <?php elseif ($user['user_level'] === '21') : ?>
         <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('consejo_menu.php'); ?> 
-		
-		 <?php elseif ($user['user_level'] === '22') : ?>
+        <?php include_once('consejo_menu.php'); ?>
+
+      <?php elseif ($user['user_level'] === '22') : ?>
         <!-- Presidencia y Secretaría Técnica -->
         <?php include_once('area_medica_menu.php'); ?>
-		
-		<?php elseif ($user['user_level'] === '23') : ?>
+
+      <?php elseif ($user['user_level'] === '23') : ?>
         <!-- Presidencia y Secretaría Técnica -->
         <?php include_once('centro_estudios_menu.php'); ?>
-		
-		<?php elseif ($user['user_level'] === '24') : ?>
+
+      <?php elseif ($user['user_level'] === '24') : ?>
         <!-- Presidencia y Secretaría Técnica -->
         <?php include_once('centro_estudios_menu.php'); ?>
-		
-		<?php elseif ($user['user_level'] === '25') : ?>
+
+      <?php elseif ($user['user_level'] === '25') : ?>
         <!-- Proyectos -->
         <?php include_once('proyectos_menu.php'); ?>
-		
-		<?php elseif ($user['user_level'] === '26') : ?>
+
+      <?php elseif ($user['user_level'] === '26') : ?>
         <!-- Visitador Regional -->
         <?php include_once('quejas_menu1.php'); ?>
 
       <?php elseif ($user['user_level'] === '51') : ?>
         <!-- Presidencia y Secretaría Técnica -->
-        <?php include_once('operador_tecnica_menu.php'); ?> 
+        <?php include_once('operador_tecnica_menu.php'); ?>
 
       <?php elseif ($user['user_level'] === '52') : ?>
         <!-- Presidencia Operador -->
         <?php include_once('operador_presidencia_menu.php'); ?>
 
-		<?php elseif ($user['user_level'] === '53') : ?>
+      <?php elseif ($user['user_level'] === '53') : ?>
         <!-- Presidencia Operador -->
         <?php include_once('consulta_general_menu.php'); ?>
 

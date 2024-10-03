@@ -38,7 +38,7 @@ $all_actividades = find_all_order('actividades_especiales', 'id_actividades_espe
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT folio,fecha_actividad,tema_actividad,lugar_actividad,b.descripcion as eje_estrategico, c.descripcion as agenda_institucional,observaciones,asistentes_otros,asistentes_nobinario,asistentes_mujeres,asistentes_hombres  	
 	FROM actividades_especiales a
 	LEFT JOIN cat_ejes_estrategicos b USING(id_cat_ejes_estrategicos) 

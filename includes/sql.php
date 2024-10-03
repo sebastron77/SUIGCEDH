@@ -7788,9 +7788,10 @@ function find_by_id_vehiculo($id)
   global $db;
   $id = (int)$id;
   $sql = $db->query("SELECT v.id_vehiculo, v.marca, v.modelo, v.anio, v.no_serie, v.placas, v.color, v.no_puertas, v.no_cilindros, v.tipo_combustible,
-            v.compania_seguros, v.no_poliza, v.documento_poliza, v.tarjeta_circulacion, v.factura, c.descripcion as combustible
+            v.compania_seguros, v.no_poliza, v.documento_poliza, v.tarjeta_circulacion, v.factura, c.descripcion as combustible, a.nombre_area
             FROM vehiculos v
             LEFT JOIN cat_combustible as c ON c.id_cat_combustible = v.tipo_combustible
+            LEFT JOIN area as a ON a.id_area = v.area_asignacion
             WHERE v.id_vehiculo = '{$db->escape($id)}'");
   if ($result = $db->fetch_assoc($sql))
     return $result;
@@ -7868,3 +7869,122 @@ function find_by_id_consec_rep($id)
   else
     return null;
 }
+
+function find_by_id_detalle_perfil($id_detalle)
+{
+  global $db;
+  $id_detalle = (int)$id_detalle;
+  $sql = $db->query("SELECT CONCAT(d.nombre,' ', d.apellidos) as nombre_completo, d.correo, d.curp, d.rfc, d.clave, d.niv_puesto, d.telefono, c.nombre_cargo, 
+                    a.nombre_area, u.username, g.descripcion as genero
+                      FROM detalles_usuario d 
+                      LEFT JOIN cargos c ON c.id_cargos = d.id_cargo
+                      LEFT JOIN area a ON a.id_area = d.id_area
+                      LEFT JOIN users u ON u.id_detalle_user = d.id_det_usuario
+                      LEFT JOIN cat_genero g ON g.id_cat_gen = d.id_cat_gen
+                      WHERE d.id_det_usuario='{$db->escape($id_detalle)}' LIMIT 1");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+/*---------------------------------------------------------*/
+/* Funcion que encuentra todas los trabajadores de un área */
+/*---------------------------------------------------------*/
+function find_all_subcategorias_inv($cat)
+{
+  $sql = "SELECT * FROM cat_subcategorias_inv WHERE id_cat_categoria_inv = '{$cat}' ORDER BY descripcion ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_id_inventario($id)
+{
+  $sql = "SELECT c.id_compra_inv, c.marca, c.modelo, c.no_serie, c.material, s.existencia, c.especificaciones, c.fecha_compra, 
+          SUM(c.cantidad_compra) as cantidad_compra, c.precio_unitario, c.observaciones, cat.descripcion as articulo
+          FROM compras_inv c
+          LEFT JOIN cat_subcategorias_inv as cat
+          ON cat.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
+          LEFT JOIN stock_inv as s
+          ON s.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
+          WHERE id_cat_categoria_inv = '{$id}'
+          GROUP BY c.id_cat_subcategorias_inv, c.marca, c.precio_unitario";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_id_articulo($id)
+{
+  global $db;
+  $id = (int)$id;
+  $sql = $db->query("SELECT c.id_compra_inv, c.marca, c.modelo, c.no_serie, c.material, s.existencia, c.especificaciones, c.fecha_compra, 
+          SUM(c.cantidad_compra) as cantidad_compra, c.precio_unitario, c.observaciones, cat.descripcion as articulo, c.especificaciones
+          FROM compras_inv c
+          LEFT JOIN cat_subcategorias_inv as cat
+          ON cat.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
+          LEFT JOIN stock_inv as s
+          ON s.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
+          WHERE id_compra_inv = '{$id}'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+function find_ultimo_km($id_v)
+{
+  global $db;
+  $id = (int)$id_v;
+  $sql = $db->query("SELECT km_final, mes
+                    FROM rel_bitacora_vehiculo
+                    WHERE id_vehiculo = '{$db->escape($id)}' 
+                    AND mes = IF(MONTH(CURRENT_DATE()) = 1, 12, MONTH(CURRENT_DATE()) - 1);");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+function find_total_litros($id_v, $id_m, $id_e)
+{
+  global $db;
+  $id = (int)$id_v;
+  $id_m = (int)$id_m;
+  $id_e = (int)$id_e;
+  $sql = $db->query("SELECT SUM(litros_g) AS t_litros
+                    FROM rel_bitacora_vehiculo
+                    WHERE id_vehiculo = '{$id}' AND mes='{$id_m}' AND ejercicio={$id_e}");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return ['t_litros' => 0];
+}
+
+function find_gasto_mensual($id_v, $id_m, $id_e)
+{
+  global $db;
+  $id = (int)$id_v;
+  $id_m = (int)$id_m;
+  $id_e = (int)$id_e;
+  $sql = $db->query("SELECT SUM(importe_g) AS t_importe, AVG(precio) as precio_prom
+                    FROM rel_bitacora_vehiculo
+                    WHERE id_vehiculo = '{$id}' AND mes='{$id_m}' AND ejercicio={$id_e}");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return ['t_importe' => 0];
+}
+
+function find_all_bit_ejer_mes($ejercicio, $mes)
+{
+  global $db;
+  return find_by_sql("SELECT * FROM rel_bitacora_vehiculo WHERE ejercicio=" . $db->escape($ejercicio) . " AND mes=" . $db->escape($mes));
+}
+
+// function find_all_group_bitacora($table, $group)
+// {
+//   global $db;
+//   if (tableExists($table)) {
+//     return find_by_sql("SELECT * FROM " . $db->escape($table) . " GROUP BY " . $db->escape($group));
+//   }
+// }

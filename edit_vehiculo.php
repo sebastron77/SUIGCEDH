@@ -1,14 +1,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <?php header('Content-type: text/html; charset=utf-8');
+require_once('includes/load.php');
 $page_title = 'Editar Vehículo';
 error_reporting(E_ALL ^ E_NOTICE);
-require_once('includes/load.php');
 $user = current_user();
 $nivel_user = $user['user_level'];
 $detalle = $user['id_user'];
 
 $e_vehiculo = find_by_id('vehiculos', (int)$_GET['id'], 'id_vehiculo');
 $cat_combustible = find_all_order('cat_combustible', 'descripcion');
+$area = find_all_order('area', 'nombre_area');
 
 if ($nivel_user == 1) {
     page_require_level_exacto(1);
@@ -48,6 +49,7 @@ if (isset($_POST['edit_vehiculo'])) {
         $tipo_combustible   = remove_junk($db->escape($_POST['tipo_combustible']));
         $compania_seguros   = remove_junk($db->escape($_POST['compania_seguros']));
         $no_poliza   = remove_junk($db->escape($_POST['no_poliza']));
+        $area_asignacion   = remove_junk($db->escape($_POST['area_asignacion']));
 
         $carpeta = 'uploads/parquevehicular/vehiculos/' . $id_vehiculo;
 
@@ -90,7 +92,7 @@ if (isset($_POST['edit_vehiculo'])) {
 
         $sql = "UPDATE vehiculos SET marca='{$marca}', modelo='{$modelo}', anio='{$anio}', no_serie='{$no_serie}', placas='{$placas}',  color='{$color}', 
                 no_puertas='{$no_puertas}', no_cilindros='{$no_cilindros}', tipo_combustible='{$tipo_combustible}', compania_seguros='{$compania_seguros}', 
-                no_poliza='{$no_poliza}'";
+                no_poliza='{$no_poliza}', area_asignacion='{$area_asignacion}'";
 
         if ($name != '') {
             $sql .= ", documento_poliza='{$name}' ";
@@ -212,6 +214,17 @@ include_once('layouts/header.php'); ?>
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="area_asignacion">Área a la que se asigna</label>
+                            <select class="form-control" id="area_asignacion" name="area_asignacion" required>
+                                <?php foreach ($area as $a) : ?>
+                                    <option <?php if ($a['id_area'] === $e_vehiculo['area_asignacion']) echo 'selected="selected"'; ?> value="<?php echo $a['id_area']; ?>"><?php echo ucwords($a['nombre_area']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="documento_poliza">Documento Póliza</label>

@@ -160,8 +160,14 @@ $area = 41;
                 </span>
             </div>
         </a>
-
-
+        <a href="solicitudes_inventario.php" class="tile">
+            <div class="tile-tittle">Inventario</div>
+            <div class="tile-icon">
+                <span class="material-symbols-rounded" style="font-size:95px;">
+                    shelves
+                </span>
+            </div>
+        </a>
     </div>
 </div>
 <?php include_once('layouts/footer.php'); ?>

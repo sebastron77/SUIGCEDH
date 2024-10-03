@@ -50,7 +50,7 @@ if (isset($_POST['add_vehiculo'])) {
         date_default_timezone_set('America/Mexico_City');
         $creacion = date('Y-m-d');
 
-        $dbh = new PDO('mysql:host=localhost; dbname=suigcedh7', 'suigcedh', '9DvkVuZ915H!');
+        $dbh = new PDO('mysql:host=localhost; dbname=suigcedh', 'suigcedh', '9DvkVuZ915H!');
 
         $name = $_FILES['documento_poliza']['name'];
         $size = $_FILES['documento_poliza']['size'];
@@ -70,10 +70,10 @@ if (isset($_POST['add_vehiculo'])) {
 
         $query = "INSERT INTO vehiculos (";
         $query .= "marca, modelo, anio, no_serie, placas, color, no_puertas, no_cilindros, tipo_combustible, compania_seguros, no_poliza, documento_poliza, 
-                        tarjeta_circulacion, factura, estatus, usuario_creador, fecha_creacion";
+                        tarjeta_circulacion, factura, area_asignacion, estatus, usuario_creador, fecha_creacion";
         $query .= ") VALUES (";
         $query .= " '{$marca}', '{$modelo}', '{$anio}', '{$no_serie}', '{$placas}', '{$color}', '{$no_puertas}', '{$no_cilindros}', '{$tipo_combustible}', 
-                    '{$compania_seguros}', '{$no_poliza}', '{$name}', '{$name2}', '{$name3}', 1, '{$id_user}', '{$creacion}'";
+                    '{$compania_seguros}', '{$no_poliza}', '{$name}', '{$name2}', '{$name3}', 40, 1, '{$id_user}', '{$creacion}'";
         $query .= ")";
 
         $dbh->exec($query);

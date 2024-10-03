@@ -23,23 +23,23 @@ if ($session->isUserLoggedIn(true)) {
 			</div>
 		</div>
 		<div class=" text-center">
-						<h1 style="margin-top:25px; font-weight: bold; color:#2a2b3b;padding-top: 20px;">Iniciar Sesión</h1>
-					</div>
-					<?php echo display_msg($msg); ?>
-					<form method="post" action="auth.php" class="clearfix">
+			<h1 style="margin-top:25px; font-weight: bold; color:#2a2b3b;padding-top: 20px;">Iniciar Sesión</h1>
+		</div>
+		<?php echo display_msg($msg); ?>
+		<form method="post" action="auth.php" class="clearfix">
 
-						<div class="form-group">
-							<label for="username" class="control-label">Usuario</label>
-							<input type="name" style="background:#E3E3E3;" class="form-control" name="username" placeholder="Usuario">
-						</div>
-						<div class="form-group">
-							<label for="Password" class="control-label">Contraseña</label>
-							<input type="password" style="background:#E3E3E3; " name="password" class="form-control" placeholder="Contraseña">
-						</div>
-						<div class="form-group">
-							<button type="submit" class="btn btn-info  pull-right" style="background: #370494; border-color: #370494;">Entrar</button>
-						</div>
-					</form>
-				</div>
+			<div class="form-group">
+				<label for="username" class="control-label">Usuario</label>
+				<input type="name" style="background:#E3E3E3;" class="form-control" name="username" placeholder="Usuario">
 			</div>
-			<?php include_once('layouts/header.php'); ?>
+			<div class="form-group">
+				<label for="Password" class="control-label">Contraseña</label>
+				<input type="password" style="background:#E3E3E3; " name="password" class="form-control" placeholder="Contraseña">
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-info  pull-right" style="background: #370494; border-color: #370494;">Entrar</button>
+			</div>
+		</form>
+	</div>
+</div>
+<?php include_once('layouts/header.php'); ?>

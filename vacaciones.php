@@ -49,7 +49,7 @@ if (isset($_POST['vacaciones'])) {
     date_default_timezone_set('America/Mexico_City');
     $fecha_creacion = date('Y-m-d');
 
-    $dbh = new PDO('mysql:host=localhost; dbname=suigcedh7', 'suigcedh', '9DvkVuZ915H!');
+    $dbh = new PDO('mysql:host=localhost; dbname=suigcedh', 'suigcedh', '9DvkVuZ915H!');
     // $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $query = "INSERT INTO rel_vacaciones (";

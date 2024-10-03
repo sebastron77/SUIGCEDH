@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Correspondencia';
+$page_title = 'Vehículos';
 require_once('includes/load.php');
 ?>
 <?php
@@ -9,9 +9,6 @@ $id_user = $user['id_user'];
 $nivel_user = $user['user_level'];
 $area = isset($_GET['a']) ? $_GET['a'] : '0';
 $solicitud = find_by_solicitud($area);
-$no_atendidos = count_oficiosInter($area);
-$no_atendidos_ext = count_oficiosExt($area);
-
 if ($nivel_user == 1) {
     page_require_level_exacto(1);
 }
@@ -44,7 +41,6 @@ $c_user = count_by_id('users', 'id_user');
 <div class="container-fluid">
 
     <div class="full-box tileO-container">
-
         <a href="control_vehiculos.php" class="tile">
             <div class="tile-tittle">Control de Vehículos</div>
             <div class="tile-icon">

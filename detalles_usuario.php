@@ -35,7 +35,7 @@ if (!$nivel_user) {
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 
 $sql = "SELECT
 id_det_usuario	,

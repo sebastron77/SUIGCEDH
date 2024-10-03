@@ -96,13 +96,13 @@ if (isset($_POST['licencias'])) {
     $move =  move_uploaded_file($temp, $carpeta . "/" . $name);
 
     $dias = abs((strtotime($fecha_termino) - strtotime($fecha_inicio)) / 86400);
-    $dias2 = $dias + 1 ;
+    $dias2 = $dias + 1;
 
     $query2 = "INSERT INTO rel_licencias_personal (";
-    $query2 .= "id_detalle_usuario, no_consec, tipo_licencia, fecha_inicio, fecha_termino, no_dias, observaciones, documento, fecha_creacion";
+    $query2 .= "id_detalle_usuario, no_consec, id_cat_licencia, fecha_inicio, fecha_termino, no_dias, observaciones, documento, fecha_creacion,id_user_creador,terminado";
     $query2 .= ") VALUES (";
     $query2 .= " '{$idP}', '{$no_consec}', '{$tipo_licencia}', '{$fecha_inicio}', '{$fecha_termino}', '{$dias2}', '{$observaciones}', '{$name}', 
-                '{$fecha_creacion}'";
+                '{$fecha_creacion}',{$user['id_user']},0";
     $query2 .= ")";
     $texto2 = $texto2 . $query2;
     $db->query($query2);
@@ -164,25 +164,26 @@ if (isset($_POST['licencias'])) {
     }
 
     .round-button {
-            background-color: #7263f0;
-            color: white;
-            border: none;
-            padding: 10px; /* Espacio interior */
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin-left: 5px;
-            margin-top: 5px;
-            cursor: pointer;
-            border-radius: 100%;
-            width: 20px;
-            height: 20px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            vertical-align: middle;
-        }
+        background-color: #7263f0;
+        color: white;
+        border: none;
+        padding: 10px;
+        /* Espacio interior */
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        margin-left: 5px;
+        margin-top: 5px;
+        cursor: pointer;
+        border-radius: 100%;
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        vertical-align: middle;
+    }
 
     /* Efecto al pasar el ratón */
     .round-button:hover {
@@ -248,9 +249,9 @@ if (isset($_POST['licencias'])) {
                         <a href="detalles_usuario.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
                             Regresar
                         </a>
-                        <?php if ($consec['terminado'] == 1 || $consec['terminado'] == '') : ?>
-                            <button type="submit" name="licencias" class="btn btn-info">Agregar</button>
-                        <?php endif; ?>
+
+                        <button type="submit" name="licencias" class="btn btn-info">Agregar</button>
+
                     </div>
                 </form>
             </div>
@@ -260,7 +261,7 @@ if (isset($_POST['licencias'])) {
         <table class="table table-bordered table-striped" style="width: 100%; float: left;" id="tblProductos">
             <thead class="thead-purple" style="margin-top: -50px;">
                 <tr style="height: 10px;">
-                    <th colspan="6" style="text-align:center; font-size: 14px;">Licencias <?php echo $diferencia ?></th>
+                    <th colspan="6" style="text-align:center; font-size: 14px;">Licencias </th>
                 </tr>
                 <tr style="height: 10px;">
                     <th class="text-center" style="width: 10%; font-size: 13px;">Fecha Inicio</th>
