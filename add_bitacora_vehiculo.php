@@ -53,24 +53,16 @@ if (isset($_POST['add_bitacora_vehiculo'])) {
             $litros_g2 = $_POST['litros_g'][$i];
             $importe_g2 = $_POST['importe_g'][$i];
 
-            $total_lit = find_total_litros($id_vehiculo, $mes, $ejercicio);
-            $total_litros = (int)$total_lit['t_litros'] + (int)$litros_g2;
-
-            // $precio = $_POST['precio'];
-            $total_mens = find_gasto_mensual($id_vehiculo, $mes, $ejercicio);
-            $gasto_mensual = (int)$importe_g2 + (int)$total_mens['t_importe'];
             date_default_timezone_set('America/Mexico_City');
             $creacion = date('Y-m-d');
             $observaciones = remove_junk($db->escape($_POST['observaciones']));
 
-            echo 'Litros = ' . $_POST['litros_g'][$i];
-            echo $gasto_litros;
             $query = "INSERT INTO rel_bitacora_vehiculo (";
-            $query .= "id_vehiculo, ejercicio, mes, km_inicial, km_final, dia_g, kilometraje_g, litros_g, importe_g, total_litros, gasto_mensual,
-                        observaciones, usuario_creador, fecha_creacion";
+            $query .= "id_vehiculo, ejercicio, mes, km_inicial, km_final, dia_g, kilometraje_g, litros_g, importe_g, observaciones, usuario_creador,  
+                        fecha_creacion";
             $query .= ") VALUES (";
             $query .= " '{$id_vehiculo}', '{$ejercicio}', '{$mes}', '{$km_inicial}', '{$km_final}', '{$dia_g[$i]}', '{$kilometraje_g[$i]}', '{$litros_g[$i]}', 
-                        '{$importe_g[$i]}', '{$total_litros}', '{$gasto_mensual}', '{$observaciones}', '$id_user', '$creacion') ";
+                        '{$importe_g[$i]}', '{$observaciones}', '$id_user', '$creacion') ";
             $texto = $texto . $query;
             $x = $db->query($query);
         }
@@ -79,15 +71,15 @@ if (isset($_POST['add_bitacora_vehiculo'])) {
             //sucess
             $session->msg('s', "La bitácora ha sido agregada con éxito.");
             insertAccion($user['id_user'], '"' . $user['username'] . '" agregó bitácora de ' . $mes . ' ' . $año, 1);
-            redirect('bitacora_vehiculo.php?id=' . $id_vehiculo, false);
+            redirect('control_vehiculos.php', false);
         } else {
             //failed
             $session->msg('d', ' No se pudo agregar la bitácora al sistema.');
-            redirect('add_bitacora_vehiculo.php?id=' . $id_vehiculo, false);
+            redirect('control_vehiculos.php', false);
         }
     } else {
         $session->msg("d", $errors);
-        redirect('add_bitacora_vehiculo.php?id=' . $id_vehiculo, false);
+        redirect('control_vehiculos.php', false);
     }
 }
 ?>
@@ -233,7 +225,7 @@ include_once('layouts/header.php'); ?>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="observaciones">Observaciones</label>
-                            <textarea class="form-control" name="observaciones" cols="30" rows="5" id="observaciones"></textarea>
+                            <textarea class="form-control" name="observaciones" cols="30" rows="5" id="observaciones" placeholder="EL USO DE ESTE VEHÍCULO ES ÚNICAMENTE PARA LAS ACTIVIDADES QUE MARCA EL REGLAMENTO INTERNO."></textarea>
                         </div>
                     </div>
                 </div>
@@ -277,7 +269,7 @@ include_once('layouts/header.php'); ?>
                 <div class="row" id="newRow">
                 </div>
                 <div class="form-group clearfix" style="margin-top: 2%;">
-                    <a href="bitacora_vehiculo.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
+                    <a href="bitacora_vehiculo.php?id=<?php echo $id_v; ?>" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
                         Regresar
                     </a>
                     <button type="submit" name="add_bitacora_vehiculo" class="btn btn-primary">Guardar</button>
@@ -286,44 +278,4 @@ include_once('layouts/header.php'); ?>
         </div>
     </div>
 </div>
-
-
-
-<script>
-    // Texto fijo que estará en la parte superior
-    const textoFijo = "EL USO DE ESTE VEHÍCULO ES ÚNICAMENTE PARA LAS ACTIVIDADES QUE MARCA EL REGLAMENTO INTERNO.\n\n";
-
-    // Obtener el textarea y el formulario
-    const textarea = document.getElementById("observaciones");
-    const formulario = document.getElementById("add_bitacora_vehiculo");
-
-    // Insertar el texto fijo al cargar la página
-    textarea.value = textoFijo;
-
-    // Deshabilitar la edición en la parte fija
-    textarea.addEventListener('keydown', function(event) {
-        // Si la posición del cursor está dentro del texto fijo, evitar la edición
-        if (textarea.selectionStart < textoFijo.length) {
-            event.preventDefault();
-        }
-    });
-
-    // Asegurar que el cursor solo se coloque al final del texto fijo al hacer clic
-    textarea.addEventListener('click', function() {
-        if (textarea.selectionStart < textoFijo.length) {
-            textarea.selectionStart = textoFijo.length;
-            textarea.selectionEnd = textoFijo.length;
-        }
-    });
-
-    // Evitar que el usuario pueda borrar el texto fijo
-    textarea.addEventListener('input', function() {
-        if (textarea.value.substring(0, textoFijo.length) !== textoFijo) {
-            textarea.value = textoFijo;
-        }
-    });
-
-
-</script>
-
 <?php include_once('layouts/footer.php'); ?>

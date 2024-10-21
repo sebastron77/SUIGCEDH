@@ -7935,10 +7935,10 @@ function find_ultimo_km($id_v)
 {
   global $db;
   $id = (int)$id_v;
-  $sql = $db->query("SELECT km_final, mes
+  $sql = $db->query("SELECT MAX(km_final) as km_final, mes, ejercicio
                     FROM rel_bitacora_vehiculo
-                    WHERE id_vehiculo = '{$db->escape($id)}' 
-                    AND mes = IF(MONTH(CURRENT_DATE()) = 1, 12, MONTH(CURRENT_DATE()) - 1);");
+                    WHERE id_vehiculo = '{$db->escape($id)}'
+                    ORDER BY ejercicio DESC, mes DESC");
   if ($result = $db->fetch_assoc($sql))
     return $result;
   else
@@ -7981,10 +7981,54 @@ function find_all_bit_ejer_mes($ejercicio, $mes)
   return find_by_sql("SELECT * FROM rel_bitacora_vehiculo WHERE ejercicio=" . $db->escape($ejercicio) . " AND mes=" . $db->escape($mes));
 }
 
-// function find_all_group_bitacora($table, $group)
-// {
-//   global $db;
-//   if (tableExists($table)) {
-//     return find_by_sql("SELECT * FROM " . $db->escape($table) . " GROUP BY " . $db->escape($group));
-//   }
-// }
+function find_all_order_asc($table, $order)
+{
+  global $db;
+  if (tableExists($table)) {
+    return find_by_sql("SELECT * FROM " . $db->escape($table) . " ORDER BY " . $db->escape($order) . " ASC");
+  }
+}
+
+function find_all_order_desc($table, $order)
+{
+  global $db;
+  if (tableExists($table)) {
+    return find_by_sql("SELECT * FROM " . $db->escape($table) . " ORDER BY " . $db->escape($order) . " DESC");
+  }
+}
+// PARA LA BITÁCORA COMPLETA EN CIERTO MES Y AÑO
+function find_all_bitacora_order($mes, $ejercicio, $id_v)
+{
+  $sql = "SELECT bv.ejercicio, bv.mes, bv.km_inicial, bv.km_final, bv.dia_g, bv.kilometraje_g, bv.litros_g, bv.importe_g, bv.observaciones, 
+          CONCAT(v.marca, ' ', v.modelo) as marca_modelo,
+          (SELECT SUM(bv2.litros_g) FROM rel_bitacora_vehiculo bv2 WHERE bv2.mes = bv.mes AND bv2.ejercicio = bv.ejercicio) as t_litros,
+          (SELECT SUM(bv2.importe_g) FROM rel_bitacora_vehiculo bv2 WHERE bv2.mes = bv.mes AND bv2.ejercicio = bv.ejercicio) as t_importes,
+          (SELECT MAX(bv2.km_final) FROM rel_bitacora_vehiculo bv2 WHERE bv2.mes = bv.mes AND bv2.ejercicio = bv.ejercicio) as t_km_final,
+          (SELECT MIN(bv2.km_inicial) FROM rel_bitacora_vehiculo bv2 WHERE bv2.mes = bv.mes AND bv2.ejercicio = bv.ejercicio) as t_km_inicial,
+          v.anio, v.placas, v.color, v.no_serie, c.descripcion as tipo_combustible, a.nombre_area
+          FROM rel_bitacora_vehiculo bv
+          LEFT JOIN vehiculos as v
+          ON v.id_vehiculo = bv.id_vehiculo
+          LEFT JOIN cat_combustible as c
+          ON c.id_cat_combustible = v.tipo_combustible
+          LEFT JOIN area as a
+          ON a.id_area = v.area_asignacion
+          WHERE bv.mes = '{$mes}' && bv.ejercicio = '{$ejercicio}' && bv.id_vehiculo = '{$id_v}' 
+          GROUP BY bv.ejercicio, bv.mes, bv.km_inicial, bv.km_final, bv.dia_g, bv.kilometraje_g, bv.litros_g, bv.importe_g, bv.observaciones, v.anio, v.placas, v.color, v.no_serie, c.descripcion 
+          ORDER BY dia_g ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+// PARA OBTENER LA INFORMACIÓN DE LA BITÁCORA DE CIERTO VEHÍCULO
+function find_info_bitacora_vehiculo($id_vehiculo, $mes, $ejercicio)
+{
+  global $db;
+  $sql = $db->query("SELECT km_inicial, MAX(km_final) as km_final, mes, ejercicio
+          FROM rel_bitacora_vehiculo
+          WHERE id_vehiculo = '{$id_vehiculo}' AND mes = '{$mes}' AND ejercicio = '{$ejercicio}'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}

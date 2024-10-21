@@ -110,7 +110,11 @@ $all_vehiculos = find_all('vehiculos');
                                                     no_crash
                                                 </span>
                                             </a>
-                                            <a href="bitacora_vehiculo.php?id=<?php echo (int) $a_vehiculo['id_vehiculo']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Bitácora" style="background-color:#7437AD; border-color: #7437AD;">
+                                            <?php
+                                                $mes = date('n');
+                                                $ejercicio = date('Y');
+                                            ?>
+                                            <a href="bitacora_vehiculo.php?id=<?php echo (int) $a_vehiculo['id_vehiculo']; ?>&mes=<?php echo $mes;?>&ejercicio=<?php echo $ejercicio;?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Bitácora" style="background-color:#7437AD; border-color: #7437AD;">
                                                 <span class="material-symbols-outlined" style="font-size: 22px; color: white; margin-top: 8px;">
                                                     list_alt
                                                 </span>

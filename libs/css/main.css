@@ -1405,3 +1405,12 @@ a:active {
         opacity: 1;
     }
 }
+.botones {
+  background: #FF0D17;
+  border-color: #FF0D17;
+  border-radius: 10%;
+  width: 100px;
+  height: 32px;
+  color: white;
+  font-weight: bold;
+}
