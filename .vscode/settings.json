@@ -10,8 +10,26 @@
     "workbench.list.defaultFindMode": "highlight",
     "workbench.list.fastScrollSensitivity": 5,
     "workbench.activityBar.iconClickBehavior": "toggle",
-    "workbench.colorCustomizations": {
-    },
     "workbench.editor.decorations.colors": true,
-    "workbench.statusBar.visible": true
+    "workbench.statusBar.visible": true,
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#34006a",
+        "activityBar.background": "#34006a",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#9f4e00",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#34006a",
+        "statusBar.background": "#1b0037",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#34006a",
+        "statusBarItem.remoteBackground": "#1b0037",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#1b0037",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#1b003799",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#1B0037"
 }

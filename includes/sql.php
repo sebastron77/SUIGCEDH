@@ -8032,3 +8032,12 @@ function find_info_bitacora_vehiculo($id_vehiculo, $mes, $ejercicio)
   else
     return null;
 }
+
+function find_info_servicios($id_vehiculo, $mes, $ejercicio)
+{
+  $sql = "SELECT *
+          FROM rel_servicios_vehiculos
+          WHERE id_vehiculo = '{$id_vehiculo}' AND MONTH(fecha_servicio) = '{$mes}' AND YEAR(fecha_servicio) = '{$ejercicio}'";
+  $result = find_by_sql($sql);
+  return $result;
+}
