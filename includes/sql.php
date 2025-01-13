@@ -7743,7 +7743,7 @@ function find_all_vac($id)
           LEFT JOIN cat_periodos_vac cpv
           ON rv.id_cat_periodo_vac = cpv.id_cat_periodo_vac
           WHERE rv.id_detalle_usuario = '{$id}' 
-          ORDER BY rv.ejercicio DESC";
+          ORDER BY rv.ejercicio DESC, pv.id_rel_periodo_vac DESC, pv.semana1_1 DESC";
   $result = find_by_sql($sql);
   return $result;
 }
@@ -7888,49 +7888,6 @@ function find_by_id_detalle_perfil($id_detalle)
     return null;
 }
 
-/*---------------------------------------------------------*/
-/* Funcion que encuentra todas los trabajadores de un área */
-/*---------------------------------------------------------*/
-function find_all_subcategorias_inv($cat)
-{
-  $sql = "SELECT * FROM cat_subcategorias_inv WHERE id_cat_categoria_inv = '{$cat}' ORDER BY descripcion ASC";
-  $result = find_by_sql($sql);
-  return $result;
-}
-
-function find_by_id_inventario($id)
-{
-  $sql = "SELECT c.id_compra_inv, c.marca, c.modelo, c.no_serie, c.material, s.existencia, c.especificaciones, c.fecha_compra, 
-          SUM(c.cantidad_compra) as cantidad_compra, c.precio_unitario, c.observaciones, cat.descripcion as articulo
-          FROM compras_inv c
-          LEFT JOIN cat_subcategorias_inv as cat
-          ON cat.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
-          LEFT JOIN stock_inv as s
-          ON s.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
-          WHERE id_cat_categoria_inv = '{$id}'
-          GROUP BY c.id_cat_subcategorias_inv, c.marca, c.precio_unitario";
-  $result = find_by_sql($sql);
-  return $result;
-}
-
-function find_by_id_articulo($id)
-{
-  global $db;
-  $id = (int)$id;
-  $sql = $db->query("SELECT c.id_compra_inv, c.marca, c.modelo, c.no_serie, c.material, s.existencia, c.especificaciones, c.fecha_compra, 
-          SUM(c.cantidad_compra) as cantidad_compra, c.precio_unitario, c.observaciones, cat.descripcion as articulo, c.especificaciones
-          FROM compras_inv c
-          LEFT JOIN cat_subcategorias_inv as cat
-          ON cat.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
-          LEFT JOIN stock_inv as s
-          ON s.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
-          WHERE id_compra_inv = '{$id}'");
-  if ($result = $db->fetch_assoc($sql))
-    return $result;
-  else
-    return null;
-}
-
 function find_ultimo_km($id_v)
 {
   global $db;
@@ -8040,4 +7997,165 @@ function find_info_servicios($id_vehiculo, $mes, $ejercicio)
           WHERE id_vehiculo = '{$id_vehiculo}' AND MONTH(fecha_servicio) = '{$mes}' AND YEAR(fecha_servicio) = '{$ejercicio}'";
   $result = find_by_sql($sql);
   return $result;
+}
+
+function find_all_order_by($table, $order, $nombre_id, $id)
+{
+  global $db;
+  if (tableExists($table)) {
+    return find_by_sql("SELECT * FROM " . $db->escape($table) . " WHERE " . $db->escape($nombre_id) . " = " . $db->escape($id) . " ORDER BY " . $db->escape($order));
+  }
+}
+
+function find_all_subcategorias_inv($cat)
+{
+  $sql = "SELECT * FROM cat_subcategorias_inv WHERE id_cat_categoria_inv = '{$cat}' ORDER BY descripcion ASC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_id_inventario($id)
+{
+  // COALESCE es una función en SQL que devuelve el primer valor no nulo de una lista de expresiones. Es muy útil cuando tienes varias columnas o valores 
+  // posibles y quieres elegir el primero que tenga datos, especialmente en estructuras jerárquicas o cuando trabajas con datos opcionales.
+  $sql = "SELECT COALESCE(niv3.id_categoria_inv, niv2.id_categoria_inv) AS id_categoria, COALESCE(niv3.descripcion, niv2.descripcion) AS descripcion_categoria,
+          compras_inv.id_compra_inv, compras_inv.marca, compras_inv.modelo, compras_inv.no_serie, compras_inv.material, compras_inv.especificaciones, 
+          compras_inv.fecha_compra, compras_inv.precio_unitario, stock_inv.existencia, stock_inv.fecha_actualizacion
+          FROM cat_categorias_inv AS niv1
+          LEFT JOIN cat_categorias_inv AS niv2 
+          ON niv2.padre = niv1.id_categoria_inv AND niv2.nivel = 2
+          LEFT JOIN cat_categorias_inv AS niv3 
+          ON niv3.padre = niv2.id_categoria_inv AND niv3.nivel = 3
+          LEFT JOIN compras_inv 
+          ON compras_inv.id_categoria_inv = COALESCE(niv3.id_categoria_inv, niv2.id_categoria_inv) 
+          AND compras_inv.fecha_compra = (
+              SELECT MAX(fecha_compra) 
+              FROM compras_inv 
+              WHERE id_categoria_inv = COALESCE(niv3.id_categoria_inv, niv2.id_categoria_inv)
+          )
+          LEFT JOIN stock_inv 
+          ON stock_inv.id_categoria_inv = COALESCE(niv3.id_categoria_inv, niv2.id_categoria_inv)
+          WHERE niv1.id_categoria_inv = '{$id}' AND (niv3.estatus = 1 OR (niv2.estatus = 1 AND niv3.id_categoria_inv IS NULL))
+          GROUP BY id_categoria;";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_id_articulo($id)
+{
+  global $db;
+  $id = (int)$id;
+  $sql = $db->query("SELECT c.id_compra_inv, c.marca, c.modelo, c.no_serie, c.material, s.existencia, c.especificaciones, c.fecha_compra, 
+          SUM(c.cantidad_compra) as cantidad_compra, c.precio_unitario, c.observaciones, cat.descripcion as articulo, c.especificaciones
+          FROM compras_inv c
+          LEFT JOIN cat_subcategorias_inv as cat
+          ON cat.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
+          LEFT JOIN stock_inv as s
+          ON s.id_cat_subcategorias_inv = c.id_cat_subcategorias_inv
+          WHERE id_compra_inv = '{$id}'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+function find_all_cat_subcat()
+{
+  $sql = "SELECT a.id_categoria_inv, a.descripcion AS categoria, b.descripcion AS desc_padre, a.nivel
+          FROM cat_categorias_inv AS a
+          LEFT JOIN cat_categorias_inv AS b
+          ON b.id_categoria_inv = a.padre
+          WHERE a.nivel = 2
+          ORDER BY b.descripcion";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_all_articulos()
+{
+  $sql = "SELECT a.id_categoria_inv, a.descripcion AS descripcion_articulo, b.descripcion AS descripcion_categoria, c.descripcion as descripcion_padre, a.nivel
+          FROM cat_categorias_inv AS a
+          LEFT JOIN cat_categorias_inv AS b
+          ON b.id_categoria_inv = a.padre
+          LEFT JOIN cat_categorias_inv AS c
+          ON c.id_categoria_inv = b.padre
+          WHERE a.nivel = 3
+          ORDER BY b.descripcion";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_all_entradas_inv()
+{
+  $sql = "SELECT c.id_compra_inv, c.marca, c.especificaciones, c.fecha_compra, c.cantidad_compra, c.precio_unitario, c.observaciones, cc.descripcion
+          FROM compras_inv AS c
+          LEFT JOIN cat_categorias_inv AS cc
+          ON c.id_categoria_inv = cc.id_categoria_inv
+          ORDER BY c.fecha_creacion DESC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+function find_all_salidas_inv()
+{
+  $sql = "SELECT c.id_rel_salida_inv, c.id_categoria_inv, c.id_area_asigna, c.cantidad_salida, c.cantidad_anterior, c.fecha_salida, cc.descripcion, 
+          a.nombre_area
+          FROM rel_salidas_inv AS c
+          LEFT JOIN cat_categorias_inv AS cc
+          ON c.id_categoria_inv = cc.id_categoria_inv
+          LEFT JOIN area as a
+          ON c.id_area_asigna = a.id_area
+          ORDER BY c.fecha_salida DESC";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_by_id_edit_salidas_inv($id)
+{
+  global $db;
+  $id = (int)$id;
+  $sql = $db->query("SELECT c.descripcion, c.id_categoria_inv, s.id_rel_salida_inv, s.cantidad_salida, s.id_area_asigna, s.fecha_salida,
+                    (SELECT c1.padre FROM cat_categorias_inv as c1 WHERE c1.id_categoria_inv = s.id_categoria_inv ) as subpadre,
+                    (SELECT c2.padre FROM cat_categorias_inv as c2 WHERE c2.id_categoria_inv = (SELECT c1.padre FROM cat_categorias_inv as c1 WHERE c1.id_categoria_inv = s.id_categoria_inv )) as padre
+                    FROM rel_salidas_inv as s
+                    LEFT JOIN cat_categorias_inv as c
+                    ON c.id_categoria_inv = s.id_categoria_inv
+                    WHERE s.id_rel_salida_inv = '{$id}'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
+
+function find_and_count_vac($id)
+{
+  global $db;
+  $sql = "SELECT COUNT(id_rel_vacaciones) as total
+          FROM rel_periodos_vac
+          WHERE id_rel_vacaciones = '{$id}'";
+  $result = $db->query($sql);
+  return ($db->fetch_assoc($result));
+}
+
+function find_all_entradas_ejer_mes($ejercicio, $mes)
+{
+  global $db;
+  return find_by_sql("SELECT c.id_compra_inv, c.marca, c.especificaciones, c.fecha_compra, c.cantidad_compra, c.precio_unitario, c.observaciones, 
+                      cc.descripcion, YEAR(c.fecha_compra) as anio
+                      FROM compras_inv AS c
+                      LEFT JOIN cat_categorias_inv AS cc
+                      ON c.id_categoria_inv = cc.id_categoria_inv
+                      WHERE YEAR(c.fecha_compra) = " . $db->escape($ejercicio) . " AND MONTH(c.fecha_compra) = " . $db->escape($mes) . " ORDER BY c.fecha_creacion DESC");
+}
+
+function find_by_id_entrada_inv($id)
+{
+  global $db;
+  $id = (int)$id;
+  $sql = $db->query("SELECT c.*, ci.descripcion as categoria
+                    FROM compras_inv c
+                    LEFT JOIN cat_categorias_inv as ci ON c.id_categoria_inv = ci.id_categoria_inv
+                    WHERE c.id_compra_inv = '{$db->escape($id)}'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
 }

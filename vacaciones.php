@@ -6,10 +6,10 @@ require_once('includes/load.php');
 
 $idP =  (int)$_GET['id'];
 $e_detalle = find_by_id('detalles_usuario', $idP, 'id_det_usuario');
-if (!$e_detalle) {
-    $session->msg("d", "id de usuario no encontrado.");
-    redirect('detalles_usuario.php');
-}
+// if (!$e_detalle) {
+//     $session->msg("d", "id de usuario no encontrado.");
+//     redirect('detalles_usuario.php');
+// }
 
 $user = current_user();
 $id_user = $user['id_user'];
@@ -50,7 +50,7 @@ if (isset($_POST['vacaciones'])) {
     $fecha_creacion = date('Y-m-d');
 
     $dbh = new PDO('mysql:host=localhost; dbname=suigcedh', 'suigcedh', '9DvkVuZ915H!');
-    // $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $query = "INSERT INTO rel_vacaciones (";
     $query .= "id_detalle_usuario, id_cat_periodo_vac, derecho_vacas, observaciones, ejercicio, usuario_creador, fecha_creacion";
@@ -58,29 +58,33 @@ if (isset($_POST['vacaciones'])) {
     $query .= " '{$idP}', '{$id_cat_periodo_vac}', '{$derecho_vacas}', '{$observaciones}', '{$ejercicio}', '{$id_user}', '{$fecha_creacion}'";
     $query .= ")";
 
-    $dbh->exec($query);
-    $id_rv = $dbh->lastInsertId();
 
-    if ($derecho_vacas != 0) {
-        for ($i = 0; $i < sizeof($semana1_1); $i = $i + 1) {
-            $query2 = "INSERT INTO rel_periodos_vac (";
-            $query2 .= " id_rel_vacaciones, semana1_1, semana1_2, usuario_creador, fecha_creacion";
-            $query2 .= ") VALUES (";
-            $query2 .= " '{$id_rv}', '{$semana1_1[$i]}', '{$semana1_2[$i]}', '{$id_user}', '{$fecha_creacion}'";
-            $query2 .= ")";
-            $db->query($query2);
-            $q2 = 1;
+    if ($dbh->exec($query)) {
+        $id_rv = $dbh->lastInsertId();
+
+        if ($derecho_vacas != 0) {
+            for ($i = 0; $i < sizeof($semana1_1); $i = $i + 1) {
+                if ($semana1_1[$i] != '') {
+                    $query2 = "INSERT INTO rel_periodos_vac (";
+                    $query2 .= " id_rel_vacaciones, semana1_1, semana1_2, usuario_creador, fecha_creacion";
+                    $query2 .= ") VALUES (";
+                    $query2 .= " '{$id_rv}', '{$semana1_1[$i]}', '{$semana1_2[$i]}', '{$id_user}', '{$fecha_creacion}'";
+                    $query2 .= ")";
+                    $db->query($query2);
+                    $q2 = 1;
+                }
+            }
         }
-    }
-    if (($id_rv != 0) || ($q2 == 1)) {
-        //sucess
-        $session->msg('s', "Periodo vacacional agregado con éxito. ");
-        insertAccion($user['id_user'], '"' . $user['username'] . '" agregó periodo vacacional al usuario de id:' . (int)$idP, 1);
-        redirect('detalles_usuario.php', false);
-    } else {
-        //failed
-        $session->msg('d', 'Desafortunadamente no se pudo crear el registro.');
-        redirect('detalles_usuario.php', false);
+        if (($id_rv != 0) || ($q2 == 1)) {
+            //sucess
+            $session->msg('s', "Periodo vacacional agregado con éxito. ");
+            insertAccion($user['id_user'], '"' . $user['username'] . '" agregó periodo vacacional al usuario de id:' . (int)$idP, 1);
+            redirect('vacaciones.php?id=' . $idP, false);
+        } else {
+            //failed
+            $session->msg('d', 'Desafortunadamente no se pudo crear el registro.');
+            redirect('detalles_usuario.php', false);
+        }
     }
 }
 ?>
@@ -266,7 +270,7 @@ if (isset($_POST['vacaciones'])) {
                                 <input type="date" class="form-control" name="semana1_2[]">
                             </div>
                         </div>
-                        <!-- <div class="row" style="margin-top: 1%; margin-bottom: 2%; margin-left: 1%;"> -->
+
                         <div class="col-md-1" style="margin-top: 4%;">
                             <button type="button" class="btn btn-success" id="addRow" name="addRow" style="width: 40px">
                                 <span class="material-symbols-outlined" style="color: white">
@@ -314,11 +318,19 @@ if (isset($_POST['vacaciones'])) {
                         <td style="font-size: 15px;"><?php echo $vac['cat_periodo']; ?></td>
                         <td class="text-center" style="font-size: 15px;"><?php echo $vac['ejercicio']; ?></td>
                         <td class="text-center" style="font-size: 15px;"><?php echo $vac['derecho_vacas'] == '0' ? 'No' : 'Sí'; ?></td>
-                        <td class="text-center" style="font-size: 15px;"><?php echo $vac['derecho_vacas'] == '1' ? $newDate = date("d-m-Y", strtotime($vac['semana1_1'])) : '-'; ?></td>
-                        <td class="text-center" style="font-size: 15px;"><?php echo  $vac['derecho_vacas'] == '1' ? $newDate = date("d-m-Y", strtotime($vac['semana1_2'])) : '-'; ?></td>
+                        <td class="text-center" style="font-size: 15px;"><?php echo $vac['derecho_vacas'] == '1' ? ($vac['semana1_1'] ? $newDate = date("d-m-Y", strtotime($vac['semana1_1'])) : '-') : '-'  ?></td>
+                        <td class="text-center" style="font-size: 15px;"><?php echo $vac['derecho_vacas'] == '1' ? ($vac['semana1_1'] ? $newDate = date("d-m-Y", strtotime($vac['semana1_2'])) : '-') : '-'  ?></td>
                         <td class="text-center" style="font-size: 15px;"><?php echo $vac['observaciones']; ?></td>
                         <td style="font-size: 14px;" class="text-center">
-                            <a href="edit_vacaciones.php?idrv=<?php echo (int)$vac['id_rel_vacaciones']; ?>&idrpv=<?php echo (int)$vac['id_rel_periodo_vac']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 30px; width: 30px;"><span class="material-symbols-rounded" style="font-size: 22px; color: black; margin-top: -1.5px; margin-left: -5px;">edit</span>
+                            <!-- <?php if ($vac['derecho_vacas'] == '0'): ?> -->
+                            <a href="edit_vacaciones.php?idrv=<?php echo (int)$vac['id_rel_vacaciones']; ?>" class=" btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 30px; width: 30px;"><span class="material-symbols-rounded" style="font-size: 22px; color: black; margin-top: -1.5px; margin-left: -5px;">edit</span>
+                            </a>
+                            <!-- <?php endif; ?> -->
+                            <!-- <?php if ($vac['derecho_vacas'] == '1'): ?> -->
+                            <a href="edit_vacaciones.php?idrv=<?php echo (int)$vac['id_rel_vacaciones']; ?>&idrpv=<?php echo (int)$vac['id_rel_periodo_vac']; ?>"" class=" btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 30px; width: 30px;"><span class="material-symbols-rounded" style="font-size: 22px; color: black; margin-top: -1.5px; margin-left: -5px;">edit</span>
+                            </a>
+                            <!-- <?php endif; ?> -->
+                            <a href="delete_vacaciones.php?idrv=<?php echo (int)$vac['id_rel_vacaciones']; ?>&idrpv=<?php echo (int)$vac['id_rel_periodo_vac']; ?>&idT=<?php echo (int)$idP; ?>" class=" btn btn-dark btn-md" title="Editar" data-toggle="tooltip" style="height: 30px; width: 30px;"><span class="material-symbols-rounded" style="font-size: 22px; color: white; margin-top: -1.5px; margin-left: -5px;">delete</span>
                             </a>
                         </td>
                     </tr>

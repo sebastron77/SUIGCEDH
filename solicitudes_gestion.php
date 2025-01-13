@@ -164,7 +164,7 @@ $area = 41;
             <div class="tile-tittle">Inventario</div>
             <div class="tile-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
-                    shelves
+                    warehouse
                 </span>
             </div>
         </a>

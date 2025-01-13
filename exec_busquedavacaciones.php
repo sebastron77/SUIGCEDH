@@ -9,18 +9,25 @@ $busca_area = area_usuario($id_user);
 $otro = $busca_area['nivel_grupo'];
 $nivel = $user['user_level'];
 
-if ($nivel <= 2) {
-    page_require_level(2);
+if ($nivel == 1) {
+    page_require_level_exacto(1);
+}
+if ($nivel == 2) {
+    page_require_level_exacto(2);
 }
 if ($nivel == 14) {
     page_require_level_exacto(14);
 }
-
-if ($nivel > 2 && $nivel < 14) :
+if ($nivel == 29) {
+    page_require_level_exacto(29);
+}
+if ($nivel > 2 && $nivel < 14) {
     redirect('home.php');
-endif;
-
-if (!$nivel) {
+}
+if ($nivel > 14 && $nivel < 29) {
+    redirect('home.php');
+}
+if ($nivel > 29) {
     redirect('home.php');
 }
 
@@ -32,21 +39,31 @@ if (isset($_POST['export_data'])) {
         $periodo = remove_junk($db->escape($_POST['periodo']));
         $id_area = remove_junk($db->escape($_POST['id_area']));
         $derecho = remove_junk($db->escape($_POST['derecho']));
+        $semana1 = remove_junk($db->escape($_POST['semana1']));
+        $semana2 = remove_junk($db->escape($_POST['semana2']));
 
         $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
         mysqli_set_charset($conexion, "utf8");
         mysqli_select_db($conexion, "suigcedh");
 
         $sql = "SELECT 
-                d.id_det_usuario, d.nombre, d.apellidos,  rv.ejercicio, pv.descripcion as periodo,IF(rv.derecho_vacas = 0, 'No', 'Sí') as derecho, 
-                rv.observaciones, rpv.semana1_1, rpv.semana1_2, a.nombre_area
+                d.id_det_usuario, 
+				d.nombre, 
+				d.apellidos,  
+				rv.ejercicio, 
+				pv.descripcion as periodo,
+				IF(rv.derecho_vacas = 0, 'No', 'Sí') as derecho, 
+                 REPLACE(REPLACE(REPLACE(rv.observaciones,'\r',''),'\t',''),'\n','_') as observaciones, 
+				 rpv.semana1_1 as del_dia, 
+				 rpv.semana1_2 as al_dia, 
+				 a.nombre_area
 
                 FROM rel_vacaciones rv
                 LEFT JOIN rel_periodos_vac rpv ON rv.id_rel_vacaciones = rpv.id_rel_vacaciones
                 LEFT JOIN detalles_usuario as d ON d.id_det_usuario = rv.id_detalle_usuario
                 LEFT JOIN cat_periodos_vac as pv ON pv.id_cat_periodo_vac = rv.id_cat_periodo_vac
                 LEFT JOIN area as a ON a.id_area = d.id_area
-                WHERE CAST(rv.ejercicio AS UNSIGNED) = YEAR(CURDATE())";
+                WHERE  CAST(rv.ejercicio AS UNSIGNED) = YEAR(CURDATE())";
 
         /******************************* Datos Queja ************************************************/
         //ejercicio
@@ -62,8 +79,19 @@ if (isset($_POST['export_data'])) {
             $sql .= " AND a.id_area = '" . $id_area . "' ";
         }
 
+        //fecha_acuerdo
+        if ($semana1 != '') {
+            $sql .= " AND rpv.semana1_1 >=  '" . $semana1 . "' ";
+        }
 
-        $sql .= " ORDER BY rv.fecha_creacion ";
+        //fecha_acuerdo
+        if ($semana2 != '') {
+            $sql .= " AND rpv.semana1_2 <=  '" . $semana2 . "' ";
+        }
+
+
+        $sql .= " ORDER BY d.nombre,semana1_1 ";
+		//echo $sql;
         $resultado = mysqli_query($conexion, $sql) or die;
         $vacaciones = array();
         while ($rows = mysqli_fetch_assoc($resultado)) {
@@ -92,8 +120,8 @@ if (isset($_POST['export_data'])) {
                 <p style="font-size: 17px; font-family: 'Montserrat'">
                     Lo sentimos, su búsqueda no generó ningún resultado ya que no hay coincidencias. Le pedimos por favor vuelva a intentarlo o verifique su información.
                 </p>
-
-                <a href="busquedavacaciones.php" class="btn btn-md btn-success" data-toggle="tooltip" title="ACEPTAR">ACEPTAR </a>
+                
+<a href="busquedavacaciones.php" class="btn btn-md btn-success" data-toggle="tooltip" title="ACEPTAR">ACEPTAR </a>
 <?php
             }
             exit;

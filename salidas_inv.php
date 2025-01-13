@@ -1,12 +1,12 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
-$page_title = 'Inventario de Abarrotes';
+$page_title = 'Historial de Salidas en el Inventario';
 require_once('includes/load.php');
 ?>
 <?php
 $user = current_user();
 $nivel_user = $user['user_level'];
-$abarrotes = find_by_id_inventario(5);
+$salidas_inv = find_all_salidas_inv();
 
 if ($nivel_user == 1) {
     page_require_level_exacto(1);
@@ -42,7 +42,8 @@ if (!$nivel_user) {
             <div class="panel-heading clearfix">
                 <strong>
                     <span class="glyphicon glyphicon-th"></span>
-                    <span>INVENTARIO DE ABARROTES</span>
+                    <span>HISTORIAL DE SALIDAS EN EL INVENTARIO</span>
+                    <a href="add_salida_inv.php" class="btn btn-info pull-right">AGREGAR SALIDA</a>
                 </strong>
             </div>
 
@@ -51,44 +52,41 @@ if (!$nivel_user) {
                     <thead class="thead-purple">
                         <tr style="height: 10px;">
                             <th class="text-center" style="width: 1%;">#</th>
-                            <th class="text-center" style="width: 5%;">Artículo</th>
-                            <th class="text-center" style="width: 5%;">Marca</th>
-                            <th class="text-center" style="width: 1%;">Stock</th>
-                            <th class="text-center" style="width: 2%;">Precio Unitario</th>
-                            <th class="text-center" style="width: 2%;">Fecha Compra</th>
-                            <th class="text-center" style="width: 10%;">Observaciones</th>
+                            <th class="text-center" style="width: 5%;">Categoría</th>
+                            <th class="text-center" style="width: 2%;">Cantidad Salida</th>
+                            <th class="text-center" style="width: 2%;">Cantidad Anterior</th>
+                            <th class="text-center" style="width: 10%;">Área Salida</th>
+                            <th class="text-center" style="width: 1%;">Fecha Salida</th>
                             <?php if ($nivel_user == 1 || $nivel_user == 14) : ?>
                                 <th style="width: 1%;" class="text-center">Acciones</th>
                             <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($abarrotes as $a_inv) : ?>
-                            <?php if ($a_inv['existencia'] != '') : ?>
+                        <?php foreach ($salidas_inv as $sali_inv) :
+                            $o_fecha = date("d/m/Y", strtotime($sali_inv['fecha_salida']));
+                        ?>
                             <tr>
                                 <td class="text-center"><?php echo count_id(); ?></td>
                                 <td>
-                                    <?php echo remove_junk(ucwords($a_inv['descripcion_categoria'])) ?>
+                                    <?php echo $sali_inv['descripcion'] ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php echo $sali_inv['cantidad_salida'] ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php echo $sali_inv['cantidad_anterior'] ?>
                                 </td>
                                 <td>
-                                    <?php echo remove_junk(ucwords($a_inv['marca'])) ?>
+                                    <?php echo remove_junk(ucwords($sali_inv['nombre_area'])) ?>
                                 </td>
                                 <td class="text-center">
-                                    <?php echo remove_junk(ucwords($a_inv['existencia'])) ?>
-                                </td>
-                                <td class="text-center">
-                                    <?php echo '$' . $a_inv['precio_unitario']; ?>
-                                </td>
-                                <td class="text-center">
-                                    <?php echo remove_junk(date("d/m/Y", strtotime($a_inv['fecha_compra']))) ?>
-                                </td>
-                                <td>
-                                    <?php echo remove_junk(ucwords($a_inv['observaciones'])) ?>
+                                    <?php echo $o_fecha ?>
                                 </td>
                                 <td class="text-center">
                                     <?php if ($nivel_user == 1 || $nivel_user == 14) : ?>
                                         <div class="btn-group">
-                                            <a href="edit_inv_abarrotes.php?id=<?php echo (int) $a_inv['id_compra_inv']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Editar">
+                                            <a href="edit_salida_inv.php?id=<?php echo (int)$sali_inv['id_rel_salida_inv']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip">
                                                 <span class="material-symbols-outlined" style="font-size: 22px; color: black; margin-top: 8px;">
                                                     edit
                                                 </span>
@@ -97,7 +95,6 @@ if (!$nivel_user) {
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                            <?php endif; ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>

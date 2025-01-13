@@ -7,7 +7,7 @@ $user = current_user();
 $nivel_user = $user['user_level'];
 $id_user = $user['id_user'];
 $cat_combustible = find_all_order('cat_combustible', 'descripcion');
-$categorias_articulos = find_all_order('cat_categorias_inv', 'descripcion');
+$categorias_articulos = find_all_order_by('cat_categorias_inv', 'descripcion', 'padre', 0);
 $tipos_articulos = find_all_order('cat_subcategorias_inv', 'descripcion');
 
 if ($nivel_user == 1) {
@@ -43,7 +43,8 @@ if (!$nivel_user) {
 if (isset($_POST['add_inventario'])) {
     if (empty($errors)) {
 
-        $id_cat_subcategorias_inv = $db->escape($_POST['id_cat_subcategorias_inv']);
+        $id_categoria_inv2 = $db->escape($_POST['id_categoria_inv2']);
+        $id_categoria_inv3 = $db->escape($_POST['id_categoria_inv3']);
 
         $marca = remove_junk($db->escape($_POST['marca']));
         $modelo = remove_junk($db->escape($_POST['modelo']));
@@ -58,7 +59,14 @@ if (isset($_POST['add_inventario'])) {
         date_default_timezone_set('America/Mexico_City');
         $creacion = date('Y-m-d');
 
-        $busqueda = find_by_id('stock_inv', $id_cat_subcategorias_inv, 'id_cat_subcategorias_inv');
+        if ($id_categoria_inv3 == '') {
+            $id_categoria_inv = $id_categoria_inv2;
+        } else {
+            $id_categoria_inv = $id_categoria_inv3;
+        }
+
+        $busqueda = find_by_id('stock_inv', $id_categoria_inv, 'id_categoria_inv');
+        
         if ($busqueda['existencia'] != null) {
             $suma = $busqueda['existencia'] + $cantidad_compra;
         } else {
@@ -66,26 +74,26 @@ if (isset($_POST['add_inventario'])) {
         }
 
         $query = "INSERT INTO stock_inv (";
-        $query .= "id_cat_subcategorias_inv, existencia, fecha_actualizacion, usuario_creador, fecha_creacion";
+        $query .= "id_categoria_inv, existencia, fecha_actualizacion, usuario_creador, fecha_creacion";
         $query .= ") VALUES (";
-        $query .= " '{$id_cat_subcategorias_inv}', '{$suma}', '{$creacion}', '{$id_user}', '{$creacion}') ";
+        $query .= " '{$id_categoria_inv}', '{$suma}', '{$creacion}', '{$id_user}', '{$creacion}') ";
 
         $query .= "ON DUPLICATE KEY UPDATE ";
         $query .= "existencia = VALUES(existencia), ";
         $query .= "fecha_actualizacion = VALUES(fecha_actualizacion)";
 
         $query2 = "INSERT INTO compras_inv (";
-        $query2 .= "id_cat_subcategorias_inv, marca, modelo, no_serie, material, especificaciones, fecha_compra, cantidad_compra, precio_unitario, 
+        $query2 .= "id_categoria_inv, marca, modelo, no_serie, material, especificaciones, fecha_compra, cantidad_compra, precio_unitario, 
                     observaciones, usuario_creador, fecha_creacion";
         $query2 .= ") VALUES (";
-        $query2 .= " '{$id_cat_subcategorias_inv}', '{$marca}', '{$modelo}', '{$no_serie}', '{$material}', '{$especificaciones}', '{$fecha_compra}', 
+        $query2 .= " '{$id_categoria_inv}', '{$marca}', '{$modelo}', '{$no_serie}', '{$material}', '{$especificaciones}', '{$fecha_compra}', 
                         '{$cantidad_compra}', '{$precio_unitario1}', '{$observaciones}', '{$id_user}', '{$creacion}'";
         $query2 .= ")";
 
         if ($db->query($query) && $db->query($query2)) {
             //sucess
             $session->msg('s', " El artículo ha sido agregado al inventario con éxito.");
-            insertAccion($user['id_user'], '"' . $user['username'] . '" agregó articulo: (subcat: ' . $id_cat_subcategorias_inv . ', cant.: ' . $cantidad_compra . ', marca: ' . $marca . ')', 1);
+            insertAccion($user['id_user'], '"' . $user['username'] . '" agregó articulo: (subcat: ' . $id_categoria_inv . ', cant.: ' . $cantidad_compra . ', marca: ' . $marca . ')', 1);
             redirect('solicitudes_inventario.php', false);
         } else {
             //failed
@@ -115,20 +123,25 @@ include_once('layouts/header.php'); ?>
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label for="id_cat_categoria_inv">Categorías de Artículos</label>
-                            <select class="form-control" id="id_cat_categoria_inv" name="id_cat_categoria_inv" required>
+                            <label for="id_categoria_inv">Categoría del Artículo</label>
+                            <select class="form-control" id="id_categoria_inv" name="id_categoria_inv" required>
                                 <option value="">Escoge una opción</option>
                                 <?php foreach ($categorias_articulos as $c_articulo) : ?>
-                                    <option value="<?php echo $c_articulo['id_cat_categoria_inv']; ?>"><?php echo ucwords($c_articulo['descripcion']); ?></option>
+                                    <option value="<?php echo $c_articulo['id_categoria_inv']; ?>"><?php echo ucwords($c_articulo['descripcion']); ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
-                    <?php $trabajadores = find_all_subcategorias_inv($c_articulo['id_cat_categoria_inv']) ?>
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label for="id_cat_subcategorias_inv">Tipo de Artículo</label>
-                            <select class="form-control" id="id_cat_subcategorias_inv" name="id_cat_subcategorias_inv" required></select>
+                            <label for="id_categoria_inv2">Subcategoría del Artículo / Artículo</label>
+                            <select class="form-control" id="id_categoria_inv2" name="id_categoria_inv2" required></select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="id_categoria_inv3">Artículo</label>
+                            <select class="form-control" id="id_categoria_inv3" name="id_categoria_inv3" ></select>
                         </div>
                     </div>
                     <div class="col-md-1">
@@ -137,7 +150,7 @@ include_once('layouts/header.php'); ?>
                             <input type="number" min="1" class="form-control" name="cantidad_compra" required>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="precio_unitario">Precio Unitario</label>
                             <input type="text" class="form-control" name="precio_unitario" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency">
@@ -157,15 +170,18 @@ include_once('layouts/header.php'); ?>
                     </div>
                 </div>
                 <script>
+                    //CATEGORÍA
                     $(function() {
-                        $("#id_cat_categoria_inv").on("change", function() {
+                        $("#id_categoria_inv").on("change", function() {
                             var variable = $(this).val();
                             $("#selected").html(variable);
+                            
                         })
 
                     });
+                    //SUBCATEGORÍA
                     $(function() {
-                        $("#id_cat_subcategorias_inv").on("change", function() {
+                        $("#id_categoria_inv").on("change", function() {
                             var variable2 = $(this).val();
                             $("#selected2").html(variable2);
                         })
@@ -197,10 +213,10 @@ include_once('layouts/header.php'); ?>
                                 <input type="text" class="form-control" name="material">
                             </div>
                         </div>
-                        <div class="col-md-3" id="input3">
+                        <div class="col-md-4" id="input3">
                             <div class="form-group" style="margin-left: -15px;">
                                 <label for="especificaciones">Especificaciones</label>
-                                <textarea class="form-control" name="especificaciones" cols="30" rows="3"></textarea>
+                                <textarea class="form-control" name="especificaciones" cols="30" rows="4"></textarea>
                             </div>
                         </div>
                     </div>
@@ -249,6 +265,10 @@ include_once('layouts/header.php'); ?>
             document.getElementById('input4').classList.add('hidden');
             document.getElementById('input5').classList.add('hidden');
         }
+        if (valorSeleccionado === "5") { //Oculta modelo, no_serie, material y especificaciones
+            document.getElementById('input1').classList.add('hidden');
+            // document.getElementById('input3').classList.add('hidden');
+        }
         if (valorSeleccionado === "6") { //Oculta modelo, no_serie, especificaciones y muestra material
             document.getElementById('input1').classList.remove('hidden');
             document.getElementById('input2').classList.add('hidden');
@@ -259,7 +279,7 @@ include_once('layouts/header.php'); ?>
     }
 
     // Evento que detecta el cambio en el select
-    document.getElementById('id_cat_categoria_inv').addEventListener('change', function() {
+    document.getElementById('id_categoria_inv').addEventListener('change', function() {
         mostrarInputs(this.value);
     });
 

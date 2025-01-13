@@ -65,41 +65,43 @@ if (!$nivel_user) {
                     </thead>
                     <tbody>
                         <?php foreach ($mobiliario as $m_inv) : ?>
-                            <tr>
-                                <td class="text-center"><?php echo count_id(); ?></td>
-                                <td>
-                                    <?php echo remove_junk(ucwords($m_inv['articulo'])) ?>
-                                </td>
-                                <td>
-                                    <?php echo remove_junk(ucwords($m_inv['marca'])) ?>
-                                </td>
-                                <td>
-                                    <?php echo remove_junk(ucwords($m_inv['material'])) ?>
-                                </td>
-                                <td class="text-center">
-                                    <?php echo remove_junk(ucwords($m_inv['cantidad_compra'])) ?>
-                                </td>
-                                <td class="text-center">
-                                    <?php echo '$' . $m_inv['precio_unitario']; ?>
-                                </td>
-                                <td class="text-center">
-                                    <?php echo remove_junk(date("d/m/Y", strtotime($m_inv['fecha_compra']))) ?>
-                                </td>
-                                <td>
-                                    <?php echo remove_junk(ucwords($m_inv['observaciones'])) ?>
-                                </td>
-                                <td class="text-center">
-                                    <?php if ($nivel_user == 1 || $nivel_user == 14) : ?>
-                                        <div class="btn-group">
-                                            <a href="edit_inv_mobiliario.php?id=<?php echo (int) $m_inv['id_compra_inv']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Editar">
-                                                <span class="material-symbols-outlined" style="font-size: 22px; color: black; margin-top: 8px;">
-                                                    edit
-                                                </span>
-                                            </a>
-                                        </div>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
+                            <?php if ($m_inv['existencia'] != '') : ?>
+                                <tr>
+                                    <td class="text-center"><?php echo count_id(); ?></td>
+                                    <td>
+                                        <?php echo remove_junk(ucwords($m_inv['articulo'])) ?>
+                                    </td>
+                                    <td>
+                                        <?php echo remove_junk(ucwords($m_inv['marca'])) ?>
+                                    </td>
+                                    <td>
+                                        <?php echo remove_junk(ucwords($m_inv['material'])) ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php echo remove_junk(ucwords($m_inv['cantidad_compra'])) ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php echo '$' . $m_inv['precio_unitario']; ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php echo remove_junk(date("d/m/Y", strtotime($m_inv['fecha_compra']))) ?>
+                                    </td>
+                                    <td>
+                                        <?php echo remove_junk(ucwords($m_inv['observaciones'])) ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php if ($nivel_user == 1 || $nivel_user == 14) : ?>
+                                            <div class="btn-group">
+                                                <a href="edit_inv_mobiliario.php?id=<?php echo (int) $m_inv['id_compra_inv']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Editar">
+                                                    <span class="material-symbols-outlined" style="font-size: 22px; color: black; margin-top: 8px;">
+                                                        edit
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>

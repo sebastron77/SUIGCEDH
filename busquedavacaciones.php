@@ -7,7 +7,6 @@ $user = current_user();
 $id_user = $user['id_user'];
 $busca_area = area_usuario($id_user);
 $nivel = $user['user_level'];
-$periodos = find_all('cat_periodos_vac');
 
 if ($nivel == 1) {
     page_require_level_exacto(1);
@@ -18,15 +17,22 @@ if ($nivel == 2) {
 if ($nivel == 14) {
     page_require_level_exacto(14);
 }
-if ($nivel > 2 && $nivel < 14) :
+if ($nivel == 29) {
+    page_require_level_exacto(29);
+}
+if ($nivel > 2 && $nivel < 14) {
     redirect('home.php');
-endif;
-if ($nivel > 14) :
+}
+if ($nivel > 14 && $nivel < 29) {
     redirect('home.php');
-endif;
+}
+if ($nivel > 29) {
+    redirect('home.php');
+}
 
 $areas_all = find_all_order('area', 'nombre_area');
 $grupos_vuln = find_all('cat_grupos_vuln');
+$periodos = find_all('cat_periodos_vac');
 ?>
 
 
@@ -63,17 +69,7 @@ $grupos_vuln = find_all('cat_grupos_vuln');
                             </select>
                         </div>
                     </div>
-                    <!-- <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="years">Ejercicio</label>
-                            <select class="form-control" name="years">
-                                <option value="0">Escoge una opción</option>
-                                <?php for ($i = 2022; $i <= (int) date("Y"); $i++) {
-                                    echo "<option value='" . $i . "'>" . $i . "</option>";
-                                } ?>
-                            </select>
-                        </div>
-                    </div> -->
+
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="derecho">Con Derecho</label>
@@ -84,7 +80,7 @@ $grupos_vuln = find_all('cat_grupos_vuln');
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="id_area">Área</label>
                             <select class="form-control" name="id_area">
@@ -93,6 +89,18 @@ $grupos_vuln = find_all('cat_grupos_vuln');
                                     <option value="<?php echo $area['id_area']; ?>"><?php echo ucwords($area['nombre_area']); ?></option>
                                 <?php endforeach; ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="semana1_1" style="margin-left: 35%;">Del día</label>
+                            <input type="date" class="form-control" name="semana1" id="semana1_1" value="<?php echo $e_rel_p_vacaciones['semana1_1'] ?>">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="semana1_2" style="margin-left: 35%;">Al día</label>
+                            <input type="date" class="form-control" name="semana2" id="semana1_2" value="<?php echo $e_rel_p_vacaciones['semana1_2'] ?>">
                         </div>
                     </div>
                 </div>

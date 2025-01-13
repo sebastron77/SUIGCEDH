@@ -1,12 +1,12 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
-$page_title = 'Inventario de Abarrotes';
+$page_title = 'Categorías del Inventario';
 require_once('includes/load.php');
 ?>
 <?php
 $user = current_user();
 $nivel_user = $user['user_level'];
-$abarrotes = find_by_id_inventario(5);
+$categorias_inv = find_all_order_by('cat_categorias_inv', 'descripcion', 'padre', 0);
 
 if ($nivel_user == 1) {
     page_require_level_exacto(1);
@@ -42,8 +42,9 @@ if (!$nivel_user) {
             <div class="panel-heading clearfix">
                 <strong>
                     <span class="glyphicon glyphicon-th"></span>
-                    <span>INVENTARIO DE ABARROTES</span>
+                    <span>CATEGORÍAS DEL INVENTARIO</span>
                 </strong>
+                <a href="add_categorias_inv.php" class="btn btn-info pull-right">Agregar Categoría</a>
             </div>
 
             <div class="panel-body">
@@ -51,44 +52,27 @@ if (!$nivel_user) {
                     <thead class="thead-purple">
                         <tr style="height: 10px;">
                             <th class="text-center" style="width: 1%;">#</th>
-                            <th class="text-center" style="width: 5%;">Artículo</th>
-                            <th class="text-center" style="width: 5%;">Marca</th>
-                            <th class="text-center" style="width: 1%;">Stock</th>
-                            <th class="text-center" style="width: 2%;">Precio Unitario</th>
-                            <th class="text-center" style="width: 2%;">Fecha Compra</th>
-                            <th class="text-center" style="width: 10%;">Observaciones</th>
+                            <th class="text-center" style="width: 50%;">Categoría</th>
+                            <th class="text-center" style="width: 5%;">Nivel</th>
                             <?php if ($nivel_user == 1 || $nivel_user == 14) : ?>
                                 <th style="width: 1%;" class="text-center">Acciones</th>
                             <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($abarrotes as $a_inv) : ?>
-                            <?php if ($a_inv['existencia'] != '') : ?>
+                        <?php foreach ($categorias_inv as $cat_inv) : ?>
                             <tr>
                                 <td class="text-center"><?php echo count_id(); ?></td>
                                 <td>
-                                    <?php echo remove_junk(ucwords($a_inv['descripcion_categoria'])) ?>
-                                </td>
-                                <td>
-                                    <?php echo remove_junk(ucwords($a_inv['marca'])) ?>
+                                    <?php echo $cat_inv['descripcion']; ?>
                                 </td>
                                 <td class="text-center">
-                                    <?php echo remove_junk(ucwords($a_inv['existencia'])) ?>
-                                </td>
-                                <td class="text-center">
-                                    <?php echo '$' . $a_inv['precio_unitario']; ?>
-                                </td>
-                                <td class="text-center">
-                                    <?php echo remove_junk(date("d/m/Y", strtotime($a_inv['fecha_compra']))) ?>
-                                </td>
-                                <td>
-                                    <?php echo remove_junk(ucwords($a_inv['observaciones'])) ?>
+                                    <?php echo $cat_inv['nivel']; ?>
                                 </td>
                                 <td class="text-center">
                                     <?php if ($nivel_user == 1 || $nivel_user == 14) : ?>
                                         <div class="btn-group">
-                                            <a href="edit_inv_abarrotes.php?id=<?php echo (int) $a_inv['id_compra_inv']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Editar">
+                                            <a href="edit_categorias_inv.php?id=<?php echo (int) $cat_inv['id_categoria_inv']; ?>" class="btn btn-md btn-warning" data-toggle="tooltip" title="Editar">
                                                 <span class="material-symbols-outlined" style="font-size: 22px; color: black; margin-top: 8px;">
                                                     edit
                                                 </span>
@@ -97,7 +81,6 @@ if (!$nivel_user) {
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                            <?php endif; ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>

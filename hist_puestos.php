@@ -59,12 +59,12 @@ if (isset($_POST['hist_puestos'])) {
     }
     if (isset($x)) {
         //sucess
-        $session->msg('s', "Histórico laboral ha sido agregado.");
-        insertAccion($user['id_user'], '"' . $user['username'] . '" agregó histórico laboral ' . $idP, 1);
+        $session->msg('s', "Registro del histórico laboral ha sido agregado con éxito.");
+        insertAccion($user['id_user'], '"' . $user['username'] . '" agregó histórico laboral al trabajador: ' . $idP, 1);
         redirect('hist_puestos.php?id=' . $idP, false);
     } else {
         //failed
-        $session->msg('d', 'Lamentablemente no se ha actualizado el histórico laboral, debido a que no hay cambios registrados.');
+        $session->msg('d', 'Lamentablemente no se ha actualizado el histórico laboral, debido a que no hay cambios registrados o ha ocurrido un error.');
         redirect('hist_puestos.php?id=' . $idP, false);
     }
 
@@ -245,16 +245,16 @@ if (isset($_POST['hist_puestos'])) {
         <table class="table table-bordered table-striped" style="width: 100%; float: left;" id="tblProductos">
             <thead class="thead-purple" style="margin-top: -50px;">
                 <tr style="height: 10px;">
-                    <th colspan="7" style="text-align:center; font-size: 14px;">Expediente</th>
+                    <th colspan="7" style="text-align:center; font-size: 16px;">Histórico de Expediente Interno</th>
                 </tr>
                 <tr style="height: 10px;">
-                    <th style="width: 10%; font-size: 14px;">Puesto</th>
-                    <th style="width: 10%; font-size: 14px;">Área</th>
-                    <th style="width: 1%; font-size: 14px;">Clave</th>
-                    <th style="width: 1%; font-size: 14px;">Nivel</th>
-                    <th style="width: 5%; font-size: 14px;">Inicio</th>
-                    <th style="width: 5%; font-size: 14px;">Concl.</th>
-                    <th style="width: 1%; font-size: 14px;"></th>
+                    <th class="text-center" style="width: 10%; font-size: 14px;">Puesto</th>
+                    <th class="text-center" style="width: 10%; font-size: 14px;">Área</th>
+                    <th class="text-center" style="width: 3%; font-size: 14px;">Clave</th>
+                    <th class="text-center" style="width: 1%; font-size: 14px;">Nivel</th>
+                    <th class="text-center" style="width: 3%; font-size: 14px;">Inicio</th>
+                    <th class="text-center" style="width: 3%; font-size: 14px;">Conclusión</th>
+                    <th class="text-center" style="width: 1%; font-size: 14px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -263,11 +263,13 @@ if (isset($_POST['hist_puestos'])) {
                         <td style="font-size: 13.5px;"><?php echo $hist['puesto'] ?></td>
                         <td style="font-size: 13.5px;"><?php echo $hist['nombre_area'] ?></td>
                         <td style="font-size: 13.5px;"><?php echo $hist['clave'] ?></td>
-                        <td style="font-size: 13.5px;"><?php echo $hist['niv_puesto'] ?></td>
-                        <td style="font-size: 13.5px;"><?php echo $hist['fecha_inicio'] ?></td>
-                        <td style="font-size: 13.5px;"><?php echo $hist['fecha_conclusion'] ?></td>
+                        <td class="text-center" style="font-size: 13.5px;"><?php echo $hist['niv_puesto'] ?></td>
+                        <td class="text-center" style="font-size: 13.5px;"><?php echo $hist['fecha_inicio'] ?></td>
+                        <td class="text-center" style="font-size: 13.5px;"><?php echo $hist['fecha_conclusion'] ?></td>
                         <td style="font-size: 13.5px;" class="text-center">
                             <a href="edit_hist_puestos.php?id=<?php echo (int)$hist['id_rel_hist_exp_int']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 30px; width: 30px;"><span class="material-symbols-rounded" style="font-size: 18px; color: black; margin-top: 1px; margin-left: -3px;">edit</span>
+                            </a>
+                            <a href="delete_hist_puestos.php?iddel=<?php echo (int)$hist['id_rel_hist_exp_int']; ?>&id=<?php echo (int)$idP;?>" class="btn btn-dark btn-md" title="Eliminar" data-toggle="tooltip" style="height: 30px; width: 30px;"><span class="material-symbols-rounded" style="font-size: 22px; color: white; margin-top: -1.5px; margin-left: -5px;" onclick="return confirm('¿Seguro que deseas eliminar este registro?');">delete</span>
                             </a>
                         </td>
                     </tr>

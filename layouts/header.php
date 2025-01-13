@@ -137,16 +137,31 @@
     });
 
     $(document).ready(function() {
-      $("#id_cat_categoria_inv").change(function() {
-        $("#id_cat_categoria_inv option:selected").each(function() {
+      $("#id_categoria_inv").change(function() {
+        // $('#cbx_localidad').find('option').remove().end().append('<option value=""></option>').val('');
+        $("#id_categoria_inv option:selected").each(function() {
           id_cat_inv = $(this).val();
           $.post("muestra_articulos.php", {
             id_cat_inv: id_cat_inv
           }, function(data) {
-            $("#id_cat_subcategorias_inv").html(data);
+            $("#id_categoria_inv2").html(data);
+            $("#id_categoria_inv3").html('');
           })
         })
+      })
+    });
 
+    $(document).ready(function() {
+      $("#id_categoria_inv2").change(function() {
+        // $('#cbx_localidad').find('option').remove().end().append('<option value=""></option>').val('');
+        $("#id_categoria_inv2 option:selected").each(function() {
+          id_cat_inv = $(this).val();
+          $.post("muestra_articulos.php", {
+            id_cat_inv: id_cat_inv
+          }, function(data) {
+            $("#id_categoria_inv3").html(data);            
+          })
+        })
       })
     });
 

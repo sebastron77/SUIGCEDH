@@ -1,20 +1,19 @@
 <?php
-$page_title = 'Editar Expediente Laboral';
+$page_title = 'Editar Expediente General';
 require_once('includes/load.php');
-
 
 $areas = find_all_area_orden('area');
 $tipo_int = find_all('cat_tipo_integrante');
 $cat_puestos = find_all('cat_puestos');
-?>
-<?php
 $e_detalle = find_by_id('detalles_usuario', (int)$_GET['id'], 'id_det_usuario');
+
+$user = current_user();
+$nivel_user = $user['user_level'];
+
 if (!$e_detalle) {
     $session->msg("d", "id de usuario no encontrado.");
     redirect('detalles_usuario.php');
 }
-$user = current_user();
-$nivel_user = $user['user_level'];
 
 if ($nivel_user == 1) {
     page_require_level_exacto(1);
@@ -40,19 +39,36 @@ if (!$nivel_user) {
 if (isset($_POST['update'])) {
     if (empty($errors)) {
         $id = (int)$e_detalle['id_det_usuario'];
-        $nombre   = $e_detalle['nombre'];
-        $apellidos   = $e_detalle['apellidos'];
-        $puesto   = $db->escape($_POST['id_cat_puestos']);
-        $id_area   = $db->escape($_POST['id_area']);
-        $monto_bruto   = $db->escape($_POST['monto_bruto']);
-        $monto_neto   = $db->escape($_POST['monto_neto']);
-        $tipo_inte   = $db->escape($_POST['tipo_inte']);
-        $clave   = $db->escape($_POST['clave']);
-        $niv_puesto   = $db->escape($_POST['niv_puesto']);
+        $nombre = $e_detalle['nombre'];
+        $apellidos = $e_detalle['apellidos'];
+        $puesto = $db->escape($_POST['id_cat_puestos']);
+        $id_area = $db->escape($_POST['id_area']);
+        $monto_bruto = $db->escape($_POST['monto_bruto']);
+        $monto_neto = $db->escape($_POST['monto_neto']);
+        $tipo_inte = $db->escape($_POST['tipo_inte']);
+        $clave = $db->escape($_POST['clave']);
+        $niv_puesto = $db->escape($_POST['niv_puesto']);
         $tiene_seguro = $db->escape($_POST['tiene_seguro']);
         $nss = $db->escape($_POST['nss']);
+        $fecha_inicio = $_POST['fecha_inicio'];
+        $fecha_conclusion = $_POST['fecha_conclusion'];
 
-        // $carpeta_trabajador = $nombre . ' ' . $apellidos;
+        $puesto2 = $e_detalle['id_cat_puestos'];
+        $id_area2 = $e_detalle['id_area'];
+        $clave2 = $e_detalle['clave'];
+        $niv_puesto2 = $e_detalle['niv_puesto'];
+        $fecha_inicio2 = $e_detalle['fecha_inicio'];
+        $fecha_conclusion2 = $e_detalle['fecha_conclusion'];
+
+        if ($puesto != $e_detalle['id_cat_puestos']) {
+            $query = "INSERT INTO rel_hist_exp_int (";
+            $query .= "id_detalle_usuario, id_cat_puestos, id_area, clave, niv_puesto, fecha_inicio, fecha_conclusion, fecha_creacion";
+            $query .= ") VALUES (";
+            $query .= " '{$id}', '{$puesto2}', '{$id_area2}', '{$clave2}', '{$niv_puesto2}', '{$fecha_inicio2}', '{$fecha_conclusion2}', NOW()";
+            $query .= ")";
+            $insert = $db->query($query);
+        }
+
         $carpeta = 'uploads/personal/expediente/' . $id;
 
         if (!is_dir($carpeta)) {
@@ -95,8 +111,7 @@ if (isset($_POST['update'])) {
         $tempCartaRec2 = $_FILES['carta_rec2']['tmp_name'];
         $moveCartaRec2 = move_uploaded_file($tempCartaRec2, $carpeta . "/" . $nameCartaRec2);
 
-
-        $sql = "UPDATE detalles_usuario SET   nombre='{$e_detalle['nombre']}' ";
+        $sql = "UPDATE detalles_usuario SET nombre='{$e_detalle['nombre']}' ";
         if ($nameActa !== '') {
             $sql .= ",acta_nacimiento='{$nameActa}'";
         }
@@ -119,17 +134,21 @@ if (isset($_POST['update'])) {
         if ($puesto !== '') {
             $sql .= ", id_cat_puestos='{$puesto}'";
         }
+        if ($puesto !== '') {
+            $sql .= ", fecha_inicio='{$fecha_inicio}'";
+        }
+        if ($puesto !== '') {
+            $sql .= ", fecha_conclusion='{$fecha_conclusion}'";
+        }
         if ($id_area !== '') {
             $sql .= ", id_area='{$id_area}'";
         }
         if ($monto_bruto !== '') {
             $monto_solo1 = str_replace("$", "", $monto_bruto);
-            // $monto_coma1 = str_replace(",", "", $monto_solo1);
             $sql .= ", monto_bruto='{$monto_solo1}'";
         }
         if ($monto_neto !== '') {
             $monto_solo2 = str_replace("$", "", $monto_neto);
-            // $monto_coma2 = str_replace(",", "", $monto_solo2);
             $sql .= ", monto_neto='{$monto_solo2}'";
         }
         if ($tipo_inte !== '') {
@@ -150,7 +169,7 @@ if (isset($_POST['update'])) {
         $sql .= " WHERE id_det_usuario='{$db->escape($id)}'";
 
         $result = $db->query($sql);
-        if ($result && $db->affected_rows() === 1) {
+        if ((($result && $db->affected_rows() === 1) || ($insert && $db->affected_rows() === 1)) || (($result && $db->affected_rows() === 1) && ($insert && $db->affected_rows() === 1))) {
             $session->msg('s', "Expediente Actualizado");
             insertAccion($user['id_user'], '"' . $user['username'] . '" actualizó expediente general al trabajador(a): ' . $nombre . ' ' . $apellidos . '.', 2);
             redirect('exp_general.php?id=' . (int)$e_detalle['id_det_usuario'], false);
@@ -305,7 +324,7 @@ if (isset($_POST['update'])) {
                         <div class="col-md-4">
                             <div style="margin-bottom: 1%; margin-top: -1%">
                                 <span class="material-symbols-rounded" style="margin-top: 2%; color: #3a3d44;">work</span>
-                                <p style="font-size: 15px; font-weight: bold; margin-top: -27px; margin-left: 5%">EXPEDIENTE INTERNO</p>
+                                <p style="font-size: 15px; font-weight: bold; margin-top: -27px; margin-left: 5%">EXPEDIENTE INTERNO DE PUESTOS</p>
                             </div>
                         </div>
                         <div class="col-md-6" style="display: flex; align-items: center; margin-top: -6px">
@@ -317,7 +336,7 @@ if (isset($_POST['update'])) {
 
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="id_cat_puestos" class="control-label">Puesto</label>
                                 <select class="form-control" name="id_cat_puestos">
@@ -326,6 +345,30 @@ if (isset($_POST['update'])) {
                                         <option <?php if ($datos['id_cat_puestos'] === $e_detalle['id_cat_puestos']) echo 'selected="selected"'; ?> value="<?php echo $datos['id_cat_puestos']; ?>"><?php echo ucwords($datos['descripcion']); ?></option>
                                     <?php endforeach; ?>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="fecha_inicio">Fecha Inicio</label>
+                                <input type="date" class="form-control" name="fecha_inicio" value="<?php echo $e_detalle['fecha_inicio']?>">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="fecha_conclusion">Fecha Termino</label>
+                                <input type="date" class="form-control" name="fecha_conclusion" value="<?php echo $e_detalle['fecha_conclusion'];?>">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="clave" class="control-label">Clave</label>
+                                <input type="text" class="form-control" name="clave" value="<?php echo ($e_detalle['clave']); ?>">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="niv_puesto" class="control-label">Nivel de Puesto</label>
+                                <input type="text" class="form-control" name="niv_puesto" value="<?php echo ($e_detalle['niv_puesto']); ?>">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -339,7 +382,9 @@ if (isset($_POST['update'])) {
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="tipo_inte">Tipo de Integrante</label>
                                 <select class="form-control" name="tipo_inte">
@@ -348,20 +393,6 @@ if (isset($_POST['update'])) {
                                         <option <?php if ($inte['id_tipo_integrante'] === $e_detalle['id_tipo_integrante']) echo 'selected="selected"'; ?> value="<?php echo $inte['id_tipo_integrante']; ?>"><?php echo ucwords($inte['descripcion']); ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="clave" class="control-label">Clave</label>
-                                <input type="text" class="form-control" name="clave" value="<?php echo ($e_detalle['clave']); ?>">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="niv_puesto" class="control-label">Nivel de Puesto</label>
-                                <input type="text" class="form-control" name="niv_puesto" value="<?php echo ($e_detalle['niv_puesto']); ?>">
                             </div>
                         </div>
                         <?php $v1 = "$" . ($e_detalle['monto_bruto'] == '' ? "0.00" : $e_detalle['monto_bruto']);

@@ -37,7 +37,12 @@ $c_user = count_by_id('users', 'id_user');
 <?php include_once('layouts/header.php'); ?>
 
 <a href="solicitudes_gestion.php" class="btn btn-info">Regresar a Área</a><br><br>
-<h1 style="color: #3a3d44;">Inventarios de la CEDH</h1>
+<div class="row">
+    <div class="col-md-12">
+        <?php echo display_msg($msg); ?>
+    </div>
+</div>
+<h1 style="text-align: center; color: #3a3d44; font-weight: bold; margin-top: -20px; font-size: 26px;">INVENTARIO DE LA CEDH</h1>
 <div class="panel-heading clearfix">
     <center>
         <a href="add_inventario.php" class="btn btn-info">AGREGAR A INVENTARIO</a>
@@ -103,4 +108,55 @@ $c_user = count_by_id('users', 'id_user');
         </a>
     </div>
 </div>
+<h1 style="text-align: center; color: #3a3d44; margin-top: 2%;">Entradas y salidas del Inventario de la CEDH</h1>
+<div class="container-fluid">
+    <div class="full-box tileO-container">
+        <a href="entradas_inv.php" class="tile">
+            <div class="tile-tittle">Entradas</div>
+            <div class="tile-icon">
+                <span class="material-symbols-rounded" style="font-size:100px;">
+                    arrow_upward_alt
+                </span>
+            </div>
+        </a>
+        <a href="salidas_inv.php" class="tile">
+            <div class="tile-tittle">Salidas</div>
+            <div class="tile-icon">
+                <span class="material-symbols-rounded" style="font-size:100px;">
+                    arrow_downward_alt
+                </span>
+            </div>
+        </a>
+    </div>
+</div>
+<h1 style="margin-top: 2%; color: #3a3d44; text-align: center;">Categorías y Subcategorías del Inventario</h1>
+<div class="container-fluid" style="margin-top: 0%;">
+    <div class="full-box tileO-container">
+        <a href="categorias_inv.php" class="tile">
+            <div class="tile-tittle" style="font-size: 14px;">Categorías Artículos</div>
+            <div class="tile-icon">
+                <span class="material-symbols-rounded" style="font-size:95px;">
+                    inventory
+                </span>
+            </div>
+        </a>
+        <a href="subcategorias_inv.php" class="tile">
+            <div class="tile-tittle" style="font-size: 14px;">Subcategorías Artículos</div>
+            <div class="tile-icon">
+                <span class="material-symbols-rounded" style="font-size:95px;">
+                    package_2
+                </span>
+            </div>
+        </a>
+        <a href="articulos_inv.php" class="tile">
+            <div class="tile-tittle" style="font-size: 14px;">Artículos</div>
+            <div class="tile-icon">
+                <span class="material-symbols-rounded" style="font-size:95px;">
+                    shelves
+                </span>
+            </div>
+        </a>
+    </div>
+</div>
+
 <?php include_once('layouts/footer.php'); ?>

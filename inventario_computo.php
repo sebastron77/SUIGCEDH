@@ -67,10 +67,11 @@ if (!$nivel_user) {
                     </thead>
                     <tbody>
                         <?php foreach ($computo as $c_inv) : ?>
+                            <?php if ($c_inv['existencia'] != '') : ?>
                             <tr>
                                 <td class="text-center"><?php echo count_id(); ?></td>
                                 <td>
-                                    <?php echo remove_junk(ucwords($c_inv['articulo'])) ?>
+                                    <?php echo remove_junk(ucwords($c_inv['descripcion_categoria'])) ?>
                                 </td>
                                 <td>
                                     <?php echo remove_junk(ucwords($c_inv['marca'])) ?>
@@ -82,7 +83,7 @@ if (!$nivel_user) {
                                     <?php echo remove_junk(ucwords($c_inv['no_serie'])) ?>
                                 </td>
                                 <td class="text-center">
-                                    <?php echo remove_junk(ucwords($c_inv['cantidad_compra'])) ?>
+                                    <?php echo remove_junk(ucwords($c_inv['existencia'])) ?>
                                 </td>
                                 <td class="text-center">
                                     <?php echo '$' . $c_inv['precio_unitario']; ?>
@@ -108,6 +109,7 @@ if (!$nivel_user) {
                                     <?php endif; ?>
                                 </td>
                             </tr>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>

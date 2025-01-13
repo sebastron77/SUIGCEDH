@@ -532,6 +532,14 @@ textarea.form-control:read-only {
   background: rgb(207, 207, 207);
 }
 
+input.form-control:disabled {
+  background: rgb(207, 207, 207);
+}
+
+select.form-control:disabled {
+  background: rgb(207, 207, 207);
+}
+
 input.placeholder {
   color: red;
 }
