@@ -28,7 +28,7 @@ if (isset($_POST['export_data'])) {
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");		
+mysqli_select_db($conexion, "suigcedh");		
  
  //se detecta si se busca grupo vulnerable
  if((int)$id_cat_grupo_vuln >0){

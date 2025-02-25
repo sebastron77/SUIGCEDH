@@ -40,7 +40,7 @@ $ejercicio = isset($_GET['anio']) ? $_GET['anio'] : date("Y");
 $all_entrevistas = find_all_year('entrevistas', 'fecha_entrevista',$ejercicio);
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT folio,fecha_entrevista,fecha_entrevista,lugar_entrevista,nombre_entrevistado, cargo_entrevistado,temas_destacados,observaciones
 	FROM entrevistas a
 ORDER BY fecha_entrevista DESC";

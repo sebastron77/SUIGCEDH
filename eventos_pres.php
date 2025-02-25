@@ -32,7 +32,7 @@ if ($nivel_user == 7 || $nivel_user == 53) {
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT * FROM eventos_presidencia WHERE fecha  LIKE '".$ejercicio."%' ";
 $resultado = mysqli_query($conexion, $sql) or die;
 $eventos = array();

@@ -41,7 +41,7 @@ $solicitud = find_by_solicitud($area);
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT * FROM informe_actividades_areas";
 $resultado = mysqli_query($conexion, $sql) or die;
 $informe_sistemas = array();

@@ -32,5 +32,17 @@
         "titleBar.inactiveForeground": "#e7e7e799"
     },
     "peacock.color": "#1B0037",
-    "cSpell.language": "en,es-ES,es"
+    "cSpell.language": "en,es-ES,es",
+    "cSpell.words": [
+        "Accion",
+        "Anio",
+        "creacion",
+        "datatable",
+        "descripcion",
+        "ejer",
+        "prestamo",
+        "sucess",
+        "vehiculo",
+        "vehiculos"
+    ]
 }

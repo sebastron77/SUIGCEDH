@@ -40,7 +40,7 @@ endif;
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 
 $sql = "SELECT folio, nombre_aplicativo, fecha_inicio_operacion, REPLACE(descripcion_aplicativo,'\r\n',' ') as descripcion_aplicativo, status
           FROM herramientas_sistemas a";

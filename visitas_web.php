@@ -41,7 +41,7 @@ $all_vistas = find_data_year('visitas_web','ejercicio',$ejercicio);
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 
 $sql = "SELECT ejercicio, date_format(CONCAT(ejercicio,'-',mes,'-01'),'%M') as periodo,date_format(LAST_DAY(CONCAT('2023-',mes,'-01')),'%d') as dia, 
 date_format(LAST_DAY(CONCAT('2023-',mes,'-01')),'%m') as mes,

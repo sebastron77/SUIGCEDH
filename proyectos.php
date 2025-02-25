@@ -42,7 +42,7 @@ $all_datos = find_data_year('proyectos','ejercicio',$ejercicio);
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT * FROM proyectos";
 $resultado = mysqli_query($conexion, $sql) or die;
 $sintesis = array();

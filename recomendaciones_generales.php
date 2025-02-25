@@ -42,7 +42,7 @@ $all_recomendaciones = find_all('recomendaciones_generales');
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT numero_recomendacion,fecha_recomendacion, autoridad_responsable,		
 			REPLACE(observaciones, CHAR(13, 10), ' ') as observaciones, 
 			REPLACE(hecho_completo, CHAR(13, 10), ' ') as hecho_completo 

@@ -42,7 +42,7 @@ if (($nivel_user <= 2) || ($nivel_user == 7) || ($nivel_user == 8)) {
 */
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 
 if (($nivel_user <= 2) || ($nivel_user == 7) || ($nivel_user == 8)) {
     $sql = "SELECT * FROM envio_correspondencia";

@@ -7711,7 +7711,7 @@ function find_all_lic($id)
   $sql = "SELECT l.id_rel_licencia_personal, l.fecha_inicio, l.fecha_termino, l.no_dias, l.observaciones, l.documento, l.terminado,
           cl.descripcion as tipo_lic
           FROM rel_licencias_personal l
-          LEFT JOIN cat_licencias cl ON cl.id_cat_licencia = l.tipo_licencia
+          LEFT JOIN cat_licencias cl ON cl.id_cat_licencia = l.id_cat_licencia
           WHERE l.id_detalle_usuario = '{$id}'
           ORDER BY l.fecha_termino DESC";
   $result = find_by_sql($sql);
@@ -8158,4 +8158,17 @@ function find_by_id_entrada_inv($id)
     return $result;
   else
     return null;
+}
+
+function find_all_salidas_ejer_mes($ejercicio, $mes)
+{
+  global $db;
+  return find_by_sql("SELECT s.id_rel_salida_inv, cc.descripcion, s.cantidad_salida, s.cantidad_anterior, a.nombre_area, s.fecha_salida, 
+                      YEAR(s.fecha_salida) as anio
+                      FROM rel_salidas_inv AS s
+                      LEFT JOIN cat_categorias_inv AS cc
+                      ON s.id_categoria_inv = cc.id_categoria_inv
+                      LEFT JOIN area as a
+                      ON a.id_area = s.id_area_asigna
+                      WHERE YEAR(s.fecha_salida) = " . $db->escape($ejercicio) . " AND MONTH(s.fecha_salida) = " . $db->escape($mes) . " ORDER BY s.fecha_creacion DESC");
 }

@@ -43,7 +43,7 @@ if ($nivel_user == 7 || $nivel_user == 53) {
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT * FROM informe_actividades_areas a LEFT JOIN area b ON a.area_creacion= id_area  WHERE area_creacion=".$area." AND folio LIKE '%/" . $ejercicio ."-%' ";
 $resultado = mysqli_query($conexion, $sql) or die;
 $informe_sistemas = array();

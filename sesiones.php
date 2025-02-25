@@ -47,7 +47,7 @@ $sesiones1 = find_all_sesiones($ejercicio);
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 
 $sql = "SELECT s.folio, s.fecha_atencion, s.estatus, s.nota_sesion, s.atendio, s.fecha_creacion, s.no_sesion
         FROM sesiones s

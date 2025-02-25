@@ -38,7 +38,7 @@ if ($nivel_user == 7 || $nivel_user == 53) {
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 
 if (($nivel_user <= 2) || ($nivel_user == 7) || ($nivel_user == 8)) {
     $sql = "SELECT c.id_env_corresp, fecha_emision,IFNULL(no_oficio,'S/N') as no_oficio,c.folio, IFNULL(c.fecha_en_que_se_turna,'') as fecha_en_que_se_turna, 

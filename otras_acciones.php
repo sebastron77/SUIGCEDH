@@ -36,7 +36,7 @@ $all_difusion = find_all_otras_acciones($ejercicio);
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT oa.id_otra_accion, oa.folio, oa.fecha, coa.descripcion as otra_ac, oa.tema,   a.nombre_area,oa.archivo 
         FROM otras_acciones oa
         LEFT JOIN cat_otras_acciones coa ON coa.id_cat_otra_accion = oa.accion

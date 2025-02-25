@@ -42,7 +42,7 @@ $supervision = find_all_order('supervision_buzones', 'fecha_supervision');
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 
 $sql = "SELECT folio,fecha_supervision,lugar_supervision,numero_quejas,quien_atendio,REPLACE(observaciones,  CHAR(13, 10), ' ') as observaciones 
         FROM supervision_buzones s ";

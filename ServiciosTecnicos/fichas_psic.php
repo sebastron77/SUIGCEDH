@@ -46,7 +46,7 @@ if (($nivel_user == 1) || ($nivel_user == 2) || ($nivel_user == 22) || ($nivel_u
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT f.id_ficha, f.folio, fun.descripcion as funcion, f.num_queja, f.ficha_adjunto, 
 		a.nombre_area as visitaduria, a2.nombre_area as area_solicitante,cd.descripcion as hechos,protocolo_estambul,fecha_intervencion,resultado,documento_emitido,nombre_especialista,clave_documento
         FROM fichas f

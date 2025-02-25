@@ -29,7 +29,7 @@ if ($nivel_user == 7 || $nivel_user == 53) {
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT
 	folio,fecha_reunion,hora_reunion,lugar_reunion,quien_atendio,no_asistentes,replace(acciones_realizar,'\r\n','  ') as acciones_realizar,observaciones,
     a.fecha_creacion,

@@ -42,7 +42,7 @@ endif;
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT folio,ejercicio, IF(mes=1,'Enero',IF(mes=1,'Febrero',IF(mes=1,'Marzo',
 			IF(mes=1,'Abril',IF(mes=1,'Mayo',IF(mes=1,'Junio',IF(mes=1,'Julio',
 			IF(mes=1,'Agosto',IF(mes=1,'Septiembe',IF(mes=1,'Octubre',IF(mes=1,'noviembre',IF(mes=1,'Diciembre','')))))))))))) as mes,total_archivos,observaciones,fecha_creacion FROM inventario_archivos";

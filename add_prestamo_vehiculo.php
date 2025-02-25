@@ -54,8 +54,8 @@ if (isset($_POST['add_prestamo_vehiculo'])) {
         $query .= "id_detalle_usuario, id_vehiculo, id_area, fecha_hora_presta, fecha_hora_regresa, km_inicial, km_final, motivo_prestamo, observaciones,
                     usuario_creador, fecha_creacion";
         $query .= ") VALUES (";
-        $query .= " '{$id_detalle_usuario}', '{$id_vehiculo}', '{$id_area}', '{$fecha_hora_presta}', '{$fecha_hora_regresa}', '{$km_inicial}', '{$km_final}', '{$motivo_prestamo}'
-                    '{$observaciones}', '{$id_user}', '{$creacion}'";
+        $query .= " '{$id_detalle_usuario}', '{$id_vehiculo}', '{$id_area}', '{$fecha_hora_presta}', '{$fecha_hora_regresa}', '{$km_inicial}', '{$km_final}', 
+                    '{$motivo_prestamo}', '{$observaciones}', '{$id_user}', '{$creacion}'";
         $query .= ")";
 
         $query2 = "UPDATE vehiculos SET estatus = '0' WHERE id_vehiculo = '{$id_vehiculo}'";

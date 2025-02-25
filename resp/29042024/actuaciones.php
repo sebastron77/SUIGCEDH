@@ -62,7 +62,7 @@ if (($nivel_user <= 2) || ($nivel_user == 5) || ($nivel_user == 7) || ($nivel_us
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT folio_actuacion,
        fecha_captura_acta,
 	   area_creacion,

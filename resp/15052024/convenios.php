@@ -39,7 +39,7 @@ endif;
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
-mysqli_select_db($conexion, "suigcedh7");
+mysqli_select_db($conexion, "suigcedh");
 $sql = "SELECT folio_solicitud as folio,fecha_convenio,nombre_institucion, b.descripcion as tipo_ambito, c.descripcion as tipo_institucion,
 REPLACE(descripcion_convenio,  CHAR(13, 10), ' ') as descripcion_convenio,nombre_contacto,cargo_contacto,direccion_institucion,telefono_contacto,IF(indefinido=1,'Si','No') as Indefinido,
 IFNULL(fecha_vigencia,'No aplica') as fecha_vigencia  	
