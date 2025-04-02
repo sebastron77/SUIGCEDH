@@ -19,6 +19,9 @@ if ($nivel_user == 2) {
 if ($nivel_user == 14) {
     page_require_level_exacto(14);
 }
+if ($nivel_user == 35) {
+    page_require_level_exacto(35);
+}
 if ($nivel_user > 2 && $nivel_user < 14) :
     redirect('home.php');
 endif;
@@ -53,6 +56,7 @@ $area = 41;
 
 <div class="container-fluid">
     <div class="full-box tile-container">
+        <?php if($nivel_user == 1 || $nivel_user == 2 || $nivel_user == 14): ?>
         <a href="detalles_usuario.php" class="tile">
             <div class="tile-tittle">Recursos Humanos</div>
             <div class="tile-icon">
@@ -62,7 +66,7 @@ $area = 41;
             </div>
         </a>
         <a href="desp_presupuesto.php" class="tile">
-            <div class="tile-tittle">Presuspuesto</div>
+            <div class="tile-tittle">Presupuesto</div>
             <div class="tile-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
                     currency_exchange
@@ -92,12 +96,10 @@ $area = 41;
             <div class="tile-tittle">Auditorias</div>
             <div class="tile-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
-                    credit_card_gear
+                    checklist
                 </span>
             </div>
         </a>
-
-
         <!--<a href="control_auditorio.php" class="tile">
             <div class="tile-tittle">Control Auditorio</div>
             <div class="tile-icon">
@@ -144,7 +146,7 @@ $area = 41;
         </a>
 
         <a href="solicitudes_correspondencia.php?a=<?php echo $area ?>" class="tile">
-            <div class="tile-tittle">Corresppondencia</div>
+            <div class="tile-tittle">Correspondencia</div>
             <div class="tile-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
                     local_post_office
@@ -153,7 +155,7 @@ $area = 41;
         </a>
 
         <a href="solicitudes_vehiculos.php" class="tile">
-            <div class="tile-tittle">Parque Vehícular</div>
+            <div class="tile-tittle">Parque Vehicular</div>
             <div class="tile-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
                     garage
@@ -165,6 +167,15 @@ $area = 41;
             <div class="tile-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
                     warehouse
+                </span>
+            </div>
+        </a>
+        <?php endif; ?>
+        <a href="QR/index.php" class="tile">
+            <div class="tile-tittle">Credenciales</div>
+            <div class="tile-icon">
+                <span class="material-symbols-rounded" style="font-size:95px;">
+                    badge
                 </span>
             </div>
         </a>

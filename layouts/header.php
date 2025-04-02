@@ -159,7 +159,7 @@
           $.post("muestra_articulos.php", {
             id_cat_inv: id_cat_inv
           }, function(data) {
-            $("#id_categoria_inv3").html(data);            
+            $("#id_categoria_inv3").html(data);
           })
         })
       })
@@ -383,6 +383,10 @@
       <?php elseif ($user['user_level'] === '26') : ?>
         <!-- Visitador Regional -->
         <?php include_once('quejas_menu1.php'); ?>
+
+      <?php elseif ($user['user_level'] === '36') : ?>
+        <!-- Presidencia y Secretaría Técnica -->
+        <?php include_once('agendas_menu.php'); ?>
 
       <?php elseif ($user['user_level'] === '51') : ?>
         <!-- Presidencia y Secretaría Técnica -->

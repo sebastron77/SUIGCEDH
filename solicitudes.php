@@ -172,7 +172,7 @@ $c_cargos = count_by_id('cargos', 'id_cargos');
 
 								<li>
 								
-									<a href="<?php if (($otro <= 2) || ($otro == 7)  || ($otro == 17) || ($otro == 53)) : echo "solicitudes_agendas.php"; endif ?>" class="tileA">
+									<a href="<?php if (($otro <= 2) || ($otro == 7)  || ($otro == 17) || ($otro == 36) || ($otro == 53)) : echo "solicitudes_agendas.php"; endif ?>" class="tileA">
 										<div class="tileA-tittle" style="font-size: 13px;">Mecanismos y Agendas</div>
 										<div class="tileA-icon">
 											<span class="material-symbols-rounded" style="font-size: 85px;">

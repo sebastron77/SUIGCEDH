@@ -3,13 +3,29 @@ $page_title = 'Reuniones de Vinculación';
 require_once('includes/load.php');
 ?>
 <?php
-
-$ejercicio = isset($_GET['anio']) ? $_GET['anio'] : date("Y");
+$ejercicio = isset($_GET['a']) ? $_GET['a'] : date("Y");
 $user = current_user();
-$nivel = $user['user_level'];
 $nivel_user = $user['user_level'];
 $id_u = $user['id_user'];
 
+// Identificamos a que área pertenece el usuario logueado
+$date_user = area_usuario2($id_u);
+
+// Identificamos a que área pertenece 
+$area = isset($_GET['a']) ? $_GET['a'] : '0';
+$tipo = isset($_GET['t']) ? $_GET['t'] : 'x';
+
+if ($tipo != '') {
+    $all_reuniones_vinculacion = find_all_reuniones_area($tipo, $ejercicio);
+} else {
+    $all_reuniones_vinculacion = find_all_reuniones($ejercicio);
+}
+
+$solicitud = find_by_solicitud($area);
+
+if ($nivel_user == 7 || $nivel_user == 53) {
+    insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo la lista de  ' . $page_title . ' del Área ' . $solicitud['nombre_area'] . ' del Ejercicio ' . $ejercicio, 5);
+}
 if ($nivel_user <= 2) {
     page_require_level(2);
 }
@@ -17,30 +33,42 @@ if ($nivel_user == 6) {
     page_require_level_exacto(6);
 }
 if ($nivel_user == 7) {
-	insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo la '.$page_title.' del Ejercicio '.$ejercicio, 5); 
+    insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo la ' . $page_title . ' del Ejercicio ' . $ejercicio, 5);
     page_require_level_exacto(7);
 }
-
+if ($nivel_user == 17) {
+    page_require_level_exacto(17);
+}
 if ($nivel_user == 24) {
     page_require_level_exacto(24);
 }
+if ($nivel_user == 36) {
+    page_require_level_exacto(36);
+}
 if ($nivel_user == 53) {
-	insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo la '.$page_title.' del Ejercicio '.$ejercicio, 5); 
+    insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo la ' . $page_title . ' del Ejercicio ' . $ejercicio, 5);
     page_require_level_exacto(53);
 }
-
 if ($nivel_user > 2 && $nivel_user < 6) :
     redirect('home.php');
 endif;
-if ($nivel_user > 6 && $nivel_user < 24) :
+if ($nivel_user > 6 && $nivel_user < 7) :
     redirect('home.php');
 endif;
-if ($nivel_user > 24 && $nivel_user < 53) :
+if ($nivel_user > 7 && $nivel_user < 17) :
+    redirect('home.php');
+endif;
+if ($nivel_user > 17 && $nivel_user < 24) :
+    redirect('home.php');
+endif;
+if ($nivel_user > 24 && $nivel_user < 36) :
+    redirect('home.php');
+endif;
+if ($nivel_user > 36 && $nivel_user < 53) :
     redirect('home.php');
 endif;
 
-
-$all_reuniones_vinculacion = find_all_order('reuniones_vinculacion', 'fecha_reunion');
+// $all_reuniones_vinculacion = find_all_order('reuniones_vinculacion', 'fecha_reunion');
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
@@ -76,10 +104,20 @@ if (isset($_POST["export_data"])) {
 }
 
 ?>
+<script type="text/javascript">
+    function changueAnio(anio, tipo) {
+
+        window.open("reuniones_vinculacion.php?a=" + anio + "&t=" + tipo, "_self");
+
+    }
+</script>
 <?php include_once('layouts/header.php'); ?>
-
-<a href="solicitudes_grupo.php" class="btn btn-success">Regresar</a><br><br>
-
+<?php if ($tipo == 'c'): ?>
+    <a href="solicitudes_grupo.php" class="btn btn-success">Regresar</a><br><br>
+<?php endif; ?>
+<?php if ($tipo == 'm'): ?>
+    <a href="solicitudes_agendas.php" class="btn btn-success">Regresar</a><br><br>
+<?php endif; ?>
 <div class="row">
     <div class="col-md-12">
         <?php echo display_msg($msg); ?>
@@ -87,42 +125,42 @@ if (isset($_POST["export_data"])) {
 </div>
 
 <div class="row">
+    <!-- <h1>
+        <?php echo $ejercicio ?>
+    </h1> -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <div class="col-md-8">
+                        <strong>
+                            <span class="glyphicon glyphicon-th"></span>
+                            <span>Reuniones de Vinculación de <?php echo $ejercicio ?></span>
+                        </strong>
+                    </div>
+                    <form action=" <?php echo $_SERVER["PHP_SELF"]; ?>?t=<?php echo $area2 ?>&anio=<?php echo $ejercicio ?>" method="post">
+                        <button style="float: right; margin-top: 0px; margin-left: 10px;" type="submit" id="export_data" name='export_data' value="Export to excel" class="btn btn-excel">Exportar a Excel</button>
+                    </form>
 
-<div class="row">
-	    <div class="col-md-12">
-			<div class="panel panel-default">
-				<div class="panel-heading clearfix">
-					<div class="col-md-10">
-							<strong>
-								<span class="glyphicon glyphicon-th"></span>
-								<span>Reuniones de Vinculación de <?php echo $ejercicio ?></span>
-							</strong>
-					</div>
-					<div class="col-md-2">
-						<div class="form-group" >
-							<select class="form-control" name="ejercicio" onchange="changueAnio(this.value)">
-								<option value="">Selecciona Ejercicio</option>
-								<?php for ($i = 2022; $i <= (int) date("Y"); $i++) {
-								echo "<option value='".$i."'>".$i."</option>";
-								}?>								
-							</select>
-						</div>	
-					</div>
-					<?php if (($nivel_user <= 2) || ($nivel_user == 6) || ($nivel_user == 24) ) : ?>
-                <a href="add_reuniones_vinculacion.php" style="margin-left: 10px" class="btn btn-info pull-right">Agregar Reunión</a>
-				<?php endif;?>						
-                <form action=" <?php echo $_SERVER["PHP_SELF"]; ?>?anio=<?php echo $ejercicio?>" method="post">
-                    <button style="float: right; margin-top: 0px" type="submit" id="export_data" name='export_data' value="Export to excel" class="btn btn-excel">Exportar a Excel</button>
-                </form>				
-					
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	
-	
-	
+                    <?php if (($nivel_user <= 2) || ($nivel_user == 6) || ($nivel_user == 24)) : ?>
+                        <a href="add_reuniones_vinculacion.php?t=<?php echo $tipo ?>" style="margin-left: 10px" class="btn btn-info pull-right">Agregar Reunión</a>
+                    <?php endif; ?>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select class="form-control" name="ejercicio" onchange="changueAnio(this.value,'<?php echo $tipo ?>')">
+                                <option value="">Selecciona Ejercicio</option>
+                                <?php for ($i = 2022; $i <= (int) date("Y"); $i++) {
+                                    echo "<option value='" . $i . "'>" . $i . "</option>";
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-12">
 
         <div class="panel-body">
@@ -143,28 +181,28 @@ if (isset($_POST["export_data"])) {
                         <?php
                         $folio_editar = $a_reuniones_vinculacion['folio'];
                         $resultado = str_replace("/", "-", $folio_editar);
-						
+
                         ?>
                         <tr>
                             <td><?php echo remove_junk(ucwords($a_reuniones_vinculacion['folio'])) ?></td>
                             <td style="text-align: center;"><?php echo remove_junk(ucwords($a_reuniones_vinculacion['nombre_reunion'])) ?></td>
-							<td style="text-align: center;"><?php echo date_format(date_create($a_reuniones_vinculacion['fecha_reunion']),'d/m/Y') ?></td>
+                            <td style="text-align: center;"><?php echo date_format(date_create($a_reuniones_vinculacion['fecha_reunion']), 'd/m/Y') ?></td>
                             <td style="text-align: center;"><?php echo remove_junk(ucwords($a_reuniones_vinculacion['lugar_reunion'])) ?></td>
                             <td style="text-align: center;"><?php echo remove_junk(ucwords($a_reuniones_vinculacion['modalidad'])) ?></td>
                             <td style="text-align: center;"><?php echo remove_junk(ucwords($a_reuniones_vinculacion['numero_asistentes'])) ?></td>
-                                                 
-                                <td class="text-center">
-                                    <div class="btn-group">
-									 <a href="ver_info_reuniones_vinculacion.php?id=<?php echo (int)$a_reuniones_vinculacion['id_reuniones_vinculacion']; ?>" class="btn btn-md btn-info" data-toggle="tooltip" title="Ver información completa">
-                                            <i class="glyphicon glyphicon-eye-open"></i>
-                                        </a>
-										<?php if (($nivel_user <= 2) || ($nivel_user == 6) || ($nivel_user == 24) ) : ?>
-                                        <a href="edit_reuniones_vinculacion.php?id=<?php echo (int)$a_reuniones_vinculacion['id_reuniones_vinculacion']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip">
+
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a href="ver_info_reuniones_vinculacion.php?id=<?php echo (int)$a_reuniones_vinculacion['id_reuniones_vinculacion']; ?>" class="btn btn-md btn-info" data-toggle="tooltip" title="Ver información completa">
+                                        <i class="glyphicon glyphicon-eye-open"></i>
+                                    </a>
+                                    <?php if (($nivel_user <= 2) || ($nivel_user == 6) || ($nivel_user == 24)) : ?>
+                                        <a href="edit_reuniones_vinculacion.php?id=<?php echo (int)$a_reuniones_vinculacion['id_reuniones_vinculacion']; ?>&t=<?php echo $tipo;?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </a>
-										<?php endif; ?>
-                                    </div>
-                                </td>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

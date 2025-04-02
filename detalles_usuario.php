@@ -4,14 +4,7 @@ $page_title = 'Datos trabajadores';
 require_once('includes/load.php');
 ?>
 <?php
-$all_detalles = find_all_trabajadores();
 $user = current_user();
-$nivel = $user['user_level'];
-
-$id_usuario = $user['id_user'];
-$busca_area = area_usuario($id_usuario);
-$otro = $busca_area['nivel_grupo'];
-
 $nivel_user = $user['user_level'];
 
 if ($nivel_user == 1) {
@@ -23,15 +16,23 @@ if ($nivel_user == 2) {
 if ($nivel_user == 14) {
   page_require_level_exacto(14);
 }
+if ($nivel_user == 29) {
+  page_require_level_exacto(29);
+}
 if ($nivel_user > 2 && $nivel_user < 14) :
   redirect('home.php');
 endif;
-if ($nivel_user > 14) {
+if ($nivel_user > 14 && $nivel_user < 29) :
   redirect('home.php');
-}
-if (!$nivel_user) {
+endif;
+if ($nivel_user > 29) :
   redirect('home.php');
-}
+endif;
+
+$id_usuario = $user['id_user'];
+$busca_area = area_usuario($id_usuario);
+$otro = $busca_area['nivel_grupo'];
+$all_detalles = find_all_trabajadores();
 
 $conexion = mysqli_connect("localhost", "suigcedh", "9DvkVuZ915H!");
 mysqli_set_charset($conexion, "utf8");
@@ -82,7 +83,6 @@ if (isset($_POST["export_data"])) {
     exit;
 }
 
-
 ?>
 <?php include_once('layouts/header.php'); ?>
 
@@ -100,9 +100,9 @@ if (isset($_POST["export_data"])) {
           <span class="glyphicon glyphicon-th"></span>
           <span>Lista de Trabajadores de la CEDH</span>
         </strong>
-        <?php if ($otro == 1 || $nivel_user == 1 || $nivel_user == 14) : ?>
+        <?php if ($nivel_user == 1 || $nivel_user == 14 || $nivel_user == 29) : ?>
 			<form action=" <?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-				<button style="float: right; margin-top: 0px; margin-left:10px;" type="submit" id="export_data" name='export_data' value="Export to excel" class="btn btn-excel">Exportar a Excel</button>
+				<button style="float: right; margin-top: 0px" type="submit" id="export_data" name='export_data' value="Export to excel" class="btn btn-excel">Exportar a Excel</button>
 			</form>&nbsp;
           <a href="add_detalle_usuario.php" class="btn btn-info pull-right" style="margin-left:10px">Agregar trabajador</a>
           <a href="ver_licencias_vigentes.php" class="btn btn-info pull-right" style="background: #5f03df; border-color: #5f03df;">Ver Licencias Vigentes</a>
@@ -115,12 +115,14 @@ if (isset($_POST["export_data"])) {
           <thead class="thead-purple">
             <tr style="height: 10px;"">
               <th class=" text-center" style=" width: 1%;">#</th>
+              <th class="text-center" style="width: 1%;">No.Empledo</th>
               <th class="text-center" style="width: 5%;">Nombre(s)</th>
               <th class="text-center" style="width: 5%;">Apellidos</th>
               <th class="text-center" style="width: 10%;">Puesto</th>
+              <th class="text-center" style="width: 10%;">Cargo</th>
               <th class="text-center" style="width: 15%;">Área</th>
               <th class="text-center" style="width: 1%;">Estatus</th>
-              <?php if ($otro == 1 || $nivel_user == 1 || ($nivel_user == 14)) : ?>
+              <?php if ($otro == 1 || $nivel_user == 1 || ($nivel_user == 14)  || $nivel_user == 29) : ?>
                 <th style="width: 1%;" class="text-center">Acciones</th>
               <?php endif ?>
             </tr>
@@ -129,9 +131,11 @@ if (isset($_POST["export_data"])) {
             <?php foreach ($all_detalles as $a_detalle) : ?>
               <tr>
                 <td class="text-center"><?php echo count_id(); ?></td>
+                <td class="text-center"><?php echo remove_junk(ucwords($a_detalle['no_empleado'])) ?></td>
                 <td><?php echo remove_junk(ucwords($a_detalle['nombre'])) ?></td>
                 <td><?php echo remove_junk(ucwords($a_detalle['apellidos'])) ?></td>
                 <td><?php echo remove_junk(ucwords($a_detalle['puesto'])) ?></td>
+                <td><?php echo remove_junk(ucwords($a_detalle['nombre_cargo'])) ?></td>
                 <td><?php echo remove_junk(ucwords($a_detalle['nombre_area'])) ?></td>
                 <td class="text-center">
                   <?php if ($a_detalle['estatus_detalle'] === '1') : ?>
@@ -144,9 +148,10 @@ if (isset($_POST["export_data"])) {
                     <span class="label label-danger"><?php echo "Inactivo"; ?></span>
                   <?php endif; ?>
                 </td>
-                <?php if ($otro == 1 || $nivel_user == 1 || ($nivel_user == 14)) : ?>
+                <?php if ($nivel_user == 1 || ($nivel_user == 14)  || $nivel_user == 29) : ?>
                   <td class="text-center">
                     <div class="btn-group">
+					<?php if ($a_detalle['estatus_detalle'] == 1) : ?>
                       <a href="ver_info_detalle.php?id=<?php echo (int)$a_detalle['detalleID']; ?>" class="btn btn-md btn-info" data-toggle="tooltip" title="Ver información" style="height: 40px">
                         <span class="material-symbols-rounded" style="font-size: 20px; color: white; margin-top: 5px;">visibility</span>
                       </a>&nbsp;
@@ -168,7 +173,8 @@ if (isset($_POST["export_data"])) {
                       <a href="vacaciones.php?id=<?php echo (int)$a_detalle['detalleID']; ?>" class="btn btn-danger btn-md" style=" background: #229df0; border-color:#229df0; height: 40px" title="Vacaciones" data-toggle="tooltip">
                         <span class="material-symbols-rounded" style="font-size: 20px; color: white; margin-top: 5px;">beach_access</span>
                       </a>&nbsp;
-                      <?php if (($nivel == 1) || ($nivel_user == 14)) : ?>
+                        <?php endif; ?>
+                      <?php if (($nivel_user   == 1) || ($nivel_user == 14)  || $nivel_user == 29) : ?>
                         <?php if ($a_detalle['estatus_detalle'] == 0) : ?>
                           <a href="activate_detalle_usuario.php?id=<?php echo (int)$a_detalle['detalleID']; ?>" class="btn btn-success btn-md" title="Activar" data-toggle="tooltip" style="height: 40px">
                             <span class="material-symbols-rounded" style="font-size: 20px; color: white; margin-top: 5px;">check</span>

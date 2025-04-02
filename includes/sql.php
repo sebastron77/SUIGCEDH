@@ -8172,3 +8172,17 @@ function find_all_salidas_ejer_mes($ejercicio, $mes)
                       ON a.id_area = s.id_area_asigna
                       WHERE YEAR(s.fecha_salida) = " . $db->escape($ejercicio) . " AND MONTH(s.fecha_salida) = " . $db->escape($mes) . " ORDER BY s.fecha_creacion DESC");
 }
+
+function find_all_reuniones_area($area2, $ejercicio)
+{
+  $sql = "SELECT * FROM reuniones_vinculacion WHERE area='{$area2}' AND YEAR(fecha_reunion) = '{$ejercicio}';";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function find_all_reuniones($ejercicio)
+{
+  $sql = "SELECT * FROM reuniones_vinculacion WHERE YEAR(fecha_reunion) = '{$ejercicio}' ORDER BY fecha_reunion;";
+  $result = find_by_sql($sql);
+  return $result;
+}

@@ -5,30 +5,36 @@ require_once('includes/load.php');
 $user = current_user();
 $id_user = $user['id_user'];
 $nivel_user = $user['user_level'];
-$area= 18;
+$area = 18;
 
 if ($nivel_user <= 2) {
     page_require_level(2);
 }
 if ($nivel_user == 7) {
-	insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo '.$page_title, 5);
+    insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo ' . $page_title, 5);
     page_require_level_exacto(7);
 }
 if ($nivel_user == 17) {
     page_require_level_exacto(17);
 }
+if ($nivel_user == 36) {
+    page_require_level_exacto(36);
+}
 if ($nivel_user == 53) {
-	insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo '.$page_title, 5);
+    insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo ' . $page_title, 5);
     page_require_level_exacto(53);
 }
 
 if ($nivel_user > 2 && $nivel_user < 7) :
     redirect('home.php');
 endif;
-if ($nivel_user >7  && $nivel_user < 17) :
+if ($nivel_user > 7  && $nivel_user < 17) :
     redirect('home.php');
 endif;
-if ($nivel_user > 17 && $nivel_user < 53) :
+if ($nivel_user > 17  && $nivel_user < 36) :
+    redirect('home.php');
+endif;
+if ($nivel_user > 36 && $nivel_user < 53) :
     redirect('home.php');
 endif;
 
@@ -48,43 +54,59 @@ endif;
 
 <div class="container-fluid">
     <div class="full-box tile-container">
-        
-		<a href="agenda_entregables.php" class="tileO">
-            <div class="tileO-tittle">Entregables</div>
-            <div class="tileO-icon">
-                <span class="material-symbols-rounded" style="font-size:95px;">
-                    photo_album
-                </span>
-            </div>
-        </a>
-		
-		<a href="agenda_informes.php" class="tileO">
-            <div class="tileO-tittle">Informes Especiales</div>
-            <div class="tileO-icon">
-                <span class="material-symbols-rounded" style="font-size:95px;">
-					bookmark_added	
-                </span>
-            </div>
-        </a>
-			
-        <a href="pat.php?a=<?php echo $area ?>" class="tileO">
-            <div class="tileO-tittle" style="font-size: 12px;">Programa  Anual de Trabajo</div>
-            <div class="tileO-icon">
-                <span class="material-symbols-rounded" style="font-size:95px;">
-                    engineering
-                </span>
-            </div>
-        </a>
-	
-		<a href="informes_areas.php?a=<?php echo $area ?>" class="tileO">
-            <div class="tileO-tittle">Informe de Actividades</div>
-            <div class="tileO-icon">
-                <span class="material-symbols-rounded" style="font-size:95px;">
-                    task_alt
-                </span>
-            </div>
-        </a>
+        <?php if ($nivel_user != 36): ?>
+            <a href="agenda_entregables.php" class="tileO">
+                <div class="tileO-tittle">Entregables</div>
+                <div class="tileO-icon">
+                    <span class="material-symbols-rounded" style="font-size:95px;">
+                        photo_album
+                    </span>
+                </div>
+            </a>
 
+            <a href="agenda_informes.php" class="tileO">
+                <div class="tileO-tittle">Informes Especiales</div>
+                <div class="tileO-icon">
+                    <span class="material-symbols-rounded" style="font-size:95px;">
+                        bookmark_added
+                    </span>
+                </div>
+            </a>
+
+            <a href="pat.php?a=<?php echo $area ?>" class="tileO">
+                <div class="tileO-tittle" style="font-size: 12px;">Programa Anual de Trabajo</div>
+                <div class="tileO-icon">
+                    <span class="material-symbols-rounded" style="font-size:95px;">
+                        engineering
+                    </span>
+                </div>
+            </a>
+
+            <a href="informes_areas.php?a=<?php echo $area ?>" class="tileO">
+                <div class="tileO-tittle">Informe de Actividades</div>
+                <div class="tileO-icon">
+                    <span class="material-symbols-rounded" style="font-size:95px;">
+                        task_alt
+                    </span>
+                </div>
+            </a>
+        <?php endif; ?>
+        <a href="supervision_mecanismos.php" class="tileO">
+            <div class="tileO-tittle">Supervisión</div>
+            <div class="tileO-icon">
+                <span class="material-symbols-rounded" style="font-size:95px;">
+                    search
+                </span>
+            </div>
+        </a>
+        <a href="reuniones_vinculacion.php?t=m" class="tileO">
+            <div class="tileO-tittle">Reunión Vinculación</div>
+            <div class="tileO-icon">
+                <span class="material-symbols-rounded" style="font-size:95px;">
+                    groups_2
+                </span>
+            </div>
+        </a>
         <a href="capacitaciones.php?a=<?php echo $area ?>" class="tileO">
             <div class="tileO-tittle">Capacitaciones</div>
             <div class="tileO-icon">
@@ -93,7 +115,7 @@ endif;
                 </span>
             </div>
         </a>
-       
+
         <a href="eventos.php?a=<?php echo $area ?>" class="tile">
             <div class="tile-tittle">Eventos</div>
             <div class="tile-icon">
@@ -102,16 +124,16 @@ endif;
                 </span>
             </div>
         </a>
-		
-		 <a href="solicitudes_correspondencia.php?a=<?php echo $area ?>" class="tile">
-            <div class="tile-tittle">Corresppondencia</div>
+
+        <a href="solicitudes_correspondencia.php?a=<?php echo $area ?>" class="tile">
+            <div class="tile-tittle">Correspondencia</div>
             <div class="tile-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
                     local_post_office
                 </span>
             </div>
         </a>
-		
+
     </div>
 </div><br>
 

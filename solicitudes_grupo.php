@@ -5,7 +5,7 @@ require_once('includes/load.php');
 $user = current_user();
 $id_user = $user['id_user'];
 $nivel_user = $user['user_level'];
-$area =39;
+$area = 39;
 
 // Identificamos a que área pertenece el usuario logueado
 $date_user = area_usuario2($id_user);
@@ -19,14 +19,14 @@ if ($nivel_user == 6) {
     page_require_level_exacto(6);
 }
 if ($nivel_user == 7) {
-	insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo '.$page_title, 5);  
+    insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo ' . $page_title, 5);
     page_require_level_exacto(7);
 }
 if ($nivel_user == 24) {
     page_require_level_exacto(24);
 }
 if ($nivel_user == 53) {
-	insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo '.$page_title, 5);  
+    insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo ' . $page_title, 5);
     page_require_level_exacto(53);
 }
 
@@ -58,19 +58,19 @@ endif;
 
 <div class="container-fluid">
     <div class="full-box tile-container">
-    
 
-		<a href="supervision_buzones.php" class="tileO">
-            <div class="tileO-tittle" >Supervisión Buzones</div>
+
+        <a href="supervision_buzones.php" class="tileO">
+            <div class="tileO-tittle">Supervisión Buzones</div>
             <div class="tileO-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
-notification_multiple
+                    notification_multiple
                 </span>
             </div>
         </a>
 
-<a href="reuniones_vinculacion.php" class="tileO">
-           <div class="tileO-tittle" >Reuniones Vinculación</div>
+        <a href="reuniones_vinculacion.php?t=c" class="tileO">
+            <div class="tileO-tittle">Reuniones Vinculación</div>
             <div class="tileO-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
                     diversity_3
@@ -78,17 +78,17 @@ notification_multiple
             </div>
         </a>
 
-		<a href="actividad_especial_areas.php?a=<?php echo $area ?>" class="tileO">
-            <div class="tileO-tittle" >Actividades Especiales</div>
+        <a href="actividad_especial_areas.php?a=<?php echo $area ?>" class="tileO">
+            <div class="tileO-tittle">Actividades Especiales</div>
             <div class="tileO-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
                     rate_review
                 </span>
             </div>
         </a>
-		
-		
-<!--		
+
+
+        <!--		
 		<a href="monitoreo_politicas.php" class="tile">
             <div class="tileO-tittle" style="font-size: 12px;">Políticas Públicas</div>
             <div class="tileO-icon">
@@ -108,17 +108,17 @@ notification_multiple
         </a>
 		
 		-->
-			
+
         <a href="pat.php?a=<?php echo $area ?>" class="tileO">
-            <div class="tileO-tittle" style="font-size: 12px;">Programa  Anual de Trabajo</div>
+            <div class="tileO-tittle" style="font-size: 12px;">Programa Anual de Trabajo</div>
             <div class="tileO-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">
                     engineering
                 </span>
             </div>
         </a>
-		
-	   
+
+
         <a href="informes_areas.php?a=<?php echo $area ?>" class="tileO">
             <div class="tileO-tittle">Informe de Actividades</div>
             <div class="tileO-icon">
@@ -136,7 +136,7 @@ notification_multiple
                 </span>
             </div>
         </a>
-       
+
         <a href="eventos.php?a=<?php echo $area ?>" class="tile">
             <div class="tile-tittle">Eventos</div>
             <div class="tile-icon">
@@ -145,7 +145,7 @@ notification_multiple
                 </span>
             </div>
         </a>
-		  <a href="solicitudes_correspondencia.php?a=<?php echo $area ?>" class="tile">
+        <a href="solicitudes_correspondencia.php?a=<?php echo $area ?>" class="tile">
             <div class="tile-tittle">Corresppondencia</div>
             <div class="tile-icon">
                 <span class="material-symbols-rounded" style="font-size:95px;">

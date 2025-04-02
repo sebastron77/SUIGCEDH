@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Editar Expediente General';
+$page_title = 'Editar Expediente Laboral';
 require_once('includes/load.php');
 
 $areas = find_all_area_orden('area');
@@ -50,9 +50,11 @@ if (isset($_POST['update'])) {
         $niv_puesto = $db->escape($_POST['niv_puesto']);
         $tiene_seguro = $db->escape($_POST['tiene_seguro']);
         $nss = $db->escape($_POST['nss']);
+        $no_empleado = $db->escape($_POST['no_empleado']);
+        $nombre_cargo = $db->escape($_POST['nombre_cargo']);
         $fecha_inicio = $_POST['fecha_inicio'];
         $fecha_conclusion = $_POST['fecha_conclusion'];
-
+        
         $puesto2 = $e_detalle['id_cat_puestos'];
         $id_area2 = $e_detalle['id_area'];
         $clave2 = $e_detalle['clave'];
@@ -64,18 +66,33 @@ if (isset($_POST['update'])) {
             $query = "INSERT INTO rel_hist_exp_int (";
             $query .= "id_detalle_usuario, id_cat_puestos, id_area, clave, niv_puesto, fecha_inicio, fecha_conclusion, fecha_creacion";
             $query .= ") VALUES (";
-            $query .= " '{$id}', '{$puesto2}', '{$id_area2}', '{$clave2}', '{$niv_puesto2}', '{$fecha_inicio2}', '{$fecha_conclusion2}', NOW()";
+            $query .= " '{$id}', '{$puesto2}', '{$id_area2}', '{$clave2}', '{$niv_puesto2}',";
+			$fecha_inicio2 == ''?$query .= "NULL," :$query .=" '{$fecha_inicio2}',";
+			$fecha_conclusion2 == ''?$query .= "NULL," :$query .=" '{$fecha_conclusion2}',";
+			$query .= "  NOW()";
             $query .= ")";
+			echo $query;
             $insert = $db->query($query);
         }
 
         $carpeta = 'uploads/personal/expediente/' . $id;
+        $carpetaCrede = 'uploads/personal/credenciales/' . $id;
 
         if (!is_dir($carpeta)) {
             mkdir($carpeta, 0777, true);
         }
+		
+        if (!is_dir($carpetaCrede)) {
+            mkdir($carpetaCrede, 0777, true);
+        }
 
-        $nameActa = $_FILES['acta_nacimiento']['name'];
+        $nameFoto = $_FILES['foto_credencial']['name'];
+        $sizeFoto = $_FILES['foto_credencial']['size'];
+        $typeFoto = $_FILES['foto_credencial']['type'];
+        $tempFoto = $_FILES['foto_credencial']['tmp_name'];
+        $moveFoto = move_uploaded_file($tempFoto, $carpetaCrede . "/" . $nameFoto);
+
+		$nameActa = $_FILES['acta_nacimiento']['name'];
         $sizeActa = $_FILES['acta_nacimiento']['size'];
         $typeActa = $_FILES['acta_nacimiento']['type'];
         $tempActa = $_FILES['acta_nacimiento']['tmp_name'];
@@ -112,7 +129,10 @@ if (isset($_POST['update'])) {
         $moveCartaRec2 = move_uploaded_file($tempCartaRec2, $carpeta . "/" . $nameCartaRec2);
 
         $sql = "UPDATE detalles_usuario SET nombre='{$e_detalle['nombre']}' ";
-        if ($nameActa !== '') {
+        if ($nameFoto !== '') {
+            $sql .= ",foto_credencial='{$nameFoto}'";
+        }
+		if ($nameActa !== '') {
             $sql .= ",acta_nacimiento='{$nameActa}'";
         }
         if ($nameCartaAnt !== '') {
@@ -134,10 +154,10 @@ if (isset($_POST['update'])) {
         if ($puesto !== '') {
             $sql .= ", id_cat_puestos='{$puesto}'";
         }
-        if ($puesto !== '') {
+        if ($fecha_inicio !== '') {
             $sql .= ", fecha_inicio='{$fecha_inicio}'";
         }
-        if ($puesto !== '') {
+        if ($fecha_conclusion !== '' ) {
             $sql .= ", fecha_conclusion='{$fecha_conclusion}'";
         }
         if ($id_area !== '') {
@@ -163,10 +183,17 @@ if (isset($_POST['update'])) {
         if ($tiene_seguro !== '') {
             $sql .= ", tiene_seguro='{$tiene_seguro}'";
         }
+		if ($no_empleado !== '') {
+            $sql .= ", no_empleado='{$no_empleado}'";
+        }
+		if ($nombre_cargo !== '') {
+            $sql .= ", nombre_cargo='{$nombre_cargo}'";
+        }
         if ($nss != '' || $nss == '') {
             $sql .= ", nss='{$nss}'";
         }
         $sql .= " WHERE id_det_usuario='{$db->escape($id)}'";
+
 
         $result = $db->query($sql);
         if ((($result && $db->affected_rows() === 1) || ($insert && $db->affected_rows() === 1)) || (($result && $db->affected_rows() === 1) && ($insert && $db->affected_rows() === 1))) {
@@ -213,6 +240,16 @@ if (isset($_POST['update'])) {
                             <div class="form-group">
                                 <label for="curp">CURP</label>
                                 <input type="text" class="form-control" name="curp" value="<?php echo ($e_detalle['curp']); ?>" placeholder="CURP" readonly>
+                            </div>
+                        </div>
+						 <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="foto_credencial">Foto para Credencial</label>
+                                <input type="file" accept=".jpg,.jpeg,.png,.wepp" class="form-control" name="foto_credencial" id="foto_credencial">
+                                <label style="font-size:12px; color:#E3054F;">Archivo Actual:
+                                    <a target="_blank" href="/suigcedh/uploads/personal/credenciales/<?php echo $e_detalle['id_det_usuario'] . '/' . $e_detalle['foto_credencial']; ?>" style="font-size:14px; color: #1248c7; text-decoration: underline;"><?php echo remove_junk($e_detalle['foto_credencial']); ?></a>
+                                </label>
+                              
                             </div>
                         </div>
                     </div>
@@ -336,7 +373,13 @@ if (isset($_POST['update'])) {
 
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+					 <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="no_empleado" class="control-label">No. Empleado </label>
+                                <input type="text" class="form-control" name="no_empleado" value="<?php echo ($e_detalle['no_empleado']); ?>">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="id_cat_puestos" class="control-label">Puesto</label>
                                 <select class="form-control" name="id_cat_puestos">
@@ -382,9 +425,13 @@ if (isset($_POST['update'])) {
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
+					 <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="nombre_cargo" class="control-label">Cargo</label>
+                                <input type="text" class="form-control" name="nombre_cargo" value="<?php echo ($e_detalle['nombre_cargo']); ?>">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="tipo_inte">Tipo de Integrante</label>
                                 <select class="form-control" name="tipo_inte">
@@ -409,9 +456,9 @@ if (isset($_POST['update'])) {
                                 <input type="text" class="form-control" name="monto_neto" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" value="<?php echo ($v2); ?>">
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class="form-group">
-                                <label for="tiene_seguro">¿Cuenta con Seguro Social?</label>
+                                <label for="tiene_seguro">¿Tiene Seguro Social?</label>
                                 <select class="form-control" name="tiene_seguro">
                                     <option value="">Escoge una opción</option>
                                     <option <?php if ($e_detalle['tiene_seguro'] === '0') echo 'selected="selected"'; ?> value="0">No</option>

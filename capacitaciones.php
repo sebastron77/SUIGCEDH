@@ -5,7 +5,7 @@ require_once('includes/load.php');
 ?>
 <?php
 
-page_require_level(53); 
+page_require_level(53);
 $ejercicio = isset($_GET['anio']) ? $_GET['anio'] : date("Y");
 $user = current_user();
 $nivel = $user['user_level'];
@@ -21,15 +21,15 @@ $area = isset($_GET['a']) ? $_GET['a'] : '0';
 
 $area_informe = find_by_id('area', $area, 'id_area');
 
-if($area > 0){
-	$all_capacitaciones = find_all_capacitaciones_area($area,$ejercicio);
-}else{
-    $all_capacitaciones = find_all_capacitaciones($ejercicio);	
+if ($area > 0) {
+    $all_capacitaciones = find_all_capacitaciones_area($area, $ejercicio);
+} else {
+    $all_capacitaciones = find_all_capacitaciones($ejercicio);
 }
 $solicitud = find_by_solicitud($area);
 
 if ($nivel_user == 7 || $nivel_user == 53) {
-			insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo la lista de  '.$page_title.' del Área '.$solicitud['nombre_area'].' del Ejercicio '.$ejercicio, 5);   
+    insertAccion($user['id_user'], '"' . $user['username'] . '" Despleglo la lista de  ' . $page_title . ' del Área ' . $solicitud['nombre_area'] . ' del Ejercicio ' . $ejercicio, 5);
 }
 
 
@@ -80,8 +80,8 @@ LEFT JOIN (
 		GROUP BY id_capacitacion    
 		) e USING(id_capacitacion)
 WHERE YEAR(fecha)= '{$ejercicio}' ";
-if($area > 0){
-$sql .= " AND area_creacion = ".$area;
+if ($area > 0) {
+    $sql .= " AND area_creacion = " . $area;
 }
 //echo $sql;
 $resultado = mysqli_query($conexion, $sql) or die;
@@ -107,9 +107,9 @@ if (isset($_POST["export_data"])) {
             }
             echo utf8_decode(implode("\t", array_values($resolucion)) . "\n");
         }
-		if ($nivel_user == 7 || $nivel_user == 53) {
-			insertAccion($user['id_user'], '"' . $user['username'] . '" descargó la lista de  '.$page_title.' del Área '.$solicitud['nombre_area'].' del Ejercicio '.$ejercicio, 6);   
-}
+        if ($nivel_user == 7 || $nivel_user == 53) {
+            insertAccion($user['id_user'], '"' . $user['username'] . '" descargó la lista de  ' . $page_title . ' del Área ' . $solicitud['nombre_area'] . ' del Ejercicio ' . $ejercicio, 6);
+        }
     } else {
         echo 'No hay datos a exportar';
     }
@@ -117,11 +117,11 @@ if (isset($_POST["export_data"])) {
 }
 
 ?>
-<script type="text/javascript">	
- function changueAnio(anio,area){
-	 window.open("capacitaciones.php?anio="+anio+"&a="+area,"_self");
-	 
- }
+<script type="text/javascript">
+    function changueAnio(anio, area) {
+        window.open("capacitaciones.php?anio=" + anio + "&a=" + area, "_self");
+
+    }
 </script>
 <?php include_once('layouts/header.php'); ?>
 
@@ -131,49 +131,49 @@ if (isset($_POST["export_data"])) {
     </div>
 </div>
 
-<a href="<?php echo $solicitud['nombre_solicitud'];?>" class="btn btn-success">Regresar</a><br><br>
+<a href="<?php echo $solicitud['nombre_solicitud']; ?>" class="btn btn-success">Regresar</a><br><br>
 
 <div class="row">
 
-<div class="row">
-	    <div class="col-md-12">
-			<div class="panel panel-default">
-				<div class="panel-heading clearfix">
-					<div class="col-md-8">
-							<strong>
-								<span class="glyphicon glyphicon-th"></span>
-								<span>Lista de Capacitaciones de <?php echo $ejercicio ?> de <?php echo $solicitud['nombre_area'];?> </span>
-							</strong>
-					</div>
-					<div class="col-md-1" style="margin-left: 20px; margin-top: 20px;">
-						 <form action=" <?php echo $_SERVER["PHP_SELF"]; ?>?a=<?php echo $area?>&anio=<?php echo $ejercicio?>" method="post">
-                    <button style="float: right; margin-top: -20px" type="submit" id="export_data" name='export_data' value="Export to excel" class="btn btn-excel">Exportar Excel</button>
-                </form>
-					</div>
-					<div class="col-md-1"  style="margin-left: 90px;">
-						<?php if (( $nivel != 7) && ( $nivel != 53)):         ?>
-                <a href="add_capacitacion.php?a=<?php echo $area?>" style="margin-left: 10px" class="btn btn-info pull-right">Agregar capacitación</a>
-                <?php endif; ?>
-					</div>										
-					<div class="col-md-1" style="margin-left: -20px;">
-						<div class="form-group" >
-							<select class="form-control" name="ejercicio" onchange="changueAnio(this.value,<?php echo $area?>)">
-								<option value="">Ejercicio</option>																								
-								<?php for ($i = 2022; $i <= (int) date("Y"); $i++) {
-								echo "<option value='".$i."'>".$i."</option>";
-								}?>																								
-							</select>
-						</div>	
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <div class="col-md-8">
+                        <strong>
+                            <span class="glyphicon glyphicon-th"></span>
+                            <span>Lista de Capacitaciones de <?php echo $ejercicio ?> de <?php echo $solicitud['nombre_area']; ?> </span>
+                        </strong>
+                    </div>
+                    <div class="col-md-1" style="margin-left: 20px; margin-top: 20px;">
+                        <form action=" <?php echo $_SERVER["PHP_SELF"]; ?>?a=<?php echo $area ?>&anio=<?php echo $ejercicio ?>" method="post">
+                            <button style="float: right; margin-top: -20px" type="submit" id="export_data" name='export_data' value="Export to excel" class="btn btn-excel">Exportar Excel</button>
+                        </form>
+                    </div>
+                    <div class="col-md-1" style="margin-left: 90px;">
+                        <?php if (($nivel != 7) && ($nivel != 53)):         ?>
+                            <a href="add_capacitacion.php?a=<?php echo $area ?>" style="margin-left: 10px" class="btn btn-info pull-right">Agregar capacitación</a>
+                        <?php endif; ?>
+                    </div>
+                    <div class="col-md-1" style="margin-left: -20px;">
+                        <div class="form-group">
+                            <select class="form-control" name="ejercicio" onchange="changueAnio(this.value,<?php echo $area ?>)">
+                                <option value="">Ejercicio</option>
+                                <?php for ($i = 2022; $i <= (int) date("Y"); $i++) {
+                                    echo "<option value='" . $i . "'>" . $i . "</option>";
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
     <div class="col-md-12">
-        
+
 
         <div class="panel-body">
             <table class="datatable table table-bordered table-striped">
@@ -196,9 +196,9 @@ if (isset($_POST["export_data"])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($all_capacitaciones as $a_capacitacion) : 
-					$asistentes = (int)$a_capacitacion['asistentes_otros'] + (int)$a_capacitacion['asistentes_nobinario']+ (int)$a_capacitacion['asistentes_mujeres']+ (int)$a_capacitacion['asistentes_hombres'];
-					?>
+                    <?php foreach ($all_capacitaciones as $a_capacitacion) :
+                        $asistentes = (int)$a_capacitacion['asistentes_otros'] + (int)$a_capacitacion['asistentes_nobinario'] + (int)$a_capacitacion['asistentes_mujeres'] + (int)$a_capacitacion['asistentes_hombres'];
+                    ?>
                         <tr>
                             <td><?php echo remove_junk(ucwords($a_capacitacion['folio'])) ?></td>
                             <td><?php echo remove_junk(ucwords($a_capacitacion['tipo_capacitacion'])) ?></td>
@@ -207,18 +207,18 @@ if (isset($_POST["export_data"])) {
                             <td><?php echo remove_junk(ucwords($a_capacitacion['hora'])) ?></td>
                             <td><?php echo remove_junk(ucwords($a_capacitacion['lugar'])) ?></td>
                             <td><?php echo remove_junk(ucwords($a_capacitacion['duracion'])) ?></td>
-                            <td class="text-center"><?php echo  $asistentes?></td>
-                            <td><?php echo remove_junk((ucwords($a_capacitacion['modalidad']))) ?></td>                         
+                            <td class="text-center"><?php echo  $asistentes ?></td>
+                            <td><?php echo remove_junk((ucwords($a_capacitacion['modalidad']))) ?></td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <a href="ver_info_capacitacion.php?id=<?php echo (int)$a_capacitacion['id_capacitacion']; ?>" class="btn btn-md btn-info" data-toggle="tooltip" title="Ver información">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
-									<?php if (($nivel < 7) || ($nivel > 7)) : ?>					
-                                    <a href="edit_capacitacion.php?id=<?php echo (int)$a_capacitacion['id_capacitacion']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </a>
-									<?php endif;?>
+                                    <?php if (($nivel < 7) || ($nivel > 7)) : ?>
+                                        <a href="edit_capacitacion.php?id=<?php echo (int)$a_capacitacion['id_capacitacion']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip">
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                        </a>
+                                    <?php endif; ?>
                                 </div>
                             </td>
 

@@ -4,22 +4,23 @@ require_once('includes/load.php');
 
 $user = current_user();
 $nivel_user = $user['user_level'];
+
 if ($nivel_user <= 2) {
     page_require_level(2);
-}
-if ($nivel_user == 5) {
-    page_require_level_exacto(5);
 }
 if ($nivel_user == 14) {
     page_require_level_exacto(14);
 }
-if ($nivel_user > 2 && $nivel_user < 5) :
+if ($nivel_user == 29) {
+    page_require_level_exacto(29);
+}
+if ($nivel_user > 2 && $nivel_user < 14) :
     redirect('home.php');
 endif;
-if ($nivel_user > 5 && $nivel_user < 14) :
+if ($nivel_user > 14 && $nivel_user < 29) :
     redirect('home.php');
 endif;
-if ($nivel_user > 14) :
+if ($nivel_user > 29) :
     redirect('home.php');
 endif;
 
@@ -39,22 +40,27 @@ if (isset($_POST['add_detalle_usuario'])) {
         $apellidos   = remove_junk($db->escape($_POST['apellidos']));
         $id_cat_gen   = remove_junk($db->escape($_POST['id_cat_gen']));
         $correo   = remove_junk($db->escape($_POST['correo']));
-        $cargo   = (int)$db->escape($_POST['cargo']);
-        $puesto   = $db->escape($_POST['id_cat_puestos']);
+        $curp   = $db->escape($_POST['curp']);
+        $cargo   = $db->escape($_POST['cargo']);
+		$puesto   = $db->escape($_POST['id_cat_puestos']);
         $id_area   = $db->escape($_POST['id_area']);
+		$no_empleado = $db->escape($_POST['no_empleado']);
+        $nombre_cargo = $db->escape($_POST['nombre_cargo']);
 
         $query = "INSERT INTO detalles_usuario (";
-        $query .= "nombre,apellidos,id_cat_gen,correo,id_cargo,id_area,estatus_detalle,curp";
-        if ($puesto !== '') {
+        $query .= "nombre,apellidos,id_cat_gen,correo,id_cargo,id_area,estatus_detalle,curp,no_empleado,nombre_cargo";
+		if ($puesto !== '') {
             $query .= ", id_cat_puestos";
         }
-
+       
         $query .= ") VALUES (";
-        $query .= " '{$nombre}','{$apellidos}','{$id_cat_gen}','{$correo}',{$cargo},{$id_area},'1','{$curp}'";
-        if ($puesto !== '') {
-            $query .= ", id_cat_puestos='{$puesto}'";
+        $query .= " '{$nombre}','{$apellidos}','{$id_cat_gen}','{$correo}',{$cargo},{$id_area},'1','{$curp}','{$no_empleado}','{nombre_cargo}'";
+		if ($puesto !== '') {
+            $query .= ", '{$puesto}'";
         }
-
+        $query .= ");";
+        
+		//echo$query;
 
         if ($db->query($query)) {
             //sucess
@@ -98,22 +104,22 @@ include_once('layouts/header.php'); ?>
                             <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required>
                         </div>
                     </div>
-                    <?php if ($nivel_user <= 2) { ?>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="level">Cargo</label>
-                                <select class="form-control" name="cargo">
-                                    <option value="">Escoge una opción</option>
-                                    <?php foreach ($cargos as $cargo) : ?>
-                                        <option value="<?php echo $cargo['id_cargos']; ?>"><?php echo ucwords($cargo['nombre_cargo'] . " | " . $cargo['nombre_area']); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                    <?php if($nivel_user <= 2){?>						
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="level">Cargo</label>
+                            <select class="form-control" name="cargo">
+							<option value="">Escoge una opción</option>
+                                <?php foreach ($cargos as $cargo) : ?>
+                                    <option value="<?php echo $cargo['id_cargos']; ?>"><?php echo ucwords($cargo['nombre_cargo']." | ".$cargo['nombre_area']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
-                    <?php } else { ?>
-                        <input type="hidden" class="form-control" name="cargo" value="0">
-                    <?php } ?>
-                    <div class="col-md-2">
+                    </div>
+<?php }else{?>	
+<input type="hidden" class="form-control" name="cargo" value="0">					
+<?php }?>						
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="id_cat_gen">Género</label>
                             <select class="form-control" name="id_cat_gen">
@@ -136,28 +142,42 @@ include_once('layouts/header.php'); ?>
                             <input type="text" class="form-control" name="correo" placeholder="ejemplo@correo.com" required>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="id_cat_puestos" class="control-label">Puesto</label>
-                            <select class="form-control" name="id_cat_puestos">
-                                <option value="">Escoge una opción</option>
-                                <?php foreach ($cat_puestos as $datos) : ?>
-                                    <option value="<?php echo $datos['id_cat_puestos']; ?>"><?php echo ucwords($datos['descripcion']); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="id_area">Área</label>
-                            <select class="form-control" name="id_area" required>
-                                <option value="0">Escoge una opción</option>
-                                <?php foreach ($areas as $area) : ?>
-                                    <option value="<?php echo $area['id_area']; ?>"><?php echo ucwords($area['nombre_area']); ?></option>
-                                <?php endforeach; ?>
-                            </select>
+					<div class="row">
+					 <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="no_empleado" class="control-label">No. Empleado </label>
+                                <input type="text" class="form-control" name="no_empleado" value="">
+                            </div>
                         </div>
-                    </div>
+					<div class="col-md-4">
+                            <div class="form-group">
+                                <label for="id_cat_puestos" class="control-label">Puesto</label>
+                                <select class="form-control" name="id_cat_puestos">
+                                    <option value="0">Escoge una opción</option>
+                                    <?php foreach ($cat_puestos as $datos) : ?>
+                                        <option  value="<?php echo $datos['id_cat_puestos']; ?>"><?php echo ucwords($datos['descripcion']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+						 <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="nombre_cargo" class="control-label">Cargo</label>
+                                <input type="text" class="form-control" name="nombre_cargo" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="id_area">Área</label>
+                                <select class="form-control" name="id_area" required>
+                                    <option value="0">Escoge una opción</option>
+                                    <?php foreach ($areas as $area) : ?>
+                                        <option value="<?php echo $area['id_area']; ?>"><?php echo ucwords($area['nombre_area']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
                 </div>
                 <div class="form-group clearfix">
                     <a href="detalles_usuario.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">

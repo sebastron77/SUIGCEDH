@@ -192,7 +192,6 @@ if (isset($_POST['licencias'])) {
     }
 </style>
 <?php include_once('layouts/header.php'); ?>
-<!-- Botón con tooltip -->
 
 <div class="row">
     <div class="col-md-12"> <?php echo display_msg($msg); ?> </div>
@@ -275,7 +274,8 @@ if (isset($_POST['licencias'])) {
             </thead>
             <tbody>
                 <?php foreach ($licencias as $lic) : ?>
-                    <?php $diferencia = (strtotime($lic['fecha_termino']) - strtotime(date("Y-m-d"))) / 86400; ?>
+                    <?php 
+                        $diferencia = round((strtotime($lic['fecha_termino']) - strtotime(date("Y-m-d"))) / 86400); ?>
                     <tr>
                         <td class="text-center" style="font-size: 15px;"><?php echo $newDate = date("d-m-Y", strtotime($lic['fecha_inicio'])); ?></td>
                         <td class="text-center" style="font-size: 15px;"><?php echo $newDate = date("d-m-Y", strtotime($lic['fecha_termino'])); ?></td>
@@ -297,19 +297,20 @@ if (isset($_POST['licencias'])) {
                             <td class="text-center" style="font-size: 16px; color: #FFDD00; text-shadow: -0.68px -0.68px 0 #524700, 0.68px -0.68px 0 #524700,
                             -0.68px 0.68px 0 #524700, 0.68px 0.68px 0 #524700;"><?php echo $diferencia; ?></td>
                         <?php endif; ?>
-                        <?php if ($diferencia >= 15) : ?>
+                        <?php if ($diferencia > 15) : ?>
                             <td class="text-center" style="font-size: 16px; font-weight: bold; color: #009D00;"><?php echo $diferencia; ?></td>
                         <?php endif; ?>
                         <td style="font-size: 15px;"><?php echo ucwords($lic['tipo_lic']) ?></td>
                         <td style="font-size: 14px;" class="text-center">
-                            <?php if ($lic['terminado'] == '0') : ?>
-                                <a href="edit_licencia.php?id=<?php echo (int)$lic['id_rel_licencia_personal']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 30px; width: 30px;"><span class="material-symbols-rounded" style="font-size: 22px; color: black; margin-top: -1.5px; margin-left: -5px;">edit</span>
-                                </a>
-                            <?php endif; ?>
+
+                            <a href="edit_licencia.php?id=<?php echo (int)$lic['id_rel_licencia_personal']; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip" style="height: 30px; width: 30px;"><span class="material-symbols-rounded" style="font-size: 22px; color: black; margin-top: -1.5px; margin-left: -5px;">edit</span>
+                            </a>
+
                             <?php if ($diferencia < 0 && $lic['terminado'] == '0') : ?>
                                 <a href="concluir_permiso.php?id=<?php echo (int)$lic['id_rel_licencia_personal']; ?>&det=<?php echo $idP; ?>" class="btn btn-success btn-md" title="Cumplimiento de permiso" data-toggle="tooltip" style="height: 30px; width: 30px; background: #045700;"><span class="material-symbols-rounded" style="font-size: 22px; color: white; margin-top: -1.5px; margin-left: -5px;">event_available</span>
                                 </a>
                             <?php endif; ?>
+                            <a href="delete_licencia.php?idrl=<?php echo (int)$lic['id_rel_licencia_personal']; ?>&idT=<?php echo (int)$idP; ?>" class=" btn btn-dark btn-md" title="Eliminar" data-toggle="tooltip" style="height: 30px; width: 30px;"><span class="material-symbols-rounded" style="font-size: 22px; color: white; margin-top: -1.5px; margin-left: -5px;">delete</span>
                         </td>
                     </tr>
                 <?php endforeach; ?>
