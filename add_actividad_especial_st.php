@@ -5,7 +5,7 @@ require_once('includes/load.php');
 
 $id_folio = last_id_folios();
 $id_actividades = last_id_table('actividades_especiales_areas', 'id_actividades_especiales_areas');
-$inticadores_pat = find_all_pat(3);
+// $inticadores_pat = find_all_pat(3);
 
 $user = current_user();
 $nivel = $user['user_level'];

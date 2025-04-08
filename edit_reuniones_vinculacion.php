@@ -6,7 +6,6 @@ require_once('includes/load.php');
 $user = current_user();
 $nivel_user = $user['user_level'];
 $id_user = $user['id_user'];
-$tipo = isset($_GET['t']) ? $_GET['t'] : 'x';
 
 if ($nivel_user <= 2) {
 	page_require_level(2);
@@ -15,8 +14,15 @@ if ($nivel_user == 6) {
 	page_require_level_exacto(6);
 }
 
+if ($nivel_user == 17) {
+    page_require_level_exacto(17);
+}
 if ($nivel_user == 24) {
 	page_require_level_exacto(24);
+}
+
+if ($nivel_user == 36) {
+	page_require_level_exacto(36);
 }
 
 if ($nivel_user > 2 && $nivel_user < 6) :
@@ -25,19 +31,21 @@ endif;
 if ($nivel_user > 6 && $nivel_user < 24) :
 	redirect('home.php');
 endif;
-if ($nivel_user > 24 && $nivel_user < 53) :
+if ($nivel_user > 24 && $nivel_user < 36) :
 	redirect('home.php');
 endif;
-
+if ($nivel_user > 36 && $nivel_user < 53) :
+	redirect('home.php');
+endif;
 
 $inticadores_pat = find_all_pat_area(39, 'reuniones_vinculacion');
 $a_reunion_vinculacion = find_by_id('reuniones_vinculacion', (int)$_GET['id'], 'id_reuniones_vinculacion');
 $rel_reuniones_vinculacion_asistentes = find_by_participantesReunVin($a_reunion_vinculacion['id_reuniones_vinculacion']);
+$tipo = $a_reunion_vinculacion['area'];
+$area = isset($_GET['a']) ? $_GET['a'] : '0';
 ?>
 <?php header('Content-type: text/html; charset=utf-8');
-
 if (isset($_POST['edit_reuniones_vinculacion'])) {
-
 	if (empty($errors)) {
 		$id = (int)$a_reunion_vinculacion['id_reuniones_vinculacion'];
 		$nombre_reunion   = remove_junk($db->escape($_POST['nombre_reunion']));
@@ -48,7 +56,11 @@ if (isset($_POST['edit_reuniones_vinculacion'])) {
 		$alcances_acuerdos   = remove_junk(($db->escape($_POST['alcances_acuerdos'])));
 		$observaciones   = remove_junk($db->escape($_POST['observaciones']));
 		$id_indicadores_pat   = remove_junk($db->escape($_POST['id_indicadores_pat']));
-
+		if ($id_indicadores_pat == '') {
+            $id_indicadores_pat = 0;
+        } else {
+            $id_indicadores_pat   = remove_junk($db->escape($_POST['id_indicadores_pat']));
+        }
 		$nombre_participante = $_POST['nombre_participante'];
 		$procedencia_participante = $_POST['procedencia_participante'];
 
@@ -64,8 +76,13 @@ if (isset($_POST['edit_reuniones_vinculacion'])) {
 		$type = $_FILES['lista_asistencia']['type'];
 		$temp = $_FILES['lista_asistencia']['tmp_name'];
 
-		$move =  move_uploaded_file($temp, $carpeta . "/" . $lista_asistencia);
+		$evidencia_reunion = $_FILES['evidencia_reunion']['name'];
+        $sizeE = $_FILES['evidencia_reunion']['size'];
+        $typeE = $_FILES['evidencia_reunion']['type'];
+        $tempE = $_FILES['evidencia_reunion']['tmp_name'];
 
+		$move =  move_uploaded_file($temp, $carpeta . "/" . $lista_asistencia);
+		$moveE =  move_uploaded_file($tempE, $carpeta . "/" . $evidencia_reunion);
 
 		$source = 'uploads/index.php';
 
@@ -99,17 +116,18 @@ if (isset($_POST['edit_reuniones_vinculacion'])) {
 		if ($lista_asistencia != '') {
 			$sql .= "	,lista_asistencia ='{$lista_asistencia}'";
 		}
+		if ($evidencia_reunion != '') {
+			$sql .= "	,evidencia_reunion ='{$evidencia_reunion}'";
+		}
 		$sql .= "	WHERE id_reuniones_vinculacion='{$db->escape($id)}'";
-
 		$result = $db->query($sql);
-
 
 		$session->msg('s', "Información sonbre Reunión de Vinculación fue actualizada con exito.");
 		insertAccion($user['id_user'], '"' . $user['username'] . '" editó la Reunión de Vinculación, Folio: ' . $a_reunion_vinculacion['folio'] . '.', 2);
-		redirect('reuniones_vinculacion.php?t=' . $tipo, false);
+		redirect('reuniones_vinculacion.php?t=' . $tipo.'&a='.$area, false);
 	} else {
 		$session->msg("d", $errors);
-		redirect('reuniones_vinculacion.php?t=' . $tipo, false);
+		redirect('reuniones_vinculacion.php?t=' . $tipo.'&a='.$area, false);
 	}
 }
 ?>
@@ -160,9 +178,8 @@ include_once('layouts/header.php'); ?>
 			</strong>
 		</div>
 		<div class="panel-body">
-			<form method="post" action="edit_reuniones_vinculacion.php?id=<?php echo (int)$a_reunion_vinculacion['id_reuniones_vinculacion']; ?>&t=<?php echo $tipo?>" enctype="multipart/form-data">
+			<form method="post" action="edit_reuniones_vinculacion.php?id=<?php echo (int)$a_reunion_vinculacion['id_reuniones_vinculacion']; ?>&a=<?php echo $area?>" enctype="multipart/form-data">
 				<div class="row">
-
 					<div class="col-md-2">
 						<div class="form-group">
 							<label for="fecha_reunion">Fecha de la Reunión</label><br>
@@ -219,11 +236,17 @@ include_once('layouts/header.php'); ?>
 								<label style="font-size:12px; color:#E3054F;">Archivo Actual: <?php echo remove_junk($a_reunion_vinculacion['lista_asistencia']); ?><?php ?></label>
 							</span>
 						</div>
-					</div>
+					</div>					
+					<div class="col-md-4">
+                        <div class="form-group">
+                            <span>
+                                <label for="evidencia_reunion">Evidencia de la Reunion(archivo PDF)</label>
+                                <input id="evidencia_reunion" type="file" accept="application/pdf" class="form-control" name="evidencia_reunion" >
+								<label style="font-size:12px; color:#E3054F;">Archivo Actual: <?php echo ($a_reunion_vinculacion['evidencia_reunion']); ?><?php ?></label>
+                            </span>
+                        </div>
+                    </div>
 				</div>
-
-
-
 				<div class="row">
 					<div class="col-md-4">
 						<div class="form-group">
@@ -238,11 +261,7 @@ include_once('layouts/header.php'); ?>
 						</div>
 					</div>
 				</div>
-
-
-
 				<div class="row">
-
 					<table style="color:#3a3d44; margin-top: -10px; page-break-after:always;">
 						<tr>
 							<td style="width: 50%;">
@@ -253,7 +272,6 @@ include_once('layouts/header.php'); ?>
 									</strong>
 								</div>
 							</td>
-
 						</tr>
 						<tr>
 							<td style="width: 50%;">
@@ -277,12 +295,12 @@ include_once('layouts/header.php'); ?>
 								</div>
 							</td>
 						</tr>
-
 						<tr>
 							<td style="width: 50%;">
 								<?php $i = 1;
 								foreach ($rel_reuniones_vinculacion_asistentes as $general) : ?>
 									<div id="inputFormRow" style="width: 100%;">
+										<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
 												<input type="text" class="form-control" name="nombre_participante[]" value="<?php echo remove_junk(($general['nombre_participante'])); ?>" required>
@@ -313,8 +331,7 @@ include_once('layouts/header.php'); ?>
 												<?php } ?>
 											</div>
 										</div>
-
-
+										</div>
 									</div>
 								<?php $i++;
 								endforeach;
@@ -322,15 +339,12 @@ include_once('layouts/header.php'); ?>
 								<br>
 								<div class="row" id="newRow" style="width: 100%;">
 								</div>
-
 							</td>
-
 						</tr>
 					</table>
 				</div>
-
 				<div class="form-group clearfix">
-					<a href="reuniones_vinculacion.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
+					<a href="reuniones_vinculacion.php?t=<?php echo $tipo ?>&a=<?php echo $area ?>" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
 						Regresar
 					</a>
 					<button type="submit" name="edit_reuniones_vinculacion" class="btn btn-primary" value="subir">Guardar</button>

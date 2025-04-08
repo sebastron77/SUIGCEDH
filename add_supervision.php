@@ -1,5 +1,5 @@
 <?php header('Content-type: text/html; charset=utf-8');
-$page_title = 'Agregar Supervisión de Buzones';
+$page_title = 'Agregar Supervisión de Mecanismos';
 require_once('includes/load.php');
 
 $user = current_user();

@@ -8186,3 +8186,20 @@ function find_all_reuniones($ejercicio)
   $result = find_by_sql($sql);
   return $result;
 }
+
+/*----------------------------------------------*/
+/* Funcion que encuentra todas las minutas */
+/*----------------------------------------------*/
+function find_all_minutas($year)
+{
+  $sql = "SELECT * FROM minutas WHERE YEAR(fecha_sesion) ='{$year}' ORDER BY fecha_sesion";
+  $result = find_by_sql($sql);
+  return $result;
+}
+
+function last_sesion_minuta()
+{
+  $sql = "SELECT * FROM minutas ORDER BY num_sesion DESC LIMIT 1";
+  $result = find_by_sql($sql);
+  return $result;
+}

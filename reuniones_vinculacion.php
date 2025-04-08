@@ -125,29 +125,18 @@ if (isset($_POST["export_data"])) {
 </div>
 
 <div class="row">
-    <!-- <h1>
-        <?php echo $ejercicio ?>
-    </h1> -->
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading clearfix">
-                    <div class="col-md-8">
+                <div class="panel-heading d-flex align-items-center justify-content-between flex-wrap">
+                    <div class="d-flex align-items-center">
                         <strong>
                             <span class="glyphicon glyphicon-th"></span>
                             <span>Reuniones de Vinculación de <?php echo $ejercicio ?></span>
                         </strong>
                     </div>
-                    <form action=" <?php echo $_SERVER["PHP_SELF"]; ?>?t=<?php echo $area2 ?>&anio=<?php echo $ejercicio ?>" method="post">
-                        <button style="float: right; margin-top: 0px; margin-left: 10px;" type="submit" id="export_data" name='export_data' value="Export to excel" class="btn btn-excel">Exportar a Excel</button>
-                    </form>
-
-                    <?php if (($nivel_user <= 2) || ($nivel_user == 6) || ($nivel_user == 24)) : ?>
-                        <a href="add_reuniones_vinculacion.php?t=<?php echo $tipo ?>" style="margin-left: 10px" class="btn btn-info pull-right">Agregar Reunión</a>
-                    <?php endif; ?>
-
-                    <div class="col-md-2">
-                        <div class="form-group">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="form-group mb-0">
                             <select class="form-control" name="ejercicio" onchange="changueAnio(this.value,'<?php echo $tipo ?>')">
                                 <option value="">Selecciona Ejercicio</option>
                                 <?php for ($i = 2022; $i <= (int) date("Y"); $i++) {
@@ -155,14 +144,18 @@ if (isset($_POST["export_data"])) {
                                 } ?>
                             </select>
                         </div>
+                        <?php if (($nivel_user <= 2) || ($nivel_user == 6) || ($nivel_user == 24)) : ?>
+                            <a href="add_reuniones_vinculacion.php?t=<?php echo $tipo ?>" class="btn btn-info" style="height: 31px;">Agregar Reunión</a>
+                        <?php endif; ?>
+                        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>?t=<?php echo $area2 ?>&anio=<?php echo $ejercicio ?>" method="post" class="mb-0">
+                            <button type="submit" id="export_data" name="export_data" value="Export to excel" class="btn btn-excel">Exportar a Excel</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="col-md-12">
-
         <div class="panel-body">
             <table class="datatable table table-bordered table-striped">
                 <thead class="thead-purple">
@@ -197,7 +190,7 @@ if (isset($_POST["export_data"])) {
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
                                     <?php if (($nivel_user <= 2) || ($nivel_user == 6) || ($nivel_user == 24)) : ?>
-                                        <a href="edit_reuniones_vinculacion.php?id=<?php echo (int)$a_reuniones_vinculacion['id_reuniones_vinculacion']; ?>&t=<?php echo $tipo;?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip">
+                                        <a href="edit_reuniones_vinculacion.php?id=<?php echo (int)$a_reuniones_vinculacion['id_reuniones_vinculacion']; ?>&t=<?php echo $tipo; ?>" class="btn btn-warning btn-md" title="Editar" data-toggle="tooltip">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </a>
                                     <?php endif; ?>

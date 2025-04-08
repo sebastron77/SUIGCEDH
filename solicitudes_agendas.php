@@ -107,6 +107,14 @@ endif;
                 </span>
             </div>
         </a>
+        <a href="minutas.php" class="tileO">
+            <div class="tileO-tittle">Minutas</div>
+            <div class="tileO-icon">
+                <span class="material-symbols-rounded" style="font-size:95px;">
+                    text_snippet
+                </span>
+            </div>
+        </a>
         <a href="capacitaciones.php?a=<?php echo $area ?>" class="tileO">
             <div class="tileO-tittle">Capacitaciones</div>
             <div class="tileO-icon">

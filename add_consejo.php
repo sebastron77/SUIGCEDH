@@ -6,7 +6,7 @@ $detalle = $user['id_user'];
 $id_folio = last_id_folios();
 $nivel_user = $user['user_level'];
 $id_consejo = last_id_consejo();
-$inticadores_pat = find_all_pat(10);
+// $inticadores_pat = find_all_pat(10);
 
 if ($nivel_user <= 2) {
     page_require_level(2);
