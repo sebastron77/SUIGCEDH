@@ -1,5 +1,5 @@
 <?php
-setcookie('suigecedh','',time() - 1);
+setcookie('suigecedh', '', time() - 1);
 error_reporting(E_ALL ^ E_NOTICE);
 $page_title = 'Presenta tu Queja';
 require_once('includes/load.php');
@@ -29,13 +29,8 @@ $cat_entidad = find_all_cat_entidad();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
     <title>Presenta tu queja</title>
-
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
     <link rel="stylesheet" href="libs/css/main.css">
     <link rel="stylesheet" href="libs/css/publico.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -46,68 +41,64 @@ $cat_entidad = find_all_cat_entidad();
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style type="text/css">
-
     </style>
 </head>
 
-	<script type="text/javascript">
-	history.forward();
+<script type="text/javascript">
+    history.forward();
 
-	function nobackbutton(){
-		
-	   window.location.hash="no-back-button";
-	   window.location.hash="Again-No-back-button" //chrome
-	   window.onhashchange=function(){window.location.hash="no-back-button";}
-		
-	}
-	</script>
+    function nobackbutton() {
+        window.location.hash = "no-back-button";
+        window.location.hash = "Again-No-back-button"
+        window.onhashchange = function() {
+            window.location.hash = "no-back-button";
+        }
+    }
+</script>
 <?php header('Content-type: text/html; charset=utf-8'); ?>
-
 
 <body style="font-family: 'Questrial', sans-serif; background-color: #F2F3F8;" onload="nobackbutton();">
     <form method="post" action="exce_queja_publica.php" enctype="multipart/form-data">
-        <nav class="title-main headerp" style="z-index: 20">
-            <li class="title-tex" style="">
-                <img src="medios/LOGO-CEDH-H.png" alt="CEDH" width="150px">
-            </li>
-            <li class="title-tex" style="">Presenta tu queja</li>
+        <nav class="title-main headerp">
+            <div class="nav-content">
+                <img src="medios/Logo_blanco.png" alt="CEDH" class="title-logo" />
+                <span class="title-tex">PRESENTA TU QUEJA</span>
+            </div>
         </nav>
         <br /><br /><br /><br /><br />
-
         <div class="contpub" style="margin-top: 110px;">
             <div class="panel panel-default" style="width:80%;margin: 0 auto;;">
-	<div style="text-align: right;">
-				<label for="datos" style="font-size: 13px;"> <span style="color:red;font-weight:bold">*</span>Datos Obligatorios</label>
-	</div>
-                <div class="panel-body" style="">
-                    <strong>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25px" height="25px" fill="#7263F0">
+                <div style="text-align: right; margin-right: 50px;">
+                    <label for="datos" style="font-size: 15px;"><span style="color:red; font-weight:bold">*</span> Datos Obligatorios</label>
+                </div>
+                <div class="panel-body">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25px" height="25px" fill="#0260cc">
                             <title>comment-text-multiple-outline</title>
                             <path d="M12,23A1,1 0 0,1 11,22V19H7A2,2 0 0,1 5,17V7A2,2 0 0,1 7,5H21A2,2 0 0,1 23,7V17A2,2 0 0,1 21,19H16.9L13.2,22.71C13,22.89 12.76,23 12.5,23H12M13,17V20.08L16.08,17H21V7H7V17H13M3,15H1V3A2,2 0 0,1 3,1H19V3H3V15M9,9H19V11H9V9M9,13H17V15H9V13Z" />
                         </svg>
-                        <span style="font-size: 20px; color: #7263F0">HECHOS OCURRIDOS</span>
-                        <h2 class="divider line glow"></h2>
-                    </strong>
+                        <span style="font-size: 20px; color: #0260cc; font-weight: bold">HECHOS OCURRIDOS</span>
+                    </div>
+                    <h2 class="divider line glow"></h2>
                     <form method="post" action="add_queja_publica.php" enctype="multipart/form-data">
                         <div class="row" style="margin-top: 10px;">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="descripcion_hechos">Descripción de los hechos <span style="color:red;font-weight:bold">*</span></label>
-                                    <textarea class="form-control" name="descripcion_hechos" id="descripcion_hechos" cols="30" rows="5"></textarea>
+                                    <textarea class="form-control" name="descripcion_hechos" id="descripcion_hechos" cols="30" rows="8"></textarea>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row">
+                        <div class="row g-3">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="ent_fed">Entidad Federativa <span style="color:red;font-weight:bold">*</span></label>
                                     <select class="form-control form-select" name="ent_fed" required>
-                                <option value="">Escoge una opción</option>
-                                 <?php foreach ($cat_entidad as $id_cat_ent_fed) : ?>
+                                        <option value="">Escoge una opción</option>
+                                        <?php foreach ($cat_entidad as $id_cat_ent_fed) : ?>
                                             <option value="<?php echo $id_cat_ent_fed['descripcion']; ?>"><?php echo ucwords($id_cat_ent_fed['descripcion']); ?></option>
                                         <?php endforeach; ?>
-                            </select>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -123,13 +114,12 @@ $cat_entidad = find_all_cat_entidad();
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="localidad">Localidad <span style="color:red;font-weight:bold">*</span></label>
+                                    <label for="localidad">Localidad <span style="color:red; font-weight:bold">*</span></label>
                                     <input type="text" class="form-control" name="localidad" placeholder="Localidad" required>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row">
+                        <div class="row g-3">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="dom_calle">Calle <span style="color:red;font-weight:bold">*</span></label>
@@ -148,11 +138,9 @@ $cat_entidad = find_all_cat_entidad();
                                     <input type="text" class="form-control" name="dom_colonia" placeholder="Colonia" required>
                                 </div>
                             </div>
-
                         </div>
                         <div class="row">
-
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="form-group">
                                     <label for="autoridad_responsable">Autoridad Responsable <span style="color:red;font-weight:bold">*</span></label>
                                     <select class="form-control form-select" name="autoridad_responsable" required>
@@ -163,22 +151,23 @@ $cat_entidad = find_all_cat_entidad();
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="adjunto">Archivo adjunto (si es necesario)</label>
-                                    <input type="file" accept="application/pdf" class="form-control form-select" name="adjunto" id="adjunto">
+                                    <input type="file" accept="application/pdf" class="form-control" name="adjunto" id="adjunto">
                                 </div>
                             </div>
                         </div>
                         <br>
-                        <strong>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="margin-top:-0.3%;" width="25px" height="25px" fill="#7263F0">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="margin-top:-0.3%;" width="25px" height="25px" fill="#0260cc">
                                 <title>account</title>
                                 <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
                             </svg>
-                            <span style="font-size: 20px; color: #7263F0">DATOS QUEJOSO</span>
-                            <h2 class="divider line glow"></h2>
-                        </strong><br>
+                            <span style="font-size: 20px; color: #0260cc; font-weight: bold;">DATOS DEL QUEJOSO</span>
+                        </div>
+                        <h2 class="divider line glow"></h2>
+                        <br>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -199,7 +188,6 @@ $cat_entidad = find_all_cat_entidad();
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -241,7 +229,6 @@ $cat_entidad = find_all_cat_entidad();
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -307,7 +294,6 @@ $cat_entidad = find_all_cat_entidad();
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -315,7 +301,7 @@ $cat_entidad = find_all_cat_entidad();
                                     <input type="text" class="form-control" name="calleQ" required>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="numeroQ">Núm.<span style="color:red;font-weight:bold">*</span></label>
                                     <input type="text" class="form-control" name="numeroQ" required>
@@ -333,7 +319,6 @@ $cat_entidad = find_all_cat_entidad();
                                     <input type="text" class="form-control" name="codigo_postalQ" required>
                                 </div>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-md-4">
@@ -342,24 +327,37 @@ $cat_entidad = find_all_cat_entidad();
                                     <input type="text" class="form-control" maxlength="10" name="telefonoQ" required>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="id_cat_munQ">Municipio<span style="color:red;font-weight:bold">*</span></label>
-                                    <select class="form-control form-select" name="id_cat_munQ" required>
-                                        <option value="">Escoge una opción</option>
-                                        <?php foreach ($municipios as $municipio) : ?>
-                                            <option value="<?php echo $municipio['id_cat_mun']; ?>"><?php echo ucwords($municipio['descripcion']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                            <div class="form-group">
+                                <label for="id_cat_munQ">Municipio<span style="color:red;font-weight:bold">*</span></label>
+                                <select class="form-control form-select" name="id_cat_munQ" required>
+                                    <option value="">Escoge una opción</option>
+                                    <?php foreach ($municipios as $municipio) : ?>
+                                        <option value="<?php echo $municipio['id_cat_mun']; ?>"><?php echo ucwords($municipio['descripcion']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-check" style="text-align:right;"">
+                                    <input class=" form-check-input" type="checkbox" value="" id="flexCheckChecked" style="transform: scale(1.8); accent-color: #026ce6;" required>
                                 </div>
                             </div>
-
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="aviso" style="font-weight: 500; line-height: 01.9; font-size: 16px;">
+                                        <span style="color:red; font-weight:bold; font-size: 20px;">*</span>&nbsp;He leído el aviso de privacidad integral.<br>La Comisión Estatal de los Derechos Humanos de Michoacán de Ocampo (CEDH) por conducto de la Coordinación de Orientación Legal, Quejas y Seguimiento, será la responsable de recabar, tratar y proteger sus datos personales de conformidad con los artículos 14, 22 y 23 de la Ley de Protección de Datos Personales en Posesión de Sujetos Obligados del Estado de Michoacán de Ocampo. Consulte nuestro aviso de privacidad integral en:
+                                        <a target="_blank" href="https://cedhmichoacan.org/index.php/home/aviso-de-privacidad/2-uncategorised/785-aviso-de-privacidad-integral-de-la-colqys">
+                                            https://cedhmichoacan.org/index.php/home/aviso-de-privacidad/2-uncategorised/785-aviso-de-privacidad-integral-de-la-colqys
+                                        </a></label>
+                                </div>
+                            </div>
                         </div>
                         <br>
                         <div class="form-group clearfix">
-
-                            <button style="background: #300285; border-color:#300285;" type="submit" name="add_queja_publica" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sd-card" viewBox="0 0 16 16">
+                            <button style="background: #0260cc; border-color:#0260cc;" type="submit" name="add_queja_publica" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-sd-card" viewBox="0 0 16 16">
                                     <path d="M6.25 3.5a.75.75 0 0 0-1.5 0v2a.75.75 0 0 0 1.5 0v-2zm2 0a.75.75 0 0 0-1.5 0v2a.75.75 0 0 0 1.5 0v-2zm2 0a.75.75 0 0 0-1.5 0v2a.75.75 0 0 0 1.5 0v-2zm2 0a.75.75 0 0 0-1.5 0v2a.75.75 0 0 0 1.5 0v-2z" />
                                     <path fill-rule="evenodd" d="M5.914 0H12.5A1.5 1.5 0 0 1 14 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5V3.914c0-.398.158-.78.44-1.06L4.853.439A1.5 1.5 0 0 1 5.914 0zM13 1.5a.5.5 0 0 0-.5-.5H5.914a.5.5 0 0 0-.353.146L3.146 3.561A.5.5 0 0 0 3 3.914V14.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-13z" />
                                 </svg>
@@ -371,11 +369,7 @@ $cat_entidad = find_all_cat_entidad();
             </div>
         </div>
     </form>
-
-
-    <div class="form-footer">2023 ©&nbsp; Coordinación de Sietmas Informaticos; Comisión Estatal de los Derechos Humanos de Michoacán</div>
-
-
+    <div class="form-footer">2023 ©&nbsp; Coordinación de Sistemas Informáticos; Comisión Estatal de los Derechos Humanos de Michoacán</div>
 </body>
 
 </html>

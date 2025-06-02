@@ -6,6 +6,7 @@ page_require_level(1);
 $groups = find_all('grupo_usuarios');
 $trabajadores = find_all_trabajadores();
 $user = current_user();
+$estados = find_all('cat_entidad_fed');
 ?>
 <?php
 if (isset($_POST['add_user'])) {
@@ -60,7 +61,7 @@ if (isset($_POST['add_user'])) {
       </strong>
     </div>
     <div class="panel-body">
-      <div class="col-md-6">
+      <div class="col-md-7">
         <form method="post" action="add_user.php">
           <div class="form-group">
             <label for="level">Trabajador</label>
@@ -85,12 +86,33 @@ if (isset($_POST['add_user'])) {
             <input type="password" class="form-control" name="contraseña" placeholder="Contraseña">
           </div>
           <div class="form-group">
-            <label for="level">Rol de usuario</label>
+            <!-- <label for="level">Rol de usuario</label>
             <select class="form-control" name="level">
               <?php foreach ($groups as $group) : ?>
                 <option value="<?php echo $group['nivel_grupo']; ?>"><?php echo ucwords($group['nombre_grupo']); ?></option>
               <?php endforeach; ?>
-            </select>
+            </select> -->
+
+
+
+            <!-- -------------------------------------------- NIVELES DE USUARIO CON DATALIST --------------------------------------------  -->
+
+            <label style="width: 400px;">Rol de usuario
+              <input class="form-control" list="grupos" id="input_grupo" name="nombre_grupo" placeholder="Escribe o selecciona un rol">
+            </label>
+
+            <datalist id="grupos">
+              <?php foreach ($groups as $group) : ?>
+                <option data-id="<?php echo $group['nivel_grupo']; ?>" value="<?php echo $group['nombre_grupo']; ?>"></option>
+              <?php endforeach; ?>
+            </datalist>
+
+            <input type="hidden" name="level" id="level">
+
+            <!-- -------------------------------------------------------------------------------------------------------------------------  -->
+
+
+
           </div>
           <div class="form-group clearfix">
             <a href="users.php" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">
@@ -100,10 +122,25 @@ if (isset($_POST['add_user'])) {
           </div>
         </form>
       </div>
-
     </div>
-
   </div>
 </div>
+<!-- ----------------------- SCRIPT PARA EL DATALIST ----------------------- -->
+<script>
+  document.getElementById('input_grupo').addEventListener('input', function() {
+    const input = this;
+    const datalist = document.getElementById('grupos');
+    const options = datalist.querySelectorAll('option');
+    const hiddenInput = document.getElementById('level');
 
+    hiddenInput.value = ''; // Limpiar primero
+
+    options.forEach(function(option) {
+      if (option.value === input.value) {
+        hiddenInput.value = option.dataset.id;
+      }
+    });
+  });
+</script>
+<!-- ----------------------------------------------------------------------- -->
 <?php include_once('layouts/footer.php'); ?>

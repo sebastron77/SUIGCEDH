@@ -11,12 +11,12 @@ if (!$session->isUserLoggedIn(true)) {
     <?php echo display_msg($msg); ?>
   </div>
   <div class="col-md-12">
-    <div class="panel" style="background-color: #1E2630; border-radius: 15px;">
+    <div class="panel" style="border-radius: 10px;">
       <div class="jumbotron text-center"
         style="background: rgb(18,0,50);
-background: radial-gradient(circle, rgba(18,0,50,1) 0%, rgba(46,4,124,1) 100%); border-radius: 15px; border: 1px;">
-        <h1 style="color: white;">Página principal</h1>
-        <h4 style="color: white">Sistema Único de Información y Gestión de la CEDH (SUIGCEDH)</h4>
+              background: linear-gradient(90deg, rgb(39, 7, 94)  15%, rgb(58, 10, 139) 50%, rgb(106, 17, 207) 100%);">
+        <h1 style="color: white; font-weight: 100; font-size:50px;">BIENVENIDO</h1>
+        <h4 style="color: white; font-size: 18px; font-weight: 400;">SISTEMA ÚNICO DE INFORMACIÓN Y GESTIÓN DE LA CEDH (SUIGCEDH)</h4>
       </div>
     </div>
   </div>

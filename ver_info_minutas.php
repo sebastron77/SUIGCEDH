@@ -127,6 +127,8 @@ endif;
                         </tr>
                     </tbody>
                 </table>
+                <iframe src="uploads/minutas/<?php echo $resultado ?>/<?php echo $minuta['archivo_minuta'] ?>#zoom=100" width="650px;" height="850px;"></iframe>
+                <iframe src="uploads/minutas/<?php echo $resultado ?>/<?php echo $minuta['lista_asistencia'] ?>#zoom=100" width="650px;" height="850px;"></iframe>
                 <div class="row">
                     <div class="col-md-9">
                         <a href="minutas.php?anio=<?php echo $year; ?>" class="btn btn-md btn-success" data-toggle="tooltip" title="Regresar">

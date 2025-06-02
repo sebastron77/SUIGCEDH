@@ -85,15 +85,15 @@ class MySqli_DB
   }
   /*--------------------------------------------------------------*/
   /* Funcion para remover caracteres especiales
- /* en una cadena para usarlo en una consulta SQL
- /*--------------------------------------------------------------*/
+  /* en una cadena para usarlo en una consulta SQL
+  /*--------------------------------------------------------------*/
   public function escape($str)
   {
     return $this->con->real_escape_string($str);
   }
   /*--------------------------------------------------------------*/
   /* Funcion para un ciclo while
-/*--------------------------------------------------------------*/
+  /*--------------------------------------------------------------*/
   public function while_loop($loop)
   {
     global $db;
