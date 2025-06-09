@@ -153,7 +153,14 @@ $area = 41;
                 </span>
             </div>
         </a>
-
+        <a href="bienes_inmuebles.php" class="tile">
+            <div class="tile-tittle">Bienes Inmuebles</div>
+            <div class="tile-icon">
+                <span class="material-symbols-rounded" style="font-size:95px;">
+                    apartment
+                </span>
+            </div>
+        </a>
         <a href="solicitudes_vehiculos.php" class="tile">
             <div class="tile-tittle">Parque Vehicular</div>
             <div class="tile-icon">

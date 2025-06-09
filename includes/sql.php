@@ -8203,3 +8203,44 @@ function last_sesion_minuta()
   $result = find_by_sql($sql);
   return $result;
 }
+
+function find_all_inmuebles()
+{
+  return find_by_sql("SELECT i.id_bien_inmueble, di.descripcion as denominacion, m.descripcion as municipio, ti.descripcion as tipo_inmueble, 
+                      ar.nombre_area as area_responsable
+                      FROM bienes_inmuebles as i
+                      LEFT JOIN cat_denom_inmueble as di
+                      ON i.id_cat_denom_inmueble = di.id_cat_denom_inmueble
+                      LEFT JOIN cat_municipios as m
+                      ON i.id_cat_mun = m.id_cat_mun
+                      LEFT JOIN cat_tipo_inmueble as ti
+                      ON i.id_cat_tipo_inmueble = ti.id_cat_tipo_inmueble
+                      LEFT JOIN area as ar
+                      ON i.id_area = ar.id_area");
+}
+
+function find_by_id_inmueble($id)
+{
+  global $db;
+  $id = (int)$id;
+  $sql = $db->query("SELECT i.*, di.descripcion as denominacion, m.descripcion as municipio, ti.descripcion as tipo_inmueble,
+                      op.descripcion as origen_propiedad, tp.descripcion as titulo_posesion, ar.nombre_area as area_responsable
+                      FROM bienes_inmuebles as i
+                      LEFT JOIN cat_denom_inmueble as di
+                      ON i.id_cat_denom_inmueble = di.id_cat_denom_inmueble
+                      LEFT JOIN cat_municipios as m
+                      ON i.id_cat_mun = m.id_cat_mun
+                      LEFT JOIN cat_tipo_inmueble as ti
+                      ON i.id_cat_tipo_inmueble = ti.id_cat_tipo_inmueble
+                      LEFT JOIN cat_origen_propiedad as op
+                      ON i.id_cat_origen_propiedad = op.id_cat_origen_propiedad
+                      LEFT JOIN cat_titulo_posesion as tp
+                      ON i.id_cat_titulo_posesion = tp.id_cat_titulo_posesion
+                      LEFT JOIN area as ar
+                      ON i.id_area = ar.id_area
+                      WHERE i.id_bien_inmueble = '{$db->escape($id)}'");
+  if ($result = $db->fetch_assoc($sql))
+    return $result;
+  else
+    return null;
+}
